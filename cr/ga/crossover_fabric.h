@@ -6,6 +6,7 @@
 #define _CROSSOVER_FABRIC_H_
 
 #include <paradiseo/eo/eoOp.h>
+#include <paradiseo/eo/ga/eoBitOp.h>
 
 #include "chromosome.h"
 
@@ -17,12 +18,24 @@ namespace cr {
  */
 class crossover_fabric {
 public:
+    /*
+     * Create an instance of uniform crossover with the given bias
+     * @param bias Bias for the cross mask of the crossover, default = 0.5
+     */
+    static eoQuadOp<chromosome> *create_uniform (double bias);
 
-    static eoQuadOp<chromosome> *create_uniform (double);
+    /*
+     * Create an instance of a cutpoint crossover
+     * @param num is the number of cut points
+     */
+    static eoQuadOp<chromosome> *create_cutpoints (uint num);
 
-    static eoQuadOp<chromosome> *create_cutpoints (uint);
-
-    static eoQuadOp<chromosome> *create (uint);
+    /*
+     * Create an any instance of crossover operator through a ID
+     * ID = 0: uniform crossover
+     * ID > 0: cut points crossover with $ID points
+     */
+    static eoQuadOp<chromosome> *create (uint crossID);
     
 };
 
