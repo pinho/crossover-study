@@ -1,0 +1,19 @@
+# Files ignored by Git
+
+## Folders to ignore
+build
+cmake-build-debug
+.vscode
+.idea
+
+## C++ precompiled and eexecutables
+.[o|a]
+.obj
+.exe
+.out
+.ar
+
+## Temporary test sources
+t-*.cpp
+t-*.cxx
+t-*.cc
