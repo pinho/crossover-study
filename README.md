@@ -15,4 +15,6 @@ make install
 
 ## License
 
-This work is licensed under [CC BY-NC-SA]() &copy; Ronaldd Pinho
+This work is licensed under
+[CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+&copy; Ronaldd Pinho

@@ -5,4 +5,3 @@ set(CXX_STANDARD 17)
 
 add_executable(cr src/main.cpp)
 target_include_directories(cr PRIVATE ${CMAKE_SOURCE_DIR}/include)
-# install_targets(cr)
