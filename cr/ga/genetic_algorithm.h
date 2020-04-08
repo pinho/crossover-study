@@ -12,6 +12,8 @@
 class genetic_algorithm : public eoAlgo<chromosome> {
 public:
     genetic_algorithm();
+
+    void operator ()(eoPop<chromosome> &);
 };
 
 #endif //_GENETIC_ALGORITHM_H_
