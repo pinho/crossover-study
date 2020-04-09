@@ -22,12 +22,26 @@ function green_log() {
     echo -e "\e[38;5;112m::\e[0m $1"
 }
 
+function install_from_github() {
+    file=$1;
+    echo -e ":: Baixando $file...";
+    wget -c https://github.com/pinho/scpxx/archive/v1.0.2.zip -O scpxx.zip > /dev/null;
+    unzip scpxx.zip > /dev/null;
+    rm scpxx.zip;
+    mkdir scpxx-1.0.2/build && cd scpxx-1.0.2/build
+    echo -e ":: Compilando o projeto $file...";
+    cmake .. > /dev/null;
+    echo -e ":: Instalando $file...";
+    make install > /dev/null;
+}
+
 function check_include() {
     green_log "Procurando por $1 ..."
-    if [[ -e "/usr/local/include/$1" ]]; then
+    if [[ -e "/usr/local/include/$1" || -e "/usr/include/$1" ]]; then
         echo_ok " [encontrado]\n"
     else
         echo_err " [não-encontrado]\n"
+
     fi
 }
 
@@ -45,3 +59,4 @@ green_log "Checando dependências..."
 
 check_include scpxx
 check_include paradiseo
+check_include doctest
