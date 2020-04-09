@@ -3,15 +3,22 @@
 Comparison of Crossover operators in Genetic Algorithms for some combinatorial
 optimization problems.
 
-## Installation
+## How to Build
 
-To build it and install:
+1 . Make sure that CMAKE is installed in 3.15+ version or install it.
 
-```sh
-cmake .
-make
-make install
+2 . Create a folder for hold the build files:
+
+```shell script
+mkdir build
+cd build
 ```
+
+3 . Use cmake to generate Makefiles:
+
+```shell script
+cmake ..
+``` 
 
 ## License
 
