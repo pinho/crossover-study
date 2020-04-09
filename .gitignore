@@ -12,6 +12,7 @@ cmake-build-debug
 .exe
 .out
 .ar
+.so
 
 ## Temporary test sources
 t-*.cpp
