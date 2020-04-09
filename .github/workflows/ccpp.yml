@@ -13,7 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: cmake
-      run: cmake .
+    - name: dependencies
+      run: bash build.sh
+    - name: cmake build
+      run: mkdir build && cd build && cmake ..
     - name: make
       run: make
