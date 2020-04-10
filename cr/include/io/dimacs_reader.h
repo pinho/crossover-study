@@ -9,13 +9,9 @@
 #include <sstream>
 #include <vector>
 
-namespace cr {
-
 class DimacsReader {
 public:
 	static std::vector<std::string> read(std::string filename);
 };
-
-}
 
 #endif //CROSSOVERRESEARCH_DIMACS_READER_H

@@ -12,7 +12,7 @@ auto append = [](vector<string>& v, string& l) {
 		v.emplace_back(l);
 };
 
-std::vector<string> cr::DimacsReader::read(std::string filename) {
+std::vector<string> DimacsReader::read(std::string filename) {
 	vector<string> _vec;
 	string _line;
 	try {
