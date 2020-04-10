@@ -47,7 +47,6 @@ double Configuration::mutation_rate() {
 	return (double) this->config["mutation_rate"].as<double>();
 }
 
-// TODO: Implementar o operador de << para classe Configuration
 std::ostream & Configuration::operator<<(std::ostream &os) {
 	os << "Config: " << this->ID() << "\n";
 	os << " Op de crossover: " << this->crossover_name() << "\n";

@@ -8,5 +8,5 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR})
 
 add_subdirectory(cr)
 
-install(TARGETS cr-io
+install(TARGETS ccrio ccrconfig
         DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)

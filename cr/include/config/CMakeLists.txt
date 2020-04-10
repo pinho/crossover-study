@@ -1,3 +1,4 @@
+# ccr/include/config --> libccrconfig.a
 cmake_minimum_required(VERSION 3.15)
 
 find_library(YAML_CPP yaml-cpp)
