@@ -47,12 +47,12 @@ double Configuration::mutation_rate() {
 	return (double) this->config["mutation_rate"].as<double>();
 }
 
-std::ostream & Configuration::operator<<(std::ostream &os) {
-	os << "Config: " << this->ID() << "\n";
-	os << " Op de crossover: " << this->crossover_name() << "\n";
-	os << " Taxa de cruzamento: " << this->crossover_rate() << "\n";
-	os << " Taxa de mutação: " << this->mutation_rate() << "\n";
-	os << " Tam. População: " << this->popsize() << "\n";
-	os << " Num. de gerações: " << this->number_generations() << "\n";
+std::ostream &operator <<(std::ostream &os, Configuration &conf) {
+	os << conf.ID() << "\n";
+	os << " |_ Crossover Op.: " << conf.crossover_name() << '\n';
+	os << " |_ Crossing Rate: " << conf.crossover_rate()*100 << "%\n";
+	os << " |_ Mutation rate: " << conf.mutation_rate()*100 << "%\n";
+	os << " |_ Population   : " << conf.popsize() << '\n';
+	os << " |_ Generations  : " << conf.number_generations();
 	return os;
 }

@@ -31,10 +31,11 @@ public:
 	std::string crossover_name();
 	// Get the configuration ID
 	std::string ID();
-	// Definition of ostream operator for Configuration object
-	std::ostream& operator << (std::ostream&);
 private:
 	YAML::Node config;
 };
+
+// Definition of out stream bitwise operator for Configuration objects
+std::ostream &operator <<(std::ostream &os, Configuration &conf);
 
 #endif //CROSSOVERRESEARCH_CONFIGURATION_H

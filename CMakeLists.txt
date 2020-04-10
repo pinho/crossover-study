@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Define o diretório padrão de instalação como o diretório raíz do projeto para fins de testes
 set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR})
 
-add_subdirectory(cr)
+add_subdirectory(ccr)
 
 install(TARGETS ccrio ccrconfig
         DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)

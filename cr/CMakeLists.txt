@@ -12,8 +12,8 @@ if(BUILD_TESTS)
 endif()
 
 # Executável principal que roda o algoritmo genético
-add_executable(garun main.cpp)
+add_executable(garun src/main.cpp)
 
 target_compile_options(garun PUBLIC -Wall -Werror -Wextra)
-target_include_directories(garun PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(garun PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(garun ccrio ccrconfig)
