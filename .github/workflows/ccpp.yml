@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: C++ CI
 
 on:
   push:
@@ -13,9 +13,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: dependencies
+    - name: Install Dependencies
       run: bash build.sh
-    - name: cmake build
+    - name: Generating Makefiles with CMake
       run: mkdir build && cd build && cmake ..
-    - name: make
+    - name: Make
       run: cd build && make
+
+  scripts:
+    
+    runs-on: ubunut-latest
+    
+      steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: chmod +x install_dependencies.sh && ./install_dependencies.sh
+      - name: Build project
+        run: chmod +x build.sh && ./build.sh
+    
