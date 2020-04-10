@@ -27,9 +27,10 @@ public:
 	double mutation_rate();
 	// Get the crossover rate param from configuration file
 	double crossover_rate();
+	// Get the name of the crossover operator
+	std::string crossover_name();
 	// Get the configuration ID
 	std::string ID();
-	// TODO: Implementar o operador de << para classe Configuration
 	// Definition of ostream operator for Configuration object
 	std::ostream& operator << (std::ostream&);
 private:

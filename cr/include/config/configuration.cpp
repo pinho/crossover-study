@@ -35,6 +35,10 @@ unsigned int Configuration::number_generations() {
 	return (uint) this->config["generations"].as<uint>();
 }
 
+std::string Configuration::crossover_name() {
+	return (std::string) this->config["crossover"].as<std::string>();
+}
+
 double Configuration::crossover_rate() {
 	return (double) this->config["crossover_rate"].as<double>();
 }
@@ -43,4 +47,13 @@ double Configuration::mutation_rate() {
 	return (double) this->config["mutation_rate"].as<double>();
 }
 
-
+// TODO: Implementar o operador de << para classe Configuration
+std::ostream & Configuration::operator<<(std::ostream &os) {
+	os << "Config: " << this->ID() << "\n";
+	os << " Op de crossover: " << this->crossover_name() << "\n";
+	os << " Taxa de cruzamento: " << this->crossover_rate() << "\n";
+	os << " Taxa de mutação: " << this->mutation_rate() << "\n";
+	os << " Tam. População: " << this->popsize() << "\n";
+	os << " Num. de gerações: " << this->number_generations() << "\n";
+	return os;
+}
