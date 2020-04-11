@@ -7,10 +7,17 @@ on:
     branches: [ master ]
 
 jobs:
+  
+  prebuild:
+    runs-on: ubuntu-latest  
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: chmod +x install_dependencies.sh && ./install_dependencies.sh
+
+
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Install Dependencies
@@ -19,13 +26,4 @@ jobs:
       run: mkdir build && cd build && cmake ..
     - name: Make
       run: cd build && make
-
-  scripts:
-    runs-on: ubunut-latest  
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install Dependencies
-      run: chmod +x install_dependencies.sh && ./install_dependencies.sh
-    - name: Build project
-      run: chmod +x build.sh && ./build.sh
     
