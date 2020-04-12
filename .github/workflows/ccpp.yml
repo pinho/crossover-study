@@ -8,20 +8,14 @@ on:
 
 jobs:
   
-  prebuild:
-    runs-on: ubuntu-latest  
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install Dependencies
-      run: chmod +x install_dependencies.sh && ./install_dependencies.sh
-
-
   build:
+
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v2
     - name: Install Dependencies
-      run: bash build.sh
+      run: bash install_dependencies.sh
     - name: Generating Makefiles with CMake
       run: mkdir build && cd build && cmake ..
     - name: Make
