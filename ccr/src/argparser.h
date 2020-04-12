@@ -34,8 +34,12 @@ namespace cli {
                 if (optarg) configfilename = std::string(optarg);
                 break;
             case 'h':
-            default:
                 print_help();
+                break;
+            case '?':
+                std::cout << "Use -h or --help flag to see options" << std::endl;
+                break;
+            default:
                 break;
         }
     }

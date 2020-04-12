@@ -6,4 +6,4 @@ add_executable(ccr-tests
 target_include_directories(ccr-tests PUBLIC ../include)
 target_link_libraries(ccr-tests ccrio ccrconfig)
 
-add_test(NAME ccrtest COMMAND ccr-tests)
+add_test(ccrtest ccr-tests -s)
