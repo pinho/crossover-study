@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra")
 
 add_subdirectory(include/ccr/io)
 add_subdirectory(include/ccr/config)
-if(BUILD_TESTS)
+if(BUILD_TESTING)
     add_subdirectory(test)
 endif()
 

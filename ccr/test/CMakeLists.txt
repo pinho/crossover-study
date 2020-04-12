@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 enable_testing()
 
-add_executable(cr-tests
-        test_io.cpp)
-target_include_directories(cr-tests PUBLIC ../include)
-target_link_libraries(cr-tests cr-io)
+add_executable(ccr-tests
+        test_configuration.cpp)
+target_include_directories(ccr-tests PUBLIC ../include)
+target_link_libraries(ccr-tests ccrio ccrconfig)
 
-add_test(NAME crtest COMMAND cr-tests)
+add_test(NAME ccrtest COMMAND ccr-tests)
