@@ -15,7 +15,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install Dependencies
-      run: sudo bash install_dependencies.sh
+      run: |
+        sudo apt-get install -y
+        sudo apt-get install -y cmake wget unzip doxygen
+        sudo bash install_dependencies.sh
     - name: Generating Makefiles with CMake
       run: mkdir build && cd build && cmake ..
     - name: Make
