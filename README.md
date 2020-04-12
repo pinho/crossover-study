@@ -1,6 +1,6 @@
 # Crossovers Comparison
 
-![Actions Status](https://github.com/pinho/crossover-research/workflows/.github/workflows/ccpp.yml/badge.svg)
+![Actions Status](https://github.com/pinho/crossover-research/workflows/C++%20CI/badge.svg)
 
 Comparison of Crossover operators in Genetic Algorithms for some combinatorial
 optimization problems.
