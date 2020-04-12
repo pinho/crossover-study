@@ -39,4 +39,6 @@ jobs:
         cmake -DBUILD_TESTING=ON ..
         make
     - name: Running tests
-      run: ./ccr/tests/ccr-tests
+      run: |
+        cd build
+        ./ccr/tests/ccr-tests
