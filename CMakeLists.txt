@@ -8,4 +8,15 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(ccr)
 
+# Install the executable of the genetic algorithm
+install(TARGETS garun DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+# Install static libraries
 install(TARGETS ccrio ccrconfig DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+# Install headers -- defined in cmake command (use -DINSTALL_HEADERS=ON)
+if(INSTALL_HEADERS)
+    install(
+        DIRECTORY ${CMAKE_SOURCE_DIR}/ccr/include/ccr 
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+    )
+endif()
+

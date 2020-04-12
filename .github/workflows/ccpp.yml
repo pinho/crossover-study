@@ -38,7 +38,6 @@ jobs:
         mkdir build && cd build
         cmake -DBUILD_TESTING=ON ..
         make
+        make install
     - name: Running tests
-      run: |
-        cd build
-        ./ccr/tests/ccr-tests
+      run: ./test/ccr-tests
