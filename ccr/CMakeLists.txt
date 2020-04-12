@@ -2,11 +2,16 @@
 cmake_minimum_required(VERSION 3.15)
 project(CCR VERSION 0.1.0)
 
+include(CTest)
+enable_testing()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra")
+set(CTEST_PROJECT_NAME CCRTest)
 
 add_subdirectory(include/ccr/io)
 add_subdirectory(include/ccr/config)
+
 if(BUILD_TESTING)
     add_subdirectory(test)
 endif()
