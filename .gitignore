@@ -3,17 +3,21 @@
 ## Folders to ignore
 build
 cmake-build-debug
+diagrams
+img
+dist
+
+# IDEs
 .vscode
 .idea
-diagrams
 
 ## C++ precompiled and eexecutables
-.[o|a]
-.obj
-.exe
-.out
-.ar
-.so
+**/*.[o|a]
+**/*.obj
+**/*.exe
+**/*.out
+**/*.ar
+**/*.so
 
 ## Temporary test sources
 t-*.cpp

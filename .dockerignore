@@ -1,0 +1,13 @@
+# Files and directories ignored by Dockerfile
+.github/
+.vscode/
+.idea/
+
+cmake-build-debug/
+build/
+
+diagrams
+img
+
+LICENSE
+**/*.md
