@@ -32,7 +32,7 @@ target_compile_options(ga PUBLIC -Wall -Werror)
 
 # Installation rules
 install(TARGETS config ga io
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/ccr)
 
 # if install headers is enable
 if (INSTALL_HEADERS)
