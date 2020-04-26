@@ -21,7 +21,7 @@ public:
 
 protected:
 	uint __chromSize;
-	std::ifstream __infile;
+	char *__infilename;
 	const char *__name, *__acronym;
 };
 
