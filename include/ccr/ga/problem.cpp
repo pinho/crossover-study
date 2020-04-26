@@ -6,7 +6,7 @@
 
 template <class E>
 uint Problem<E>::get_chromsize() {
-	return this->chromSize;
+	return this->__chromSize;
 }
 
 template <class E>

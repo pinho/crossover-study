@@ -17,13 +17,12 @@ public:
 	void eval(Enc &chromosome);
 	void eval(eoPop<Enc> &pop);
 
-	virtual double objective_function(Enc& chromosome) = 0;
-	virtual std::string name() = 0;
-	virtual std::string sigle() = 0;
+	virtual F objective_function(Enc& chromosome) = 0;
 
 protected:
-	uint chromSize;
-	std::ifstream infile;
+	uint __chromSize;
+	std::ifstream __infile;
+	const char *__name, *__acronym;
 };
 
 #endif //CROSSOVERRESEARCH_PROBLEM_H
