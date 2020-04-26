@@ -23,21 +23,3 @@ jobs:
       run: mkdir build && cd build && cmake ..
     - name: Make
       run: cd build && make
-    
-  tests:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Building all
-      run: |
-        sudo apt-get install -y
-        sudo apt-get install -y cmake wget unzip doxygen
-        sudo bash install_dependencies.sh
-        mkdir build && cd build
-        cmake -DBUILD_TESTING=ON ..
-        make
-        make install
-    - name: Running tests
-      run: ./test/ccr-tests
