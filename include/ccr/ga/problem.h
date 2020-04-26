@@ -4,6 +4,8 @@
 #include <fstream>
 #include "encoding.h"
 
+// TODO: Verificar e finalizar a classe virtual para problemas
+
 template <class Enc = Chrom>
 class Problem {
 public:

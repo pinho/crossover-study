@@ -8,7 +8,5 @@ set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_ROOT_DIR ${CMAKE_SOURCE_DIR}) # diretório raíz do projeto
 set(CCR_SOURCE_DIR ${CMAKE_SOURCE_DIR}/ccr) # diretório ccr
 
-add_subdirectory(ccr)
-
-# Install the executable of the genetic algorithm
-install(TARGETS garun DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+add_subdirectory(include/ccr)
+add_subdirectory(test)
