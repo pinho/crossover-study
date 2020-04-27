@@ -6,7 +6,10 @@ find_library(PEO_LIB NAMES eo libeo)
 find_library(PEOU_LIB NAMES eoutils libeoutils)
 
 if (NOT PEO_LIB OR NOT PEOU_LIB)
-    message(${PEO_LIB})
+    message(FATAL_ERROR ${PEO_LIB})
+else()
+    message("-- ParadisEO library: " ${PEO_LIB})
+    message("-- ParadisEO library: " ${PEOU_LIB})
 endif()
 
 # Header files groups
@@ -24,7 +27,7 @@ add_library(config ${CONFIG_SOURCES})
 add_library(ga ${GA_SOURCES})
 add_library(io ${IO_SOURCES})
 target_link_libraries(config yaml-cpp)
-target_link_libraries(ga eo eoutils)
+target_link_libraries(ga ${PEO_LIB} ${PEOU_LIB})
 target_compile_options(config PUBLIC -Wall -Werror -Wextra)
 target_compile_options(ga PUBLIC -Wall -Werror -Wextra)
 

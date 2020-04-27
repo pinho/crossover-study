@@ -10,3 +10,6 @@ set(CCR_SOURCE_DIR ${CMAKE_SOURCE_DIR}/ccr) # diretório ccr
 
 add_subdirectory(include/ccr)
 add_subdirectory(test)
+
+# Adiciona diretórios para executáveis de cada problema
+add_subdirectory(setcovering)
