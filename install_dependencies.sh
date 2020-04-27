@@ -34,6 +34,7 @@ declare -A LINKS
 LINKS[paradiseo]='https://github.com/pinho/paradiseo/archive/master.zip'
 LINKS[yaml-cpp]='https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-0.6.3.zip'
 LINKS[doctest]='https://github.com/onqtam/doctest/archive/2.3.7.zip'
+# TODO: adicionar scpxx nas dependências (?)
 
 # Deps to install
 declare -a DEP_ARRAY
