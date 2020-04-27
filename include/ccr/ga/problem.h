@@ -4,25 +4,50 @@
 #include <fstream>
 #include "encoding.h"
 
-// TODO: Verificar e finalizar a classe virtual para problemas
-
+/**
+ * Problem class
+ * 
+ * Defines attributes and characteristics of an optimization problem. Is an
+ * virtual/abstract class, is a template class for concrete problems that should
+ * inherit from it.
+ */
 template <class Enc = Chrom>
 class Problem {
 public:
-	using F = Chrom::Fitness;
+	// Type of the fitness of a chromosome
+	using Fitness = Chrom::Fitness;
 
 	~Problem() = default;
 
+	/**
+	 * Getter to private attribute chromSize */
 	uint get_chromsize();
+
+	/**
+	 * Evaluator of chromosomes.
+	 * This method apply the objective function with a chromosome computing
+	 * the fitness and set the resultant fitness value to the chromosome. */
 	void eval(Enc &chromosome);
+
+	/**
+	 * Apply evaluation to each chromosome in a population */
 	void eval(eoPop<Enc> &pop);
 
-	virtual F objective_function(Enc& chromosome) = 0;
+	/**
+	 * Show information of the problem instance in a ostream 
+	 * std::cout is the default ostream instance */
+	virtual void display_info(std::ostream &os) = 0;
+
+	/**
+	 * Objective Function
+	 * The function that defines the fitness of a chromosome, is the main 
+	 * formulation of an optimization problem */
+	virtual Fitness objective_function(Enc &chromosome) = 0;
 
 protected:
-	uint __chromSize;
-	char *__infilename;
-	const char *__name, *__acronym;
+	uint __chromSize; // size of the chromosomes in this problem instance
+	char *__infilename; // name of input file of this instance
+	const char *__name, *__acronym; // name and sigle of the problem
 };
 
 #endif //CROSSOVERRESEARCH_PROBLEM_H
