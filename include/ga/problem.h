@@ -17,7 +17,7 @@ public:
 	// Type of the fitness of a chromosome
 	using Fitness = typename Enc::Fitness;
 
-	~Problem();
+	~Problem() {}
 
 	/**
 	 * Getter to private attribute chromSize */
@@ -47,7 +47,7 @@ public:
 protected:
 	uint __chromSize; // size of the chromosomes in this problem instance
 	char *__infilename; // name of input file of this instance
-	const char *__name, *__acronym; // name and sigle of the problem
+	char *__name, *__acronym; // name and sigle of the problem
 };
 
 #endif //CROSSOVERRESEARCH_PROBLEM_H

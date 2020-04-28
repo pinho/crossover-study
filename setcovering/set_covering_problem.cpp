@@ -2,28 +2,27 @@
 // Created by ronaldd on 26/04/2020.
 //
 
+#include <algorithm>
 #include "set_covering_problem.h"
 
 using F = SetCoveringProblem::Fitness;
 
 SetCoveringProblem::SetCoveringProblem(const char *filename) {
     this->__infilename = (char *) filename;
-    this->__acronym = "SCP";
-    this->__name = "Set Covering Problem";
+    this->__acronym = (char *) "SCP";
+    this->__name = (char *) "Set Covering Problem";
     scpxx::SCPFile scpfile_(this->__infilename);
     scpfile_.bufferize();
     this->__matrix = scpfile_.generate_matrix();
     this->__chromSize = this->__matrix.num_columns();
 }
 
-SetCoveringProblem::~SetCoveringProblem() = default;
-
-auto SetCoveringProblem::get_matrix() -> const scpxx::Matrix& {
+const scpxx::Matrix& SetCoveringProblem::get_matrix() {
     return this->__matrix;
 }
 
 void SetCoveringProblem::display_info(std::ostream& os) {
-    os << this->__acronym << " - " << this->__name << "\n";
+    os << '[' << this->__acronym << "] " << this->__name << "\n";
     os << "Arquivo: " << __infilename << "\n";
     os << "Shape da matriz: " << __matrix.num_rows() << "x"
             << __matrix.num_columns() << "\n";
@@ -45,7 +44,23 @@ std::vector<int> SetCoveringProblem::coverage(const Chrom &chromosome) {
     return result;
 }
 
+// TODO: Função objetivo da cobertura de conjuntos
 F SetCoveringProblem::objective_function(Chrom &chromosome) {
-    std::cout << chromosome << std::endl;
-    return F();
+    // Vericar cobertura
+    auto vec = this->coverage(chromosome);
+    bool coverall = std::all_of(vec.begin(), vec.end(), [](int item) {
+        return item > 0;
+    });
+
+    if (coverall) {
+        auto costs = this->__matrix.costs();
+        double sum_ = 0.0;
+        for (uint i=0; i < this->__chromSize; i++) {
+            if (chromosome[i])
+                sum_ += costs[i];
+        }
+        return F(1.0/sum_);
+    }
+
+    return F(0);
 }

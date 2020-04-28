@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.5)
+# enable_testing()
+
+add_executable(unittests 
+    test_configuration.cpp test_crossover_fabric.cpp test_utils.cpp)
+
+target_link_libraries(unittests config ga io)
+target_include_directories(unittests PUBLIC ../include)

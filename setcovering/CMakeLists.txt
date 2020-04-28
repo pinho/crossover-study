@@ -1,7 +1,6 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.5)
 
-set(CMAKE_CXX_STANDARD 17)
-
-add_executable(ga-setcov setcov_main.cpp set_covering_problem.cpp)
-target_include_directories(ga-setcov PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(ga-setcov config ga io)
+add_executable(main main.cpp set_covering_problem.cpp)
+target_include_directories(main PUBLIC ../include)
+target_link_libraries(main config ga)
+target_compile_options(main PUBLIC -Wall)

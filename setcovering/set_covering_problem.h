@@ -5,9 +5,9 @@
 #ifndef CROSSOVERRESEARCH_SET_COVERING_PROBLEM_H
 #define CROSSOVERRESEARCH_SET_COVERING_PROBLEM_H
 
-#include <ccr/ga/problem.h>
-#include <scpxx/scp.h>
 #include <vector>
+#include <ga/problem.h>
+#include <scpxx/scp.h>
 
 // TODO: Implementar classe para cobertura de conjuntos
 class SetCoveringProblem : public Problem<Chrom> {
@@ -18,11 +18,11 @@ public:
 
     /**
      * Destrutor padrão */
-    ~SetCoveringProblem();
+    ~SetCoveringProblem() = default;
 
     /**
      * Retorna uma referência para o atributo matriz da instância */
-    auto get_matrix() -> const scpxx::Matrix&;
+    const scpxx::Matrix& get_matrix();
 
     /**
      * Retorna um vector contendo a quantidade de linhas que cobre cada coluna*/

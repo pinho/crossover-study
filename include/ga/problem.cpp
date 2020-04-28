@@ -1,7 +1,5 @@
 #include "problem.h"
 
-template <class E> Problem<E>::~Problem() = default;
-
 template <class E>
 uint Problem<E>::get_chromsize() {
     return __chromSize;
