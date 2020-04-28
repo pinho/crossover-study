@@ -9,6 +9,7 @@ extern "C" {
 
 // TODO: IMplementar struct para conjunto de argumentos
 struct cl_arguments {
+    char *infile = (char *) "";
     unsigned int pop_size = 8;
     unsigned int epochs = 50;
     double crossover_rate = 0.0;
@@ -16,6 +17,7 @@ struct cl_arguments {
 };
 
 option long_options[] = {
+    {"ifile", required_argument, 0, 'f'},
     {"popsize", required_argument, 0, 'p'},
     {"epochs", required_argument, 0, 'g'},
     {"xrate", required_argument, 0, 'x'},
@@ -24,9 +26,9 @@ option long_options[] = {
     {0, 0, 0, 0}
 };
 
-const char *short_options = "p:g:x:m:h";
+const char *short_options = "f:p:g:x:m:h";
 
-const unsigned int NUM_OPTIONS = 5;
+const unsigned int NUM_OPTIONS = 6;
 
 #ifdef __cpluscplus
 }
