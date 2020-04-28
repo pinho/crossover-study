@@ -1,6 +1,5 @@
-#include <doctest/doctest.h>
-
-#include <ccr/io/utils.h>
+#include "doctest.h"
+#include <io/utils.h>
 
 TEST_SUITE("Utils") {
 

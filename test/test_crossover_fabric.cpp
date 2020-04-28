@@ -1,5 +1,5 @@
-#include <doctest/doctest.h>
-#include <ccr/ga/crossover_fabric.h>
+#include "doctest.h"
+#include <ga/crossover_fabric.h>
 
 TEST_SUITE("Crossover Fabric") {
 

@@ -2,9 +2,9 @@
 #include <sstream>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest/doctest.h>
+#include "doctest.h"
 
-#include <ccr/config/configuration.h>
+#include <config/configuration.h>
 
 void create_testfile1() {
     std::ofstream out("_config.yml");
