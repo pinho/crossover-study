@@ -39,6 +39,13 @@ public:
 	virtual void display_info(std::ostream &os) = 0;
 
 	/**
+	 * TODO: Método para inicializar população
+	 * Population initializer
+	 * Initialize a population with encoding and chromSize defined in
+	 * problem instance. */
+	virtual eoPop<Enc> init_pop(uint length) = 0;
+
+	/**
 	 * Objective Function
 	 * The function that defines the fitness of a chromosome, is the main 
 	 * formulation of an optimization problem */
