@@ -11,13 +11,13 @@
  * virtual/abstract class, is a template class for concrete problems that should
  * inherit from it.
  */
-template <class Enc = Chrom>
+template <class Enc>
 class Problem {
 public:
 	// Type of the fitness of a chromosome
-	using Fitness = Chrom::Fitness;
+	using Fitness = typename Enc::Fitness;
 
-	~Problem() = default;
+	~Problem();
 
 	/**
 	 * Getter to private attribute chromSize */
