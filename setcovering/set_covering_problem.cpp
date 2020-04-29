@@ -1,8 +1,6 @@
 //
 // Created by ronaldd on 26/04/2020.
 //
-
-#include <algorithm>
 #include "set_covering_problem.h"
 
 using F = SetCoveringProblem::Fitness;
@@ -44,7 +42,11 @@ std::vector<int> SetCoveringProblem::coverage(const Chrom &chromosome) {
     return result;
 }
 
-// TODO: Função objetivo da cobertura de conjuntos
+eoPop<Chrom> SetCoveringProblem::init_pop(uint length) {
+    return Random<Chrom>::population(__chromSize, length);
+}
+
+// TODO: TESTAR Função objetivo da cobertura de conjuntos
 F SetCoveringProblem::objective_function(Chrom &chromosome) {
     // Vericar cobertura
     auto vec = this->coverage(chromosome);

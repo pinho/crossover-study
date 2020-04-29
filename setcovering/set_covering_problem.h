@@ -6,11 +6,12 @@
 #define CROSSOVERRESEARCH_SET_COVERING_PROBLEM_H
 
 #include <vector>
+#include <algorithm>
+#include <ga/random.h>
 #include <ga/problem.h>
 #include <scpxx/scp.h>
 
-// TODO: Implementar classe para cobertura de conjuntos
-class SetCoveringProblem : public Problem<Chrom> {
+class SetCoveringProblem : public Problem {
 public:
     /**
      * Construtor padrão */
@@ -30,9 +31,11 @@ public:
 
     /**
      * Verifica se todas as colunas estão sendo cobertas pela dada solução */
-    bool check_coverage(const Chrom&);
+//    bool check_coverage(const Chrom&);
 
-    void display_info(std::ostream& os = std::cout) override;
+    void display_info(std::ostream& os) override;
+
+    eoPop<Chrom> init_pop(uint length) override;
 
     /**
      * Função objetivo do problema de cobertura de conjuntos.
