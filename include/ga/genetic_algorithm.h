@@ -35,7 +35,9 @@ public:
 
 	// Main operator of the GA
 	// Gets a reference to a population object and evolve it
-	void operator()(eoPop<Chrom>& population_, bool verbose_ = false);
+	// Gets also a function to manipulate the population and is called
+	// at end of each generation
+	void operator()(eoPop<Chrom>& population, void (int, eoPop<Chrom>&) );
 
 protected:
 	Problem& problem;

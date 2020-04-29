@@ -4,15 +4,18 @@
 
 #include "genetic_algorithm.h"
 
-void GeneticAlgorithm::operator()(eoPop<Chrom>& population, bool verbose)
+void GeneticAlgorithm::operator()(eoPop<Chrom>& population,
+		void callback(int, eoPop<Chrom>&) = [](int g, eoPop<Chrom>& p) {})
 {
 	eoPop<Chrom> _nextGen;
 	Chrom _elite;
+	int gen = 0;
 
 	// Main loop
 	do {
+		gen++;
 		// Save current best individual
-		_elite = *population.it_best_element();
+		_elite = population.best_element();
 		// Select for next population
 		select(population, _nextGen);
 		// Recombination step (crossover)
@@ -38,10 +41,9 @@ void GeneticAlgorithm::operator()(eoPop<Chrom>& population, bool verbose)
 		auto _worseIt = population.it_worse_element();
 		*_worseIt = _elite;
 
-		if (verbose) {
-			auto _best = population.best_element();
-			std::cout << _best << " :: Gen" << stopCriteria;
-		}
+		// call the custom function
+		callback(gen, population);
+		
 	} while (stopCriteria(population));
 	_nextGen.clear();
 }
