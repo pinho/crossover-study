@@ -1,19 +1,16 @@
 #include "problem.h"
 
-template <class E>
-uint Problem<E>::get_chromsize() {
+uint Problem::get_chromsize() {
     return __chromSize;
 }
 
-template <class E>
-void Problem<E>::eval(E& chromosome) {
+void Problem::eval(Chrom& chromosome) {
     if (chromosome.invalid())
         chromosome.fitness( this->objective_function(chromosome) );
 }
 
-template <class E>
-void Problem<E>::eval(eoPop<E>& pop) {
-    for (auto& chrom : pop) {
+void Problem::eval(eoPop<Chrom>& pop) {
+    for (Chrom& chrom : pop) {
         this->eval(chrom);
     }
 }

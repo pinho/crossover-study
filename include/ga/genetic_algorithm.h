@@ -14,7 +14,7 @@ public:
 
 	// Default constructor
 	explicit GeneticAlgorithm(
-			Problem<Chrom> &problem_,
+			Problem &problem_,
 			eoSelectOne<Chrom> &selectOp_,
 			eoQuadOp<Chrom> &crossoverOp_,
 			const float crossoverRate_,
@@ -38,7 +38,7 @@ public:
 	void operator()(eoPop<Chrom>& population_, bool verbose_ = false);
 
 protected:
-	Problem<Chrom>& problem;
+	Problem& problem;
 	eoSelectPerc<Chrom> select;
 	eoInvalidateQuadOp<Chrom> cross;
 	eoInvalidateMonOp<Chrom> mutate;

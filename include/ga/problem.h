@@ -11,11 +11,10 @@
  * virtual/abstract class, is a template class for concrete problems that should
  * inherit from it.
  */
-template <class Enc>
 class Problem {
 public:
 	// Type of the fitness of a chromosome
-	using Fitness = typename Enc::Fitness;
+	using Fitness = typename Chrom::Fitness;
 
 	~Problem() {}
 
@@ -27,11 +26,11 @@ public:
 	 * Evaluator of chromosomes.
 	 * This method apply the objective function with a chromosome computing
 	 * the fitness and set the resultant fitness value to the chromosome. */
-	void eval(Enc &chromosome);
+	void eval(Chrom &chromosome);
 
 	/**
 	 * Apply evaluation to each chromosome in a population */
-	void eval(eoPop<Enc> &pop);
+	void eval(eoPop<Chrom> &pop);
 
 	/**
 	 * Show information of the problem instance in a ostream 
@@ -39,17 +38,16 @@ public:
 	virtual void display_info(std::ostream &os) = 0;
 
 	/**
-	 * TODO: Método para inicializar população
 	 * Population initializer
-	 * Initialize a population with encoding and chromSize defined in
+	 * Initialize a population with Encoding and chromSize defined in
 	 * problem instance. */
-	virtual eoPop<Enc> init_pop(uint length) = 0;
+	virtual eoPop<Chrom> init_pop(uint length) = 0;
 
 	/**
 	 * Objective Function
 	 * The function that defines the fitness of a chromosome, is the main 
 	 * formulation of an optimization problem */
-	virtual Fitness objective_function(Enc &chromosome) = 0;
+	virtual Fitness objective_function(Chrom &chromosome) = 0;
 
 protected:
 	uint __chromSize; // size of the chromosomes in this problem instance
