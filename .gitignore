@@ -5,6 +5,8 @@ build
 cmake-build-debug
 diagrams
 img
+bin
+lib
 dist
 
 # IDEs
