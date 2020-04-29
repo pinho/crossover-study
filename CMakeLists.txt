@@ -7,3 +7,5 @@ add_subdirectory(include)
 add_subdirectory(test)
 
 add_subdirectory(setcovering)
+
+install(TARGETS ga-setcovering DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
