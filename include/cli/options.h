@@ -10,10 +10,10 @@ extern "C" {
 // TODO: IMplementar struct para conjunto de argumentos
 struct cl_arguments {
     char *infile = (char *) "";
-    unsigned int pop_size = 8;
+    unsigned int pop_size = 100;
     unsigned int epochs = 50;
-    double crossover_rate = 0.0;
-    double mutation_rate = 0.0;
+    double crossover_rate = 0.8;
+    double mutation_rate = 0.05;
 };
 
 option long_options[] = {
