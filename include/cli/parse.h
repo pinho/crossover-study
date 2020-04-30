@@ -9,10 +9,11 @@
  * TODO: Implementar e formatar
  */
 void show_help(int argc, char **argv) {
-    printf("Use: %s [OPTIONS] ...\n\n", argv[0]);
+    printf("Use: %s -f [INPUTFILE] [ARGS] ...\n\n", argv[0]);
+    printf("ARGS:\n\n");
     for (unsigned int i = 0; i < NUM_OPTIONS; i++) {
         if (long_options[i].name) {
-            printf(" -%c, --%s\n", long_options[i].val, long_options[i].name);
+            printf(" -%c, --%-10s  %s\n", long_options[i].val, long_options[i].name, DESC[i]);
         }
     }
 }
@@ -36,11 +37,14 @@ cl_arguments *parse(int argc, char **argv)
             case 'g':
                 if (optarg) res->epochs = std::stoi(optarg);
                 break;
-            case 'x':
+            case 'c':
                 if (optarg) res->crossover_rate = std::stod(optarg);
                 break;
             case 'm':
                 if (optarg) res->mutation_rate = std::stod(optarg);
+                break;
+            case 'x':
+                if (optarg) res->crossover_id = std::stoi(optarg);
                 break;
             case 'h':
                 show_help(argc, argv);
