@@ -1,20 +1,46 @@
 #ifndef CROSSOVERRESEARCH_OPTIONS_H
 #define CROSSOVERRESEARCH_OPTIONS_H
 
+#include <iostream>
 #include <getopt.h>
 
-#ifdef __cpluscplus
-extern "C" {
-#endif
-
-// TODO: IMplementar struct para conjunto de argumentos
 struct cl_arguments {
-    char *infile = (char *) "";
-    unsigned int pop_size = 100;
-    unsigned int epochs = 50;
-    unsigned int crossover_id = 0;
-    double crossover_rate = 0.8;
-    double mutation_rate = 0.05;
+    char *infile;
+    uint pop_size;
+    uint epochs;
+    uint crossover_id;
+    double crossover_rate;
+    double mutation_rate;
+
+    explicit cl_arguments()
+    {
+        this->infile = (char *) "";
+        this->pop_size = 100;
+        this->epochs = 50;
+        this->crossover_id = 0;
+        this->crossover_rate = 0.8;
+        this->mutation_rate = 0.05;
+    }
+
+    explicit cl_arguments(char* f, uint p, uint g, uint c, double cr, double mr)
+    {
+        this->infile = f;
+        this->pop_size = p;
+        this->epochs = g;
+        this->crossover_id = c;
+        this->crossover_rate = cr;
+        this->mutation_rate = mr;
+    }
+
+    friend std::ostream& operator << (std::ostream& os, cl_arguments& cli) {
+        std::string cross_name = cli.crossover_id == 0? "Uniforme" : std::to_string(cli.crossover_id).append("-Pontos");
+        os << "[PARAM] Tamanho da população: " << cli.pop_size << "\n";
+        os << "[PARAM] Número de gerações: " << cli.epochs << "\n";
+        os << "[PARAM] Operador de crossover: " << cross_name << "\n";
+        os << "[PARAM] Taxa de cruzamento: " << cli.crossover_rate*100 << "%\n";
+        os << "[PARAM] Taxa de mutação: " << cli.mutation_rate*100 << "%\n";
+        return os;
+    }
 };
 
 option long_options[] = {
@@ -41,9 +67,5 @@ const char *DESC[NUM_OPTIONS] = {
         "Define o operador de crossover utilizado com um ID",
         "Mostra essa lista de opções"
 };
-
-#ifdef __cpluscplus
-}
-#endif
 
 #endif // CROSSOVERRESEARCH_OPTIONS_H

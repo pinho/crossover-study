@@ -46,7 +46,6 @@ eoPop<Chrom> SetCoveringProblem::init_pop(uint length) {
     return Random<Chrom>::population(__chromSize, length);
 }
 
-// TODO: TESTAR Função objetivo da cobertura de conjuntos
 F SetCoveringProblem::objective_function(Chrom &chromosome) {
     // Vericar cobertura
     auto vec = this->coverage(chromosome);
