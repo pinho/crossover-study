@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 #include <ga/encoding.h>
 #include <ga/crossover_fabric.h>
 #include <ga/genetic_algorithm.h>
@@ -14,20 +13,22 @@
 
 using SCP = SetCoveringProblem;
 
-// TODO: Começar a implementar o tratamento do SCP
 int main(int argc, char **argv) {
     auto cli = parse(argc, argv);
     try {
         SCP scp(cli->infile);
         scp.display_info(std::cout);
 
+        std::cout << *cli;
+
         // create a population
+        std::cout << "Inicializando população\n";
         auto population = scp.init_pop(cli->pop_size);
 
         // evaluating the initial population
-        std::cout << "Evaluating the initial population... ";
+        std::cout << "Avaliando população inicial... ";
         scp.eval(population);
-        std::cout << "DONE" << std::endl;
+        std::cout << "FEITO" << std::endl;
 
         // build GA components
         eoGenContinue<Chrom> continuator(cli->epochs);
@@ -35,7 +36,7 @@ int main(int argc, char **argv) {
         eoBitMutation<Chrom> mutator(cli->mutation_rate);
 
         // Choose crossover operator
-        eoQuadOp<Chrom> *crossover_ptr = CrossoverFabric::create(64);
+        eoQuadOp<Chrom> *crossover_ptr = CrossoverFabric::create(cli->crossover_id);
 
         // Genetic Algorithm object
         GeneticAlgorithm ga(scp, selector, *crossover_ptr, cli->crossover_rate,
@@ -43,24 +44,24 @@ int main(int argc, char **argv) {
 
         // start algorithm
         ga(population, [](int g, eoPop<Chrom>& p) {
-            std::cout << g << "a geração:\n";
+            std::cout << g << "a geração: ";
             auto best_it = p.it_best_element();
             solution_t decoded_solution(*best_it);
-            std::cout << "...." << decoded_solution << "\n";
+            std::cout << ".... " << decoded_solution << "\n";
         });
 
         // Get best solution
         Chrom best = population.best_element();
         solution_t final_solution(best);
         
-        std::cout << "\nFinal Solution:" << std::endl;
-        std::cout << final_solution.num_columns << " columns with a total cost = "
+        std::cout << "\nSolução final:" << std::endl;
+        std::cout << final_solution.num_columns << " colunas com um custo total de "
                 << final_solution.cost << "\n";
 
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
-        return 1;
+        return EXIT_FAILURE;
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
