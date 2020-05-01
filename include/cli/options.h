@@ -47,14 +47,14 @@ option long_options[] = {
     {"ifile", required_argument, 0, 'f'},
     {"popsize", required_argument, 0, 'p'},
     {"epochs", required_argument, 0, 'g'},
+    {"crossover", required_argument, 0, 'x'},
     {"xrate", required_argument, 0, 'c'},
     {"mrate", required_argument, 0, 'm'},
-    {"crossover", required_argument, 0, 'x'},
     {"help", no_argument, 0, 'h'},
     {0, 0, 0, 0}
 };
 
-const char *short_options = "f:p:g:x:m:h";
+const char *short_options = "f:p:g:x:c:m:h";
 
 const unsigned int NUM_OPTIONS = 7;
 
