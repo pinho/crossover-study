@@ -15,3 +15,10 @@ eoPop<Chrom> Random<Chrom>::population(uint chromsize, uint popsize) {
     eoInitFixedLength<Chrom> _init(chromsize, BOOLRNG);
     return eoPop<Chrom>(popsize, _init);
 }
+
+template <>
+std::pair<int, int> Random<Chrom>::choice(std::vector<int>& container) {
+    eoUniformGenerator<int> rng(0, container.size());
+    int r = rng();
+    return std::pair<int, int>(r, container[r]);
+}
