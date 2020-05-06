@@ -44,7 +44,7 @@ struct cl_arguments {
 };
 
 option long_options[] = {
-    {"ifile", required_argument, 0, 'f'},
+    {"infile", required_argument, 0, 'f'},
     {"popsize", required_argument, 0, 'p'},
     {"epochs", required_argument, 0, 'g'},
     {"crossover", required_argument, 0, 'x'},
