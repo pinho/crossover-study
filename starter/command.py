@@ -33,5 +33,4 @@ class Command():
         cmd_ = str(self)
         if suppress_log:
             cmd_ += " > /dev/null"
-        print(cmd_)
         os.system(cmd_)
