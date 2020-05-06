@@ -25,3 +25,6 @@ dist
 t-*.cpp
 t-*.cxx
 t-*.cc
+
+## Python
+**/__pycache__/
