@@ -1,0 +1,10 @@
+run:
+  program: ga4maxclique
+
+  args:
+    crossover_rate: 0.8
+    mutation_rate: 0.05
+    crossover: [ 0, 1, 2 ]
+    population: [ 100 ]
+    epochs: 2
+    instance: instances/clique/dimacs/brock200_2.clq
