@@ -35,6 +35,7 @@ class Runner():
 
     def run(self, num_executions, suppress=False):
         for i in range(num_executions):
+            if (num_executions > 1): print(f"[ {i+1} ]", end="")
             for crossover_ in self.parameters["crossover"]:
                 for epochs_ in self.parameters["epochs"]:
                     for popsize_ in self.parameters["population"]:
@@ -48,6 +49,7 @@ class Runner():
                                     crossover_rate=crossover_r,
                                     mutation_rate=mutation_r
                                 )
+                                if (num_executions > 1): print(' \t:: ', end='')
                                 print(command)
                                 command.run(suppress_log=suppress)
         return
