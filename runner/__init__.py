@@ -4,3 +4,4 @@
 # por Ronaldd Pinho
 
 from .command import Command
+from .runner import Runner
