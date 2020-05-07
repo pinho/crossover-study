@@ -4,7 +4,7 @@ WORKDIR /usr/src
 COPY . .
 
 # Dependências
-RUN apt-get install -y unzip
+RUN apt-get install -y unzip doxygen
 RUN bash install_dependencies.sh
 
 # Compilar todo o projeto e instalar em /usr/local/bin
@@ -21,3 +21,4 @@ COPY --from=build /usr/src/lib/ /usr/local/lib
 
 WORKDIR /usr/app
 COPY . .
+
