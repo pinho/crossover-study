@@ -7,4 +7,4 @@ run:
     crossover: [ 0, 1, 2 ]
     population: [ 100 ]
     epochs: 2
-    instance: instances/clique/dimacs/brock200_2.clq
+    instance: instances/clique/brock200_2.clq

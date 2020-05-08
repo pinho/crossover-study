@@ -7,7 +7,9 @@
         "**/.DS_Store": true,
         "**/.idea": true,
         "**/cmake-build-debug/": true,
-        "**/build/": true
+        "**/build/": false,
+        "diagrams/": true,
+        "lib/": true
     },
     "files.associations": {
         "iosfwd": "cpp",
