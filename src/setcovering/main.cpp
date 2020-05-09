@@ -8,6 +8,10 @@
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoDetTournamentSelect.h>
 
+#include <sqlite/connection.hpp>
+#include <sqlite/execute.hpp>
+#include <sqlite/database_exception.hpp>
+
 #include "set_covering_problem.h"
 #include "solution.h"
 
@@ -58,8 +62,31 @@ int main(int argc, char **argv) {
         solution_t final_solution(best);
         
         std::cout << "\nSolução final:" << std::endl;
-        std::cout << final_solution.num_columns << " colunas com um custo total de "
-                << final_solution.cost << "\n";
+        std::cout << final_solution.num_columns
+                  << " colunas com um custo total de "
+                  << final_solution.cost << "\n";
+
+        // Write to Database if is defined [--db]
+        if (cli->using_db) {
+            sqlite::connection conn( cli->databasefile );
+            std::stringstream ss;
+            
+            for (Chrom &ind : vec_convergence) {
+                solution_t s(ind);
+                ss << s.cost << ";";
+            }
+
+            sqlite::execute ins(conn,
+                "INSERT INTO execucoes (config_code, convergencia) VALUES (?, ?);");
+
+            ins % identify(*cli) % ss.str();
+            ins();
+            std::cout << "Dados armazenados em "<<cli->databasefile<< std::endl;
+        }
+    }
+    catch (sqlite::database_exception sqle) {
+        std::cerr << cli->databasefile << ": " << sqle.what() << std::endl;
+        return EXIT_FAILURE;
     }
     catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
