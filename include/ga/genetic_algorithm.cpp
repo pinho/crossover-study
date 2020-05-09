@@ -4,12 +4,15 @@
 
 #include "genetic_algorithm.h"
 
-void GeneticAlgorithm::operator()(eoPop<Chrom>& population,
+void GeneticAlgorithm::operator()(eoPop<Chrom>& population, std::vector<Chrom>& conv,
 		void callback(int, eoPop<Chrom>&) = [](int g, eoPop<Chrom>& p) {})
 {
 	eoPop<Chrom> _nextGen;
 	Chrom _elite;
 	int gen = 0;
+
+	// Clear convergence array
+	conv.clear();
 
 	// Main loop
 	do {
@@ -41,6 +44,9 @@ void GeneticAlgorithm::operator()(eoPop<Chrom>& population,
 		auto _worseIt = population.it_worse_element();
 		*_worseIt = _elite;
 
+		// Save to convergence
+		conv.push_back( population.best_element() );
+		
 		// call the custom function
 		callback(gen, population);
 		

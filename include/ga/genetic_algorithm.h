@@ -37,7 +37,8 @@ public:
 	// Gets a reference to a population object and evolve it
 	// Gets also a function to manipulate the population and is called
 	// at end of each generation
-	void operator()(eoPop<Chrom>& population, void (int, eoPop<Chrom>&) );
+	void operator()(eoPop<Chrom>& population, std::vector<Chrom>& conv,
+			void (int, eoPop<Chrom>&) );
 
 protected:
 	Problem& problem;

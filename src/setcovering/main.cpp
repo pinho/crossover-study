@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
         SCP scp(cli->infile);
         scp.display_info(std::cout);
 
-        std::cout << *cli;
+        // std::cout << *cli;
 
         // create a population
         std::cout << "Inicializando população\n";
@@ -42,8 +42,11 @@ int main(int argc, char **argv) {
         GeneticAlgorithm ga(scp, selector, *crossover_ptr, cli->crossover_rate,
                 mutator, 1, continuator);
 
+        // Array for ga's convergence
+        std::vector<Chrom> vec_convergence;
+
         // start algorithm
-        ga(population, [](int g, eoPop<Chrom>& p) {
+        ga(population, vec_convergence, [](int g, eoPop<Chrom>& p) {
             std::cout << g << "a geração: ";
             auto best_it = p.it_best_element();
             solution_t decoded_solution(*best_it);
@@ -57,8 +60,8 @@ int main(int argc, char **argv) {
         std::cout << "\nSolução final:" << std::endl;
         std::cout << final_solution.num_columns << " colunas com um custo total de "
                 << final_solution.cost << "\n";
-
-    } catch (std::exception &e) {
+    }
+    catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
     }
