@@ -5,7 +5,11 @@
 Comparação de Opeardores de crossover em Algoritmos Genéticos aplicando a 
 alguns problemas de otimização combinatória bem conhecidos.
 
-## How to Build
+- [Build](#Build)
+- [Executáveis](#Executáveis)
+- [Script start.py](#Script-Start.py)
+
+## Build
 
 Tenha certeza de ter o CMake instalado na versão 3.6+;
 
@@ -15,12 +19,12 @@ Use o script `install_dependencies.sh` para instalar dependências (bibliotecas 
 % sudo ./install_dependencies.sh
 ```
 
-OBS: É necessário ter instalado alguns pacotes básicos: `git`, `wget`, `zip`/`unzip`, `doxygen`(opcional).
+OBS: É necessário ter instalado alguns pacotes básicos: `git`, `wget`, `zip`/`unzip`, `doxygen`.
 
 O script baixará instalará os seguintes softwares:
 - ParadisEO framework
-- Yaml-Cpp
 - Boost Graph Library
+- [SCPxx](https://github.com/pinho/scpxx)
 
 Tome um café e aguarde ;)
 
@@ -28,23 +32,19 @@ Com todas as dependências instaladas localmente, gere os Makefiles usando cmake
 
 ```sh
 % mkdir build && cd build # recomendado para manter o diretório do projeto limpo
-
-% cmake .. [-DINSTALL_HEADERS=ON|OFF]
-
+% cmake .. -DCMAKE_INSTALL_PREFIX=..
 % make
+% make install
 ```
 
-OBS: A opção `INSTALL_HEADERS` inclui as regras de instalação dos arquivos de cabeçalho nos Makefiles, que instala arquivos no diretório de instalação padrão (`/usr/local/`);
+Projeto compilado! :)
 
-O Diretório de instalação pode ser configurado através da opção `CMAKE_INSTALL_PREFIX` com
-
-```sh
-% cmake -DCMAKE_INSTALL_PREFIX=</diretorio/de/instalacao>
+Teste:
+```
+% ./bin/ga4scp -f instances/set-covering/scp44.txt
 ```
 
-Após isso, o projeto estará compilado, e os executáveis, arquvos de biblioteca (e os arquivos de cabeçalho) instalados localmente.
-
-## Programas
+## Executáveis
 
 Com a compilação do projeto, é gerado um arquivo executável para cada problema implementado.
 
@@ -52,8 +52,13 @@ Com a compilação do projeto, é gerado um arquivo executável para cada proble
 
 `ga4maxclique` executa o algoritmo genético para o problema do clique máximo.
 
-...
+`ga4steintree` executa o algoritmo genético para o problema da árvore de Steiner.
 
+`ga4multiknap` executa o algoritmo genético para o problema da mochila multidimensional.
+
+## Script `start.py`
+
+...
 
 ## License
 

@@ -11,5 +11,5 @@ add_subdirectory(test)
 add_subdirectory(src)
 
 # Install binaries on project root directory
-install(TARGETS ga4scp DESTINATION ${CMAKE_INSTALL_PREFIX})
-install(TARGETS ga4maxclique DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(TARGETS ga4scp DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(TARGETS ga4maxclique DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)

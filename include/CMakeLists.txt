@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
-find_library(PEO NAMES eo libeo)
-find_library(PEOUTILS NAMES eoutils libeoutils)
+find_library(PEO NAMES eo libeo HINTS /usr/local/lib64)
+find_library(PEOUTILS NAMES eoutils libeoutils HINTS /usr/local/lib64)
 
 if(NOT PEO OR NOT PEOUTILS)
   message(FATAL_ERROR "ParadisEO libraries not found")
