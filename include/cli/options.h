@@ -34,11 +34,11 @@ struct cl_arguments {
 
     friend std::ostream& operator << (std::ostream& os, cl_arguments& cli) {
         std::string cross_name = cli.crossover_id == 0? "Uniforme" : std::to_string(cli.crossover_id).append("-Pontos");
-        os << "[PARAM] Tamanho da população: " << cli.pop_size << "\n";
-        os << "[PARAM] Número de gerações: " << cli.epochs << "\n";
-        os << "[PARAM] Operador de crossover: " << cross_name << "\n";
-        os << "[PARAM] Taxa de cruzamento: " << cli.crossover_rate*100 << "%\n";
-        os << "[PARAM] Taxa de mutação: " << cli.mutation_rate*100 << "%\n";
+        os << "População  : " << cli.pop_size << "\n";
+        os << "N. Gerações: " << cli.epochs << "\n";
+        os << "Crossover  : " << cross_name << "\n";
+        os << "Tx de cruz.: " << cli.crossover_rate*100 << "%\n";
+        os << "Tx de muta.: " << cli.mutation_rate*100 << "%\n";
         return os;
     }
 };
