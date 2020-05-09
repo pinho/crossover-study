@@ -11,6 +11,8 @@ struct cl_arguments {
     uint crossover_id;
     double crossover_rate;
     double mutation_rate;
+    char *databasefile;
+    bool using_db = false;
 
     explicit cl_arguments()
     {
@@ -20,6 +22,7 @@ struct cl_arguments {
         this->crossover_id = 0;
         this->crossover_rate = 0.8;
         this->mutation_rate = 0.05;
+        this->databasefile = (char *) "";
     }
 
     explicit cl_arguments(char* f, uint p, uint g, uint c, double cr, double mr)
@@ -43,7 +46,10 @@ struct cl_arguments {
     }
 };
 
+static int db_flag;
+
 option long_options[] = {
+    {"db", required_argument, 0, 'd'},
     {"infile", required_argument, 0, 'f'},
     {"popsize", required_argument, 0, 'p'},
     {"epochs", required_argument, 0, 'g'},
@@ -54,11 +60,12 @@ option long_options[] = {
     {0, 0, 0, 0}
 };
 
-const char *short_options = "f:p:g:x:c:m:h";
+const char *short_options = "d:f:p:g:x:c:m:h";
 
-const unsigned int NUM_OPTIONS = 7;
+const unsigned int NUM_OPTIONS = 8;
 
 const char *DESC[NUM_OPTIONS] = {
+        "Define o arquivo .db para salvar os dados. Se não definido não salva",
         "Arquivo de instância do problema",
         "Define o tamanho da população",
         "Define o número de épocas/gerações",
