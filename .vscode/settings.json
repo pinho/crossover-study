@@ -1,4 +1,10 @@
 {
+    "todo-tree.tree.showScanModeButton": false,
+    "todo-tree.filtering.excludeGlobs": [
+        "**/.vscode/*",
+        "**/.idea/*",
+        "**/test/doctest.h"
+    ],
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
