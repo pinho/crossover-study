@@ -10,28 +10,25 @@ else()
   message("-- ParadisEO Library: " ${PEOUTILS})
 endif()
 
-file(GLOB CONFIG_SOURCES config/*.cpp)
+# Arquivos fonte
 file(GLOB GA_SOURCES ga/*.cpp)
 file(GLOB IO_SOURCES io/*.cpp)
 
-file(GLOB CONFIG_HEADERS config/*.h)
+# Arquivos de cabeçalho
 file(GLOB GA_HEADERS ga/*.h)
 file(GLOB IO_HEADERS io/*.h)
 file(GLOB CLI_HEADERS cli/*.h)
 
-add_library(config ${CONFIG_SOURCES})
-target_link_libraries(config yaml-cpp)
-
+# Compilação e linkagem
 add_library(ga ${GA_SOURCES})
 target_link_libraries(ga ${PEO} ${PEOUTILS})
 
 add_library(io ${IO_SOURCES})
 
 # Regras de instalação
-install(TARGETS config ga io DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install(TARGETS ga io DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
 if(INSTALL_HEADERS)
-  install(FILES ${CONFIG_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/myresearch/config)
   install(FILES ${GA_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/myresearch/ga)
   install(FILES ${IO_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/myresearch/io)
   install(FILES ${CLI_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/myresearch/cli)
