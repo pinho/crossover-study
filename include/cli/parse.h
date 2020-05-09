@@ -58,10 +58,7 @@ cl_arguments *parse(int argc, char **argv)
 }
 
 /**
- * // TODO: Criar uma função que define uma string ID para combinação de parametros
- * Exemplo:
- * -- popsize = 100, epochs = 100, crossover_rate = 0.8, mutacao = 0.05, crossover uniforme
- * -- = UNIFORMP100G100CR080MR005
+ * Define uma string ID para cada cominação de parâmetros
  */
 std::string identify(cl_arguments& cli) {
     std::string ID;
