@@ -85,5 +85,6 @@
         "variant": "cpp",
         "strstream": "cpp",
         "cfenv": "cpp"
-    }
+    },
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }
