@@ -33,7 +33,7 @@ class Runner():
             if not is_iterable( self.parameters[key] ):
                 self.parameters[key] = [ self.parameters[key] ]
 
-    def run(self, num_executions, suppress=False):
+    def run(self, num_executions, savedb, suppress=False):
         for i in range(num_executions):
             if (num_executions > 1): print(f"[ {i+1} ]", end="")
             for crossover_ in self.parameters["crossover"]:
@@ -47,7 +47,8 @@ class Runner():
                                     popsize=popsize_,
                                     num_epochs=epochs_,
                                     crossover_rate=crossover_r,
-                                    mutation_rate=mutation_r
+                                    mutation_rate=mutation_r,
+                                    database=savedb
                                 )
                                 if (num_executions > 1): print(' \t:: ', end='')
                                 print(command)
