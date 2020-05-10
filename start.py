@@ -1,7 +1,7 @@
 #!/bin/python
 
 import click
-from runner import Runner
+from pyutils import Runner
 
 @click.command()
 @click.option('-c', '--config', default='config.yml', show_default=True, 
