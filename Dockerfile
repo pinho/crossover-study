@@ -1,18 +1,13 @@
-FROM ronalddpinho/cpp-build-base AS build
+FROM ronalddpinho/cpp-build-base
+
+# Dependências
+RUN apt-get install -y unzip doxygen libvsqlitepp-dev libboost-graph-dev
+
+COPY ./install_dependencies.sh .
+RUN bash install_dependencies.sh
 
 WORKDIR /app
 COPY . .
 
-# Dependências
-RUN apt-get install -y unzip doxygen
-RUN bash install_dependencies.sh
-
-# Compilar todo o projeto e instalar em /usr/local/bin
-#RUN mkdir build && cd build && cmake ..
-#RUN make
-#RUN make install
-
-COPY ./instances/set-covering/* /data/scp
-COPY ./instances/clique/dimacs/* /data/maxclq
-COPY . .
-
+RUN mkdir build && cd build && cmake -DINSTALL_HEADERS=ON ..
+RUN cd /app/build && make && make install

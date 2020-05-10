@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Compile libraries
 add_subdirectory(include)
+
+# Compile unit tests
+enable_testing()
 add_subdirectory(test)
 
 # Add/Compile sources to binaries
