@@ -1,10 +1,27 @@
 run:
-  program: ga4maxclique
+  program: bin/ga4scp 
+  # Executável do problema de cobertura de conjuntos
 
+  # Definição dos parâmetros de execuções
   args:
-    crossover_rate: 0.8
-    mutation_rate: 0.05
-    crossover: [ 0, 1, 2 ]
-    population: [ 100 ]
-    epochs: 2
-    instance: instances/clique/brock200_2.clq
+    # Taxas de cruzamento: 60%, 80% e 100%
+    crossover_rate: [ 0.6, 0.8, 1.0 ]
+
+    # Taxa de mutação de 4%
+    mutation_rate: 0.04
+
+    # Crossover: (0) Uniforme, (1) Um-ponto e (4) 4-pontos
+    crossover:
+      - 0
+      - 1
+      - 4
+
+    # Tamanho de população
+    population: 100
+
+    # Número de gerações
+    epochs: 50
+
+    # Arquivo de instância do problem
+    instance: instances/set-covering/scp41.txt
+
