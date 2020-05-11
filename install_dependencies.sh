@@ -32,9 +32,7 @@ check_tool cmake
 # Download links
 declare -A LINKS
 LINKS[paradiseo]='https://github.com/pinho/paradiseo/archive/master.zip'
-LINKS[yaml-cpp]='https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-0.6.3.zip'
-LINKS[doctest]='https://github.com/onqtam/doctest/archive/2.3.7.zip'
-# TODO: adicionar scpxx nas dependências (?)
+LINKS[scpxx]='https://github.com/pinho/scpxx/archive/master.zip'
 
 # Deps to install
 declare -a DEP_ARRAY
@@ -57,7 +55,7 @@ function default_log() {
 
 
 function check_include() {
-    default_log "Procurando por $1..."
+    default_log "Procurando por $1 "
     if [[ -e "/usr/local/include/$1" || -e "/usr/include/$1" || -e "/usr/bin/$1" ]]; then
         echo_ok "\t[encontrado]\n"
     else
@@ -85,15 +83,11 @@ function install_boost() {
 
 function install() {
     ARG=$1
-    unzip "/tmp/$ARG.zip" -d "$ARG" > /dev/null
+    unzip "/tmp/$ARG.zip" -d "/tmp/$ARG" > /dev/null
     default_log "Arquivo $ARG.zip desempacotado\n"
     cd "/tmp/$ARG"
-    if [ "$ARG" == "paradiseo" ]; then
-        cd paradiseo-master/
-    elif [ "$ARG" == "yaml-cpp" ]; then
-        cd yaml-cpp-yaml-cpp-0.6.3/
-    elif [ "$ARG" == "doctest" ]; then
-        cd doctest-2.3.7/
+    if [ "$ARG" == "paradiseo" -o "$ARG" == "scpxx" ]; then
+        cd "$ARG-master/"
     fi
     cmake . > /dev/null
     default_log "Compilando $ARG...\n"
@@ -106,9 +100,8 @@ function install() {
 
 check_all() {
     check_include 'paradiseo'
-    check_include 'yaml-cpp'
-    check_include 'doctest'
     check_include 'boost/graph'
+    check_include 'scpxx'
 }
 
 SOURCE_DIR=${PWD}

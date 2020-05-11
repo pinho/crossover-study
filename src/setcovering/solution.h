@@ -14,12 +14,12 @@ struct solution_t {
     // Default constructor
     explicit solution_t() = default;
     // Constructor through chromosome decoding
-    explicit solution_t(Chrom& chrom);
+    explicit solution_t(const Chrom& chrom);
     // Output Stream operator
     friend std::ostream& operator <<(std::ostream& os, const solution_t& sol);
 };
 
-solution_t::solution_t(Chrom& chrom) {
+solution_t::solution_t(const Chrom& chrom) {
     this->cost = (float) (1.0F / chrom.fitness());
     this->num_columns = (uint) std::accumulate(chrom.begin(), chrom.end(), 0);
 }

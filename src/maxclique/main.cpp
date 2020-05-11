@@ -41,7 +41,10 @@ int main(int argc, char **argv) {
         GeneticAlgorithm ga(*maxclique, select, *crossover_ptr,
                 cli->crossover_rate, mutation, cli->mutation_rate, cont);
 
-        ga(population, [](int g, auto &pop) {
+        // Array for save convergence
+        std::vector<Chrom> array_convergence;
+
+        ga(population, array_convergence, [](int g, auto &pop) {
             std::cout << g << "a geração: ";
             std::cout << "clique de " << pop.best_element().fitness() << " nós"
                     << std::endl;

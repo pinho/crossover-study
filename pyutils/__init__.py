@@ -3,4 +3,6 @@
 #
 # por Ronaldd Pinho
 
+# Classes
 from .command import Command
+from .runner import Runner

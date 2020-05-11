@@ -20,6 +20,8 @@ dist
 **/*.out
 **/*.ar
 **/*.so
+ga4scp
+ga4maxclique
 
 ## Temporary test sources
 t-*.cpp

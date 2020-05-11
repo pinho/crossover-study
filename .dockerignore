@@ -2,12 +2,9 @@
 .github/
 .vscode/
 .idea/
-
 cmake-build-debug/
 build/
+diagrams/
 
-diagrams
-img
-
-LICENSE
 **/*.md
+LICENSE

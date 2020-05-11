@@ -11,6 +11,8 @@ struct cl_arguments {
     uint crossover_id;
     double crossover_rate;
     double mutation_rate;
+    char *databasefile;
+    bool using_db = false;
 
     explicit cl_arguments()
     {
@@ -20,6 +22,7 @@ struct cl_arguments {
         this->crossover_id = 0;
         this->crossover_rate = 0.8;
         this->mutation_rate = 0.05;
+        this->databasefile = (char *) "";
     }
 
     explicit cl_arguments(char* f, uint p, uint g, uint c, double cr, double mr)
@@ -34,16 +37,19 @@ struct cl_arguments {
 
     friend std::ostream& operator << (std::ostream& os, cl_arguments& cli) {
         std::string cross_name = cli.crossover_id == 0? "Uniforme" : std::to_string(cli.crossover_id).append("-Pontos");
-        os << "[PARAM] Tamanho da população: " << cli.pop_size << "\n";
-        os << "[PARAM] Número de gerações: " << cli.epochs << "\n";
-        os << "[PARAM] Operador de crossover: " << cross_name << "\n";
-        os << "[PARAM] Taxa de cruzamento: " << cli.crossover_rate*100 << "%\n";
-        os << "[PARAM] Taxa de mutação: " << cli.mutation_rate*100 << "%\n";
+        os << "População  : " << cli.pop_size << "\n";
+        os << "N. Gerações: " << cli.epochs << "\n";
+        os << "Crossover  : " << cross_name << "\n";
+        os << "Tx de cruz.: " << cli.crossover_rate*100 << "%\n";
+        os << "Tx de muta.: " << cli.mutation_rate*100 << "%\n";
         return os;
     }
 };
 
+static int db_flag;
+
 option long_options[] = {
+    {"db", required_argument, 0, 'd'},
     {"infile", required_argument, 0, 'f'},
     {"popsize", required_argument, 0, 'p'},
     {"epochs", required_argument, 0, 'g'},
@@ -54,11 +60,12 @@ option long_options[] = {
     {0, 0, 0, 0}
 };
 
-const char *short_options = "f:p:g:x:c:m:h";
+const char *short_options = "d:f:p:g:x:c:m:h";
 
-const unsigned int NUM_OPTIONS = 7;
+const unsigned int NUM_OPTIONS = 8;
 
 const char *DESC[NUM_OPTIONS] = {
+        "Define o arquivo .db para salvar os dados. Se não definido não salva",
         "Arquivo de instância do problema",
         "Define o tamanho da população",
         "Define o número de épocas/gerações",

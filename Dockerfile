@@ -1,23 +1,13 @@
-FROM ronalddpinho/cpp-build-base AS build
-
-WORKDIR /usr/src
-COPY . .
+FROM ronalddpinho/cpp-build-base
 
 # Dependências
-RUN apt-get install -y unzip
+RUN apt-get install -y unzip doxygen libvsqlitepp-dev libboost-graph-dev
+
+COPY ./install_dependencies.sh .
 RUN bash install_dependencies.sh
 
-# Compilar todo o projeto e instalar em /usr/local/bin
-RUN cmake . -DCMAKE_INSTALL_PREFIX=/usr/local
-RUN make
-RUN make install
-
-# Container para execução
-FROM ubuntu:bionic
-
-# Copiando os binários do projeto C++
-COPY --from=build /usr/src/bin/ /usr/local/bin
-COPY --from=build /usr/src/lib/ /usr/local/lib
-
-WORKDIR /usr/app
+WORKDIR /app
 COPY . .
+
+RUN mkdir build && cd build && cmake -DINSTALL_HEADERS=ON ..
+RUN cd /app/build && make && make install
