@@ -1,7 +1,12 @@
 #!/bin/python
 
 import click
-from pyutils import Runner
+import os
+import sqlite3
+import pyutils
+
+SCRATCH_DB_PATH = './'
+SCRATCH_DB = 'scratch.db'
 
 @click.command()
 @click.option('-c', '--config', default='config.yml', show_default=True, 
@@ -14,10 +19,21 @@ from pyutils import Runner
         help="Suppres log of each command")
 def main(number_exec, config, output, suppress):
     try:
-        rnr = Runner(config)
+        # Copia a estrutura do banco de dados
+        os.system('cp -vf '+ SCRATCH_DB_PATH+SCRATCH_DB +' '+ output)
+
+        # Cria um objeto Runner
+        rnr = pyutils.Runner(config)
+
+        # Dispara execuções
         rnr.run(number_exec, output, suppress=suppress)
+
     except FileNotFoundError as err:
         print(err)
+    except sqlite3.DatabaseError:
+        print("Erro no banco de dados")
+    except sqlite3.DataError:
+        print("Erro nos dados")
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 import yaml
-from .command import Command
 from collections.abc import Iterable
+from .command import Command
 
 def key_exists(key: str, dict_config: dict):
     if key in dict_config.keys():
@@ -50,6 +50,7 @@ class Runner():
                                     mutation_rate=mutation_r,
                                     database=savedb
                                 )
+                                command.insert_on(savedb)
                                 if (num_executions > 1): print(' \t:: ', end='')
                                 print(command)
                                 command.run(suppress_log=suppress)
