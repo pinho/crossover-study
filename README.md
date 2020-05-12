@@ -5,33 +5,48 @@
 Comparação de Opeardores de crossover em Algoritmos Genéticos aplicando a 
 alguns problemas de otimização combinatória bem conhecidos.
 
-- [Build](#Build)
-- [Executáveis](#Executáveis)
-- [Script start.py](#Script-Start.py)
+- [Instalando dependências](#Instalando-dependências) (Linux)
+- [Compilando o projeto](#Compilando-o-projeto)
+- [Arquivos gerados](#arquivos-gerados)
+- [Utilitários Python](#Utilitários-python)
 
-## Build
+## Instalando dependências
 
-Tenha certeza de ter o CMake instalado na versão 3.6+;
-
-Use o script `install_dependencies.sh` para instalar dependências (bibliotecas e frameworks) necessárias para compilar o projeto:
+### Arch Linux
 
 ```sh
-% sudo ./install_dependencies.sh
+% sudo pacman -S --ignore pacaur cmake wget unzip doxygen boost boost-libs vsqlite++ 
+
+% pacaur -S doctest
+
+% sudo chmod +x instd.sh
+
+% sudo ./instd.sh
 ```
 
-OBS: É necessário ter instalado alguns pacotes básicos: `git`, `wget`, `zip`/`unzip`, `doxygen`.
-
-O script baixará instalará os seguintes softwares:
-- ParadisEO framework
-- Boost Graph Library
-- [SCPxx](https://github.com/pinho/scpxx)
-
-Tome um café e aguarde ;)
-
-Com todas as dependências instaladas localmente, gere os Makefiles usando cmake:
+### Debian
 
 ```sh
-% mkdir build && cd build # recomendado para manter o diretório do projeto limpo
+% sudo apt-get update
+
+% sudo apt-get install wget doxygen unzip cmake libboost-graph-dev doctest-dev libvsqlitepp-dev
+
+% sudo chmod +x instd.sh
+
+% sudo ./instd.sh
+```
+
+O script `instd.sh` baixa e instala outras dependências a partir do código fonte
+usando `wget`, `unzip` e `cmake`, logo é independente de distribuição Linux e
+gerenciador de pacotes.
+
+## Compilando o projeto
+
+Tenha certeza de ter o CMake instalado na versão 3.6+. Use o comando
+`cmake --version` para verificar.
+
+```sh
+% mkdir build && cd build
 % cmake .. -DCMAKE_INSTALL_PREFIX=..
 % make
 % make install
@@ -44,7 +59,9 @@ Teste:
 % ./bin/ga4scp -f instances/set-covering/scp44.txt
 ```
 
-## Executáveis
+## Arquivos gerados
+
+### Executáveis
 
 Com a compilação do projeto, é gerado um arquivo executável para cada problema implementado.
 
@@ -56,7 +73,7 @@ Com a compilação do projeto, é gerado um arquivo executável para cada proble
 
 `ga4multiknap` executa o algoritmo genético para o problema da mochila multidimensional.
 
-## Script `start.py`
+## Utilitários Python
 
 ...
 
