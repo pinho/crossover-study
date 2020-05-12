@@ -8,7 +8,7 @@ before_script:
   # Install dependencies packages
   - apt-get update -y
   - apt-get install -y wget doxygen unzip libboost-graph-dev libvsqlitepp-dev
-  - bash install_dependencies.sh
+  - bash instd.sh
 
 build:
   stage: build

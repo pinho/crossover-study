@@ -15,12 +15,8 @@ alguns problemas de otimização combinatória bem conhecidos.
 ### Arch Linux
 
 ```sh
-% sudo pacman -S --ignore pacaur cmake wget unzip doxygen boost boost-libs vsqlite++ 
-
-% pacaur -S doctest
-
+% sudo pacman -Sy --ignore cmake wget unzip doxygen boost boost-libs vsqlite++ 
 % sudo chmod +x instd.sh
-
 % sudo ./instd.sh
 ```
 
@@ -28,11 +24,8 @@ alguns problemas de otimização combinatória bem conhecidos.
 
 ```sh
 % sudo apt-get update
-
-% sudo apt-get install wget doxygen unzip cmake libboost-graph-dev doctest-dev libvsqlitepp-dev
-
+% sudo apt-get install cmake wget unzip doxygen libboost-graph-dev libvsqlitepp-dev
 % sudo chmod +x instd.sh
-
 % sudo ./instd.sh
 ```
 
@@ -42,7 +35,7 @@ gerenciador de pacotes.
 
 ## Compilando o projeto
 
-Tenha certeza de ter o CMake instalado na versão 3.6+. Use o comando
+Tenha certeza de ter o `cmake` instalado na versão 3.6+. Use o comando
 `cmake --version` para verificar.
 
 ```sh
