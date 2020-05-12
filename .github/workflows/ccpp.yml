@@ -1,0 +1,25 @@
+name: CMake Build
+
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: |
+        sudo apt-get install -y
+        sudo apt-get install -y cmake wget unzip doxygen
+        sudo apt-get install -y libvsqlitepp-dev libboost-graph-dev
+        sudo bash install_dependencies.sh
+    - name: Compile project
+      run: cmake . && make
+    - name: CTest
+      run: make test

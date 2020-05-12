@@ -1,0 +1,32 @@
+# Files ignored by Git
+
+## Folders to ignore
+build
+cmake-build-debug
+diagrams
+img
+bin
+lib
+dist
+
+# IDEs
+.vscode
+.idea
+
+## C++ precompiled and eexecutables
+**/*.[o|a]
+**/*.obj
+**/*.exe
+**/*.out
+**/*.ar
+**/*.so
+ga4scp
+ga4maxclique
+
+## Temporary test sources
+t-*.cpp
+t-*.cxx
+t-*.cc
+
+## Python
+**/__pycache__/
