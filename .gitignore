@@ -3,17 +3,17 @@
 ## Folders to ignore
 build
 cmake-build-debug
-diagrams
 img
 bin
 lib
 dist
+**/.ipynb-checkpoint*
 
 # IDEs
 .vscode
 .idea
 
-## C++ precompiled and eexecutables
+## C++ precompiled and executables
 **/*.[o|a]
 **/*.obj
 **/*.exe
@@ -22,11 +22,17 @@ dist
 **/*.so
 **/ga4scp
 **/ga4maxclique
+**/ga4steintree
+**/ga4multiknap
 
 ## Temporary test sources
-t-*.cpp
-t-*.cxx
-t-*.cc
+**/t-*.cpp
+**/t-*.cxx
+**/t-*.cc
+**/tmp-*
+**/*~
+**/*.bkp
+
 
 ## Python
 **/__pycache__/

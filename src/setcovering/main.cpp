@@ -1,15 +1,16 @@
 #include <iostream>
+#include <chrono>
+#include <algorithm>
 #include <ga/encoding.h>
 #include <ga/crossover_fabric.h>
 #include <ga/genetic_algorithm.h>
 #include <cli/parse.h>
+#include <db/database_entry.hpp>
 
 #include <paradiseo/eo/ga/eoBitOp.h>
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoDetTournamentSelect.h>
-
 #include <sqlite/connection.hpp>
-#include <sqlite/execute.hpp>
 #include <sqlite/database_exception.hpp>
 
 #include "set_covering_problem.h"
@@ -45,17 +46,21 @@ int main(int argc, char **argv) {
         // Genetic Algorithm object
         GeneticAlgorithm ga(scp, selector, *crossover_ptr, cli->crossover_rate,
                 mutator, 1, continuator);
-
+        
         // Array for ga's convergence
         std::vector<Chrom> vec_convergence;
 
         // start algorithm
+        auto begin_point = std::chrono::system_clock::now();
+
         ga(population, vec_convergence, [](int g, eoPop<Chrom>& p) {
             std::cout << g << "a geração: ";
             auto best_it = p.it_best_element();
             solution_t decoded_solution(*best_it);
             std::cout << ".... " << decoded_solution << "\n";
         });
+
+        auto duration = std::chrono::system_clock::now() - begin_point;
 
         // Get best solution
         Chrom best = population.best_element();
@@ -68,23 +73,23 @@ int main(int argc, char **argv) {
 
         // Write to Database if is defined [--db]
         if (cli->using_db) {
-            sqlite::connection conn( cli->databasefile );
-            std::stringstream ss;
-            
-            for (Chrom &ind : vec_convergence) {
-                solution_t s(ind);
-                ss << s.cost << ";";
+            // Create a vector with the fitness of convergence
+            std::vector<double> fitnesses(vec_convergence.size());
+            for (auto i = vec_convergence.begin(); i != vec_convergence.end(); ++i) {
+                solution_t s{*i};
+                fitnesses.push_back(s.cost);
             }
 
-            sqlite::execute ins(conn,
-                "INSERT INTO execucoes (config_code, convergencia) VALUES (?, ?);");
-
-            ins % identify(*cli) % ss.str();
-            ins();
-            std::cout << "Dados armazenados em "<<cli->databasefile<< std::endl;
+            sqlite::connection conn( cli->databasefile );
+            
+            DatabaseEntry entry(identify(*cli), crossover_ptr->className(),
+                    std::string(cli->infile), final_solution.cost,
+                    fitnesses, duration);
+            entry.write(conn);
+            std::cout << "Dados salvos em " << cli->databasefile << std::endl;
         }
     }
-    catch (sqlite::database_exception sqle) {
+    catch (sqlite::database_exception &sqle) {
         std::cerr << cli->databasefile << ": " << sqle.what() << std::endl;
         return EXIT_FAILURE;
     }

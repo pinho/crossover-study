@@ -1,13 +1,20 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 find_library(PEO NAMES eo libeo HINTS /usr/local/lib64)
 find_library(PEOUTILS NAMES eoutils libeoutils HINTS /usr/local/lib64)
+find_library(VSQL NAMES vsqlitepp libvsqlitepp)
 
 if(NOT PEO OR NOT PEOUTILS)
   message(FATAL_ERROR "ParadisEO libraries not found")
 else()
   message("-- ParadisEO Library: " ${PEO})
   message("-- ParadisEO Library: " ${PEOUTILS})
+endif()
+
+if (VSQL)
+    message("-- VSQLite++ library found: " ${VSQL})
+else()
+    message(FATAL_ERROR "VSQLite++ not found")
 endif()
 
 # Arquivos fonte
@@ -22,8 +29,12 @@ file(GLOB CLI_HEADERS cli/*.h)
 # Compilação e linkagem
 add_library(ga ${GA_SOURCES})
 target_link_libraries(ga ${PEO} ${PEOUTILS})
-
 add_library(io ${IO_SOURCES})
+
+# Add shared library for db
+add_library(db SHARED db/database_entry.cpp)
+target_link_libraries(db vsqlitepp)
+target_compile_options(db PUBLIC -Wall -Wextra)
 
 # Regras de instalação
 install(TARGETS ga io DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
