@@ -15,18 +15,18 @@ alguns problemas de otimização combinatória bem conhecidos.
 ### Arch Linux
 
 ```sh
-% sudo pacman -Sy --ignore cmake wget unzip doxygen boost boost-libs vsqlite++ 
-% sudo chmod +x instd.sh
-% sudo ./instd.sh
+sudo pacman -Sy --ignore cmake wget unzip doxygen boost boost-libs vsqlite++ 
+sudo chmod +x instd.sh
+sudo ./instd.sh
 ```
 
 ### Debian
 
 ```sh
-% sudo apt-get update
-% sudo apt-get install cmake wget unzip doxygen libboost-graph-dev libvsqlitepp-dev
-% sudo chmod +x instd.sh
-% sudo ./instd.sh
+sudo apt-get update
+sudo apt-get install cmake wget unzip doxygen libboost-graph-dev libvsqlitepp-dev
+sudo chmod +x instd.sh
+sudo ./instd.sh
 ```
 
 O script `instd.sh` baixa e instala outras dependências a partir do código fonte
@@ -41,7 +41,7 @@ Tenha certeza de ter o `cmake` instalado na versão 3.6+. Use o comando
 ```sh
 % mkdir build && cd build
 % cmake .. -DCMAKE_INSTALL_PREFIX=..
-% make
+% make -j $(nproc)
 % make install
 ```
 

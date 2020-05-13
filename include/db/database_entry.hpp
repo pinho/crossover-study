@@ -10,7 +10,12 @@
 
 /**
  * DatabaseEntry mapeia a tabela do banco de dados SQLite e encapsula o método
- * de escrita de dados na tabela */
+ * de escrita de dados na tabela 
+ * 
+ * // TODO: Adicionar mais colunas na estrutura da tabela
+ * 
+ * // TODO: Adicionar mais parâmetros no construtor para seguir o modelo da tabela
+ * */
 class DatabaseEntry {
 public:
     /**
