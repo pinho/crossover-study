@@ -7,7 +7,7 @@
 /**
  * Mostra o menu de ajuda das opções de linha de comandos
  */
-void show_help(int argc, char **argv) {
+void show_help(char **argv) {
     printf("Use: %s -f [INPUTFILE] [ARGS] ...\n\n", argv[0]);
     printf("ARGS:\n");
 
@@ -57,7 +57,7 @@ cl_arguments *parse(int argc, char **argv)
                 if (optarg) res->crossover_id = std::stoi(optarg);
                 break;
             case 'h':
-                show_help(argc, argv);
+                show_help(argv);
                 exit(127);
             default:
                 printf("Use -h ou --help para ver as opções de linha de comandos.\n");

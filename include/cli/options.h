@@ -12,7 +12,7 @@ struct cl_arguments {
     double crossover_rate;
     double mutation_rate;
     char *databasefile;
-    bool using_db = false;
+    bool using_db;
 
     explicit cl_arguments()
     {
@@ -23,6 +23,7 @@ struct cl_arguments {
         this->crossover_rate = 0.8;
         this->mutation_rate = 0.05;
         this->databasefile = (char *) "";
+        this->using_db = false;
     }
 
     explicit cl_arguments(char* f, uint p, uint g, uint c, double cr, double mr)
@@ -45,8 +46,6 @@ struct cl_arguments {
         return os;
     }
 };
-
-static int db_flag;
 
 option long_options[] = {
     {"db", required_argument, 0, 'd'},
