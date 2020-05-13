@@ -32,12 +32,12 @@ target_link_libraries(ga ${PEO} ${PEOUTILS})
 add_library(io ${IO_SOURCES})
 
 # Add shared library for db
-add_library(db SHARED db/database_entry.cpp)
+add_library(db db/database_entry.cpp)
 target_link_libraries(db vsqlitepp)
 target_compile_options(db PUBLIC -Wall -Wextra)
 
 # Regras de instalação
-install(TARGETS ga io DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install(TARGETS ga io db DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
 if(INSTALL_HEADERS)
   install(FILES ${GA_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/myresearch/ga)

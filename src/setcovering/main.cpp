@@ -6,10 +6,11 @@
 #include <ga/genetic_algorithm.h>
 #include <cli/parse.h>
 #include <db/database_entry.hpp>
-
+// ParadisEO
 #include <paradiseo/eo/ga/eoBitOp.h>
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoDetTournamentSelect.h>
+// VSQLite++
 #include <sqlite/connection.hpp>
 #include <sqlite/database_exception.hpp>
 
@@ -23,8 +24,7 @@ int main(int argc, char **argv) {
     try {
         SCP scp(cli->infile);
         scp.display_info(std::cout);
-
-        // std::cout << *cli;
+        std::cout << *cli;
 
         // create a population
         std::cout << "Inicializando população\n";
@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
 
         // Choose crossover operator
         eoQuadOp<Chrom> *crossover_ptr = CrossoverFabric::create(cli->crossover_id);
+        auto crossover_name = CrossoverFabric::name(cli->crossover_id);
 
         // Genetic Algorithm object
         GeneticAlgorithm ga(scp, selector, *crossover_ptr, cli->crossover_rate,
@@ -79,12 +80,13 @@ int main(int argc, char **argv) {
                 solution_t s{*i};
                 fitnesses.push_back(s.cost);
             }
-
-            sqlite::connection conn( cli->databasefile );
+            // Create a instance to put in DB table
+            DatabaseEntry entry(scp.name(), scp.acronym(), cli->infile,
+                    crossover_name, cli->crossover_rate, cli->pop_size,
+                    cli->epochs, final_solution.cost, fitnesses, duration);
             
-            DatabaseEntry entry(identify(*cli), crossover_ptr->className(),
-                    std::string(cli->infile), final_solution.cost,
-                    fitnesses, duration);
+            // Connect to DB and Write data
+            sqlite::connection conn( cli->databasefile );
             entry.write(conn);
             std::cout << "Dados salvos em " << cli->databasefile << std::endl;
         }

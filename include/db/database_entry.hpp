@@ -11,25 +11,26 @@
 /**
  * DatabaseEntry mapeia a tabela do banco de dados SQLite e encapsula o método
  * de escrita de dados na tabela 
- * 
- * // TODO: Adicionar mais colunas na estrutura da tabela
- * 
- * // TODO: Adicionar mais parâmetros no construtor para seguir o modelo da tabela
  * */
 class DatabaseEntry {
 public:
     /**
      * Default DatabaseEntry constructor.
-     * @param config_code, string_id da combinação de parâmetros
-     * @param crossover, nome do operador de crossover
-     * @param instance, nome do arquivo de instância usado
-     * @param best_solution, solução encontrada pelo AG nessa execução
-     * @param convergence, referência p/ um vector com os dados da convergência
-     * @param ga_duration, referência p/duração da execução do operador de AG
+     * @param problem,
+     * @param problem_sigle,
+     * @param instance,
+     * @param crossover,
+     * @param crossing_rate,
+     * @param popsize,
+     * @param num_epochs,
+     * @param best_solution, 
+     * @param conv,
+     * @param dur,
      */
-    DatabaseEntry(std::string config_code, std::string crossover, std::string instance,
-            float best_solution, std::vector<double> &convergence,
-            std::chrono::system_clock::duration &ga_duration);
+    DatabaseEntry(const char *problem, const char *problem_sigle, std::string instance,
+            const char *crossover, const float crossing_rate, int popsize,
+            int num_epochs, double best_solution, std::vector<double> &conv,
+            std::chrono::system_clock::duration &dur);
 
     /**
      * Escreve os dados do objetochar * no banco de dados SQLite.
@@ -37,11 +38,24 @@ public:
      */
     void write(sqlite::connection &con);
 
+    /**
+     * Define o código de parâmetro a partir dos dados:
+     * ~Nome do crossover
+     * ~Taxa de cruzamento
+     * ~Tamanho de população
+     * ~Número de gerações
+     */
+    std::string conf_code();
+
 private:
-    std::string __config_code, __crossover, __instance;
-    float __best_solution;
-    std::vector<double>& __convergence;
-    std::chrono::system_clock::duration __duration;
+    const char *__problem, *__problem_acronym, *__crossover;
+    std::string __instance;
+    const float __cross_rate;
+    int __pop_length;
+    int __num_epochs;
+    double __best_solution;
+    std::vector<double> &__conv;
+    std::chrono::system_clock::duration &__duration;
 };
 
 #endif
