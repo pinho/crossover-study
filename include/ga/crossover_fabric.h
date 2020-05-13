@@ -10,6 +10,7 @@
 
 class CrossoverFabric {
 public:
+	static const char *name(uint crossID);
 	static eoQuadOp<Chrom> *create(uint crossID);
 	static eoQuadOp<Chrom> *create_uniform(double bias = 0.5);
 	static eoQuadOp<Chrom> *create_cutpoints(uint numPoints);

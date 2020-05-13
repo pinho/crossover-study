@@ -23,6 +23,14 @@ public:
 	uint get_chromsize();
 
 	/**
+	 * Getter to member name */
+	const char *name();
+
+	/**
+	 * Getter to member acronym */
+	const char *acronym();
+
+	/**
 	 * Evaluator of chromosomes.
 	 * This method apply the objective function with a chromosome computing
 	 * the fitness and set the resultant fitness value to the chromosome. */

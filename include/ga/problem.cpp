@@ -14,3 +14,11 @@ void Problem::eval(eoPop<Chrom>& pop) {
         this->eval(chrom);
     }
 }
+
+const char *Problem::name() {
+    return this->__name;
+}
+
+const char *Problem::acronym() {
+    return this->__acronym;
+}
