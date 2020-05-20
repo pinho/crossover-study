@@ -1,0 +1,3 @@
+[submodule "instances"]
+	path = instances
+	url = https://gitlab.com/laai/cop-instances.git
