@@ -1,0 +1,45 @@
+# Projeto de pesquisa de comparações de operadores de crossover para problemas
+# de otimização.
+#
+# conduzido pro Ronaldd Pinho <ronaldppinho@gmail.com>
+#
+
+PROJECT_NAME = CrossoverStudy
+
+OUTPUT_DIRECTORY = ./doc
+
+OUTPUT_LANGUAGE = Portuguese
+
+BRIEF_MEMBER_DESC = YES
+
+#-------------------------------------------------------------------------------
+# Configurações relacionadas à build
+#-------------------------------------------------------------------------------
+
+EXTRACT_ALL = NO
+EXTRACT_PRIVATE = YES
+EXTRACT_STATIC = YES
+
+HIDE_UNDOC_CLASSES = NO
+
+GENERATE_TODOLIST = YES
+
+#-------------------------------------------------------------------------------
+# Configurações relacionadas aos arquivos de entrada
+#-------------------------------------------------------------------------------
+
+INPUT = ./include ./src
+
+FILE_PATTERNS = *.h *.hpp *.cpp *.c
+
+RECURSIVE = YES
+
+#-------------------------------------------------------------------------------
+# Configurações relacionadas documentação gerada em HTML
+#-------------------------------------------------------------------------------
+
+GENERATE_HTML = YES
+
+HTML_OUTPUT = html
+
+HTML_FILE_EXTENSION = .html
