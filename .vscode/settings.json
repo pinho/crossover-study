@@ -84,7 +84,9 @@
         "valarray": "cpp",
         "variant": "cpp",
         "strstream": "cpp",
-        "cfenv": "cpp"
+        "cfenv": "cpp",
+        "forward_list": "cpp",
+        "shared_mutex": "cpp"
     },
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }
