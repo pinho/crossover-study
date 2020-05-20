@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
             }
             // Create a instance to put in DB table
             DatabaseEntry entry(scp.name(), scp.acronym(), cli->infile,
-                    crossover_name, cli->crossover_rate, cli->pop_size,
+                    crossover_name.c_str(), cli->crossover_rate, cli->pop_size,
                     cli->epochs, final_solution.cost, fitnesses, duration);
             
             // Connect to DB and Write data

@@ -40,14 +40,15 @@ eoQuadOp<Chrom> * CrossoverFabric::create(uint crossID) {
 /**
  * Returns the name of the crossover operator to respective crossover ID
  */
-const char *CrossoverFabric::name(uint crossID) {
+std::string CrossoverFabric::name(uint crossID) {
 	if (crossID == 0) {
-		return "Uniform";
+		return "UNIFORM";
 	} else if (crossID == 1) {
-		return "One-Point";
+		return "ONE-POINT";
 	} else {
-		std::string n = std::to_string(crossID);
-		n += "-Points";
-		return n.c_str();
+		// TODO: Verificar o caso para crossID > 1, BD salvando como BLOB.
+		std::string str = std::to_string(crossID);
+		str += "-POINTS";
+		return str;
 	}
 }

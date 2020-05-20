@@ -9,4 +9,4 @@ target_link_libraries(ga4scp ga io db)
 
 add_executable(ga4maxclique ${MCP_SOURCES})
 target_include_directories(ga4maxclique PUBLIC ../include)
-target_link_libraries(ga4maxclique ga io)
+target_link_libraries(ga4maxclique ga io db)
