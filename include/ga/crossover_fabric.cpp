@@ -46,7 +46,6 @@ std::string CrossoverFabric::name(uint crossID) {
 	} else if (crossID == 1) {
 		return "ONE-POINT";
 	} else {
-		// TODO: Verificar o caso para crossID > 1, BD salvando como BLOB.
 		std::string str = std::to_string(crossID);
 		str += "-POINTS";
 		return str;
