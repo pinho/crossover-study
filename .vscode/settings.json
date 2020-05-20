@@ -15,7 +15,8 @@
         "**/cmake-build-debug/": true,
         "**/build/": false,
         "diagrams/": true,
-        "lib/": true
+        "lib/": true,
+        "**/*.ipynb*": true
     },
     "files.associations": {
         "iosfwd": "cpp",
