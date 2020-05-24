@@ -1,11 +1,14 @@
 run:
-  program: bin/ga4scp 
   # Executável do problema de cobertura de conjuntos
+  program: bin/ga4scp 
+  
+  # Arquivo de instância do problem
+  instance: /home/ronaldd/Projects/scpxx/instances/scp41.txt
 
   # Definição dos parâmetros de execuções
   args:
     # Taxas de cruzamento: 60%, 80% e 100%
-    crossover_rate: [ 0.5, 1.0 ]
+    crossover_rate: 1.0
 
     # Taxa de mutação de 4%
     mutation_rate: 0.04
@@ -14,15 +17,11 @@ run:
     crossover:
       - 0
       - 1
-      - 2
-      - 10
+      - 4
 
     # Tamanho de população
-    population: 200
+    population: 20
 
     # Número de gerações
-    epochs: 150
-
-    # Arquivo de instância do problem
-    instance: /home/ronaldd/Projects/scpxx/instances/scp41.txt
+    epochs: 10
 
