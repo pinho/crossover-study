@@ -34,36 +34,15 @@ class Command():
         return strcmd
 
 
-    def config_id(self):
-        '''Define o código da configuração de parâmetros
+    def get_params(self) -> dict:
+        return {
+            "popsize": self.args["popsize"],
+            "epochs": self.args["epochs"],
+            "crossover": self.args["crossover"],
+            "xrate": self.args["xrate"],
+            "mrate": self.args["mrate"] }
 
-        A partir de uma combinação de parâmetros definida em uma arquivo Yaml,
-        a função cria a sua respectiva string 
-        '''
-        if self.args['crossover'] == 0:
-            code = 'UNIFORM'
-        else:
-            code = str(self.args['crossover']) + 'POINTS'
-
-        cr = str( int(100 * self.args['xrate']) )
-        mr = str( int(100 * self.args['mrate']) )
-        code += 'P'+ str(self.args['popsize'])
-        code += 'G'+ str(self.args['epochs'])
-        code += 'CR'+ cr
-        code += 'MR'+ mr
-        # print(code)
-        return code
-
-
-    def insert_on(self, dbname: str):
-        con = sqlite3.connect(dbname)
-        cur = con.cursor()
-        cur.execute('INSERT INTO config VALUES (?, ?, ?, ?, ?, ?);',
-                (self.config_id(), self.args['crossover'], self.args['popsize'],
-                self.args['epochs'], self.args['xrate'],
-                self.args['mrate']))
-
-
+    
     def run(self, suppress_log=False):
         cmd_ = str(self)
         if suppress_log:

@@ -22,21 +22,29 @@ class ConfigFile:
 
         self.key_exists('run', conf)
         self.key_exists('program', conf['run'])
+        self.key_exists('instance', conf['run'])
         self.key_exists('args', conf['run'])
         self.key_exists('crossover', conf['run']['args'])
         self.key_exists('epochs', conf['run']['args'])
         self.key_exists('population', conf['run']['args'])
         self.key_exists('crossover_rate', conf['run']['args'])
         self.key_exists('mutation_rate', conf['run']['args'])
-        self.key_exists('instance', conf['run']['args'])
 
         self.program_name = conf['run']['program']
+        self.instance_file = conf['run']['instance']
         self.parameters = conf['run']['args']
 
         # Transforma todos os elementos (values) do dict em listas
         for key in self.parameters:
             if not isinstance( self.parameters[key], Iterable ):
                 self.parameters[key] = [ self.parameters[key] ]
+
+        # Conta a quantidade de comandos diferentes para cobrir todas as
+        # combinações de parâmetros
+        aux = 1
+        for key in self.parameters:
+            aux = aux * len( self.parameters[key] )
+        self.num_combinations = aux
 
 
     def key_exists(self, key: str, dict_config: dict):

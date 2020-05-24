@@ -1,4 +1,5 @@
 from .config_file import ConfigFile
+from .command import Command
 
 class Runner:
     """Executador de comandos
@@ -25,25 +26,37 @@ class Runner:
         self.input_file = filename
 
     # TODO: Reimplementar o método run()
-    # def run(self, num_executions, savedb, suppress=False):
-    #     for i in range(num_executions):
-    #         if (num_executions > 1): print(f"[ {i+1} ]", end="")
-    #         for crossover_ in self.parameters["crossover"]:
-    #             for epochs_ in self.parameters["epochs"]:
-    #                 for popsize_ in self.parameters["population"]:
-    #                     for crossover_r in self.parameters["crossover_rate"]:
-    #                         for mutation_r in self.parameters["mutation_rate"]:
-    #                             command = Command(
-    #                                 self.program_name, self.parameters["instance"],
-    #                                 crossover=crossover_,
-    #                                 popsize=popsize_,
-    #                                 num_epochs=epochs_,
-    #                                 crossover_rate=crossover_r,
-    #                                 mutation_rate=mutation_r,
-    #                                 database=savedb
-    #                             )
-    #                             command.insert_on(savedb)
-    #                             if (num_executions > 1): print(' \t:: ', end='')
-    #                             print(command)
-    #                             command.run(suppress_log=suppress)
-    #     return
+    def run(self, num, database, suppress=True):
+        '''Executa todas as combinações de parâmetros
+
+        A partir de um arquivo de configuração Yaml (ConfigFile), o método
+        executa todas as combinações de parâmetros possíveis "num" vezes.
+        '''
+
+        ## Dicionário de argumentos
+        args = self.config.parameters
+        ## Número total ed comandos para executar
+        total_num_commands = num * self.config.num_combinations
+
+        e = 0
+        for i in range(num):
+            for crossover_ in args["crossover"]:
+                for epochs_ in args["epochs"]:
+                    for popsize_ in args["population"]:
+                        for crossover_r in args["crossover_rate"]:
+                            for mutation_r in args["mutation_rate"]:
+                                comm = Command(
+                                    self.config.program_name,
+                                    self.config.instance_file,
+                                    crossover=crossover_,
+                                    popsize=popsize_,
+                                    num_epochs=epochs_,
+                                    crossover_rate=crossover_r,
+                                    mutation_rate=mutation_r,
+                                    database=database
+                                )
+
+                                e += 1
+                                print(f'\r[ {e}/{total_num_commands} ] {comm.get_params()}', end='')
+                                comm.run(suppress_log=suppress)
+        return
