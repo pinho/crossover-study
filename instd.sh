@@ -24,10 +24,13 @@ OFF="\e[0m"
 logf='/tmp/instd.log'
 rm -f $logf
 
+# cmake specs
+EO_ONLY='-DEO_ONLY=ON'
+
 # links to download
 declare -A LINKS
 LINKS['scpxx']='https://github.com/pinho/scpxx/archive/master.zip'
-LINKS['paradiseo']='https://github.com/pinho/paradiseo/archive/master.zip'
+LINKS['paradiseo']='https://github.com/nojhan/paradiseo/archive/master.zip'
 
 run() {
     CMD=$1
@@ -57,8 +60,11 @@ getAndInstall() {
     echo -e "Compilando $package"
     run "cd /tmp/$package/$package-master/"
     
-    run "cmake ."
-    run "make"
+    if [ $package == 'paradiseo' ]; then
+        run "cmake . ${EO_ONLY}"
+    else 
+        run "cmake ."
+    fi
     run "make install"
 
     echo "Removendo arquivos gerados"
