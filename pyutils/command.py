@@ -10,10 +10,10 @@ import sqlite3
 class Command():
     program_name : str
     args : dict
-    inpath_program : bool
+    installed_program : bool
 
     def __init__(self, program, inputfile, crossover, popsize, num_epochs, database,
-            crossover_rate=0.8, mutation_rate=0.05, locally=True):
+            crossover_rate=0.8, mutation_rate=0.05, installed=True):
         self.program_name = program
         self.args = dict()
         self.args["infile"] = inputfile
@@ -23,11 +23,11 @@ class Command():
         self.args["xrate"] = float(crossover_rate)
         self.args["mrate"] = float(mutation_rate)
         self.args["db"] = database
-        self.inpath_program = locally
+        self.installed_program = installed
 
 
     def __str__(self):
-        strcmd = './' if self.inpath_program else ''
+        strcmd = '' if self.installed_program else './'
         strcmd += self.program_name
         for key in self.args:
             strcmd += f' --{key} {str(self.args[key])}'

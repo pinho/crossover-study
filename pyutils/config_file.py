@@ -22,6 +22,7 @@ class ConfigFile:
 
         self.key_exists('run', conf)
         self.key_exists('program', conf['run'])
+        self.key_exists('installed', conf['run'])
         self.key_exists('instance', conf['run'])
         self.key_exists('args', conf['run'])
         self.key_exists('crossover', conf['run']['args'])
@@ -31,6 +32,7 @@ class ConfigFile:
         self.key_exists('mutation_rate', conf['run']['args'])
 
         self.program_name = conf['run']['program']
+        self.installed = conf['run']['installed']
         self.instance_file = conf['run']['instance']
         self.parameters = conf['run']['args']
 

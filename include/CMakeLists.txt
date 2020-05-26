@@ -31,10 +31,10 @@ file(GLOB CLI_HEADERS cli/*.h)
 # Compilação e linkagem
 add_library(ga ${GA_SOURCES})
 target_link_libraries(ga ${PEO} ${PEOUTILS})
-add_library(io SHARED ${IO_SOURCES})
 
-# Add shared library for db
-add_library(db SHARED db/database_entry.cpp)
+add_library(io ${IO_SOURCES})
+
+add_library(db db/database_entry.cpp)
 target_link_libraries(db vsqlitepp)
 target_compile_options(db PUBLIC -Wall -Wextra)
 

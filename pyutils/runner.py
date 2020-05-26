@@ -25,7 +25,6 @@ class Runner:
     def set_input(self, filename: str):
         self.input_file = filename
 
-    # TODO: Reimplementar o método run()
     def run(self, num, database, suppress=True):
         '''Executa todas as combinações de parâmetros
 
