@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
         // Write to Database if is defined [--db]
         if (cli->using_db) {
             // Create a vector with the fitness of convergence
-            std::vector<double> fitnesses(vec_convergence.size());
+            std::vector<double> fitnesses;
             for (auto i = vec_convergence.begin(); i != vec_convergence.end(); ++i) {
                 solution_t s{*i};
                 fitnesses.push_back(s.cost);
