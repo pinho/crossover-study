@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Apagar a pasta build se existir
-rm -rf build
+# rm -rf build
 
 # recriar a pasta build
-mkdir build 
+# mkdir build 
 cd build
 
 # Gerar arquivos de bild com cmake

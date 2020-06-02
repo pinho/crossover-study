@@ -19,7 +19,7 @@
 
 using SCP = SetCoveringProblem;
 
-int main(int argc, char **argv) {
+int __main__(int argc, char **argv) {
     auto cli = parse(argc, argv);
     try {
         SCP scp(cli->infile);
@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
         std::cout << "FEITO" << std::endl;
 
         // build GA components
-        eoGenContinue<Chrom> continuator(cli->epochs);
         eoDetTournamentSelect<Chrom> selector(8);
+        eoGenContinue<Chrom> continuator(cli->epochs);
         eoBitMutation<Chrom> mutator(cli->mutation_rate);
 
         // Choose crossover operator

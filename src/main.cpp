@@ -14,12 +14,7 @@
 #include <sqlite/connection.hpp>
 #include <sqlite/database_exception.hpp>
 
-#include "scp/set_covering_problem.h"
-#include "scp/solution.h"
-#include "mcp/maximum_clique_problem.h"
-#include "mcp/solution.h"
-#include "mkp/m_knapsack_problem.h"
-
+#include "problem_fabric.h"
 
 /**
  * Função executada dentro de cada geração do algoritmo.
@@ -35,8 +30,22 @@ void __gaCallback(int gen, eoPop<Chrom> &pop) {
 /**
  * Escreve todos os dados na tabela do arquivo .db
  */
-void write_into_db(Problem &problem, cl_arguments &args) {
+void write_into_db(Problem &problem, cl_arguments &args, const char *crossName,
+        double final_cost, std::vector<Chrom> &converg, std::chrono::nanoseconds &duration)
+{
+    std::vector<double> fits;
+    auto it = converg.begin();
+    
+    for (; it != converg.end(); ++it)
+        fits.push_back( it->fitness() );
 
+    DatabaseEntry entry(problem.name(), problem.acronym(),
+            args.infile, crossName, args.crossover_rate, args.pop_size,
+            args.epochs, final_cost, fits, duration);
+
+    sqlite::connection con(args.databasefile);
+    entry.write(con);
+    std::cout << "Dados salvos em " << args.databasefile << std::endl;
 }
 
 
@@ -54,7 +63,7 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 
     // Definição da configuração do Algoritmo Genético:
     // Operadores de seleção, mutação e o critério de parada (continuador)
-    eoDetTournamentSelect<Chrom> select(8);
+    eoDetTournamentSelect<Chrom> select;
     eoBitMutation<Chrom> mutation(arg.mutation_rate);
     eoGenContinue<Chrom> continuator(arg.epochs);
 
@@ -76,7 +85,12 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
     auto dur = system_clock::now() - t0;
 
     // Tratamento da população final
-    write_into_db(problem, arg);
+    // Problem::Solution final_solution;
+
+    // escrever no banco (se definido)
+    // if (arg.using_db) {
+    // TODO: Classe para escrever no banco de formas diferentes
+    // }
 }
 
 //------------------------------------------------------------------------------
@@ -84,10 +98,31 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 //------------------------------------------------------------------------------
 
 int main(int argc, char **argv) {
-    auto cli = parse(argc, argv);
+    using namespace std;
+
+    // transformando argumentos em um vector
+    vector<char *> vec_args;
+    for (int i=0; i < argc; i++) {
+        vec_args.push_back( argv[i] );
+    }
+
+    //pegando somente o primeiro argumento após o nome do programa
+    string problem_name = vec_args[1];
+    vec_args.erase(vec_args.begin()+1);
+    char **newArgs = &vec_args[0];
+
+    // cout << "Nova lista de args: ";
+    // for (int i=0; i < argc-1; i++)
+    //     cout << newArgs[i] << " ";
+    // cout << endl;
+
+    auto cli = parse(argc, newArgs);
+
+    // Criando uma instância de um problema
+    auto prob = ProblemFabric::create( cli->infile, problem_name );
 
     try {
-        
+        exec_algorithm(*prob, *cli);
     }
     catch (std::exception &e) {
         std::cerr << e.what() << std::endl;

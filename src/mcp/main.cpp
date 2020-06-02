@@ -14,7 +14,7 @@
 #include "maximum_clique_problem.h"
 using MCP = MaximumCliqueProblem;
 
-int main(int argc, char **argv) {
+int __main__(int argc, char **argv) {
     auto cli = parse(argc, argv);
 
     try {

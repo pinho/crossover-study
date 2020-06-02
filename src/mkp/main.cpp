@@ -1,20 +1,25 @@
 #include <iostream>
 #include <chrono>
-#include <paradiseo/eo/ga/eoBitOp.h>
-#include <paradiseo/eo/eoDetTournamentSelect.h>
-#include <paradiseo/eo/eoGenContinue.h>
-
-#include <cli/parse.h>
+#include <algorithm>
 #include <ga/encoding.h>
-#include <ga/genetic_algorithm.h>
 #include <ga/crossover_fabric.h>
+#include <ga/genetic_algorithm.h>
+#include <cli/parse.h>
+#include <db/database_entry.hpp>
+// ParadisEO
+#include <paradiseo/eo/ga/eoBitOp.h>
+#include <paradiseo/eo/eoGenContinue.h>
+#include <paradiseo/eo/eoDetTournamentSelect.h>
+// VSQLite++
+#include <sqlite/connection.hpp>
+#include <sqlite/database_exception.hpp>
 
 #include "m_knapsack_problem.h"
 
 using MKP = MKnapsackProblem;
 using std::chrono::system_clock;
 
-int main(int argc, char **argv) {
+int __main__(int argc, char **argv) {
     cl_arguments *cli = parse(argc, argv);
 
     if (std::string(cli->infile).empty()) {
@@ -37,8 +42,8 @@ int main(int argc, char **argv) {
     std::cout << "FEITO" << std::endl;
 
     // build GA components
-    eoGenContinue<Chrom> continuator(cli->epochs);
     eoDetTournamentSelect<Chrom> selector(8);
+    eoGenContinue<Chrom> continuator(cli->epochs);
     eoBitMutation<Chrom> mutator(cli->mutation_rate);
 
     // Choose crossover operator
