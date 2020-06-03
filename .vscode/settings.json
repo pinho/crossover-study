@@ -89,5 +89,16 @@
         "forward_list": "cpp",
         "shared_mutex": "cpp"
     },
-    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
+    "material-icon-theme.files.associations": {
+        "*.db": "database"
+    },
+    "material-icon-theme.folders.associations": {
+        "pyutils": "python",
+        "instances": "resource",
+        "scp": "src",
+        "mcp": "src",
+        "mkp": "src",
+        "stp": "src"
+    }
 }
