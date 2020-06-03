@@ -8,13 +8,13 @@ import os
 import sqlite3
 
 class Command():
-    program_name : str
+    problem_name : str
     args : dict
     installed_program : bool
 
-    def __init__(self, program, inputfile, crossover, popsize, num_epochs, database,
-            crossover_rate=0.8, mutation_rate=0.05, installed=True):
-        self.program_name = program
+    def __init__(self, problem, inputfile, crossover, popsize, num_epochs, database,
+            crossover_rate=0.8, mutation_rate=0.05, installed=False):
+        self.problem_name = problem
         self.args = dict()
         self.args["infile"] = inputfile
         self.args["crossover"] = int(crossover)
@@ -27,8 +27,8 @@ class Command():
 
 
     def __str__(self):
-        strcmd = '' if self.installed_program else './'
-        strcmd += self.program_name
+        strcmd = './bin/gastart'
+        strcmd += f' {self.problem_name}'
         for key in self.args:
             strcmd += f' --{key} {str(self.args[key])}'
         return strcmd

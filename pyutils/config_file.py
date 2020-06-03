@@ -20,18 +20,21 @@ class ConfigFile:
             buff = f.read()
             conf = yaml.load(buff, Loader=yaml.CLoader)
 
-        self.key_exists('run', conf)
-        self.key_exists('program', conf['run'])
-        self.key_exists('installed', conf['run'])
-        self.key_exists('instance', conf['run'])
-        self.key_exists('args', conf['run'])
-        self.key_exists('crossover', conf['run']['args'])
-        self.key_exists('epochs', conf['run']['args'])
-        self.key_exists('population', conf['run']['args'])
-        self.key_exists('crossover_rate', conf['run']['args'])
-        self.key_exists('mutation_rate', conf['run']['args'])
+        try:
+            self.key_exists('run', conf)
+            self.key_exists('problem', conf['run'])
+            self.key_exists('installed', conf['run'])
+            self.key_exists('instance', conf['run'])
+            self.key_exists('args', conf['run'])
+            self.key_exists('crossover', conf['run']['args'])
+            self.key_exists('epochs', conf['run']['args'])
+            self.key_exists('population', conf['run']['args'])
+            self.key_exists('crossover_rate', conf['run']['args'])
+            self.key_exists('mutation_rate', conf['run']['args'])
+        except:
+            raise KeyError(f'A valid key is missing on {filename}')
 
-        self.program_name = conf['run']['program']
+        self.problem_name = conf['run']['problem']
         self.installed = conf['run']['installed']
         self.instance_file = conf['run']['instance']
         self.parameters = conf['run']['args']

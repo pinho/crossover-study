@@ -45,7 +45,7 @@ class Runner:
                         for crossover_r in args["crossover_rate"]:
                             for mutation_r in args["mutation_rate"]:
                                 comm = Command(
-                                    self.config.program_name,
+                                    self.config.problem_name,
                                     self.config.instance_file,
                                     crossover=crossover_,
                                     popsize=popsize_,
@@ -54,7 +54,7 @@ class Runner:
                                     mutation_rate=mutation_r,
                                     database=database
                                 )
-
+                                # print(comm)
                                 e += 1
                                 print(f'\r[ {e}/{total_num_commands} ] {comm.get_params()}', end='')
                                 comm.run(suppress_log=suppress)
