@@ -1,6 +1,11 @@
 run:
-  # Executável do problema de cobertura de conjuntos
-  program: ga4scp 
+  # Sigle do problema para fazer as execuções
+  # as opções são
+  # --- scp: cobertura de conjuntos
+  # --- mkp: mochila multidimensional
+  # --- mcp: clique máximo
+  # --- stp: árvore de Steiner
+  problem: scp
 
   # 'installed' define se o executável foi movido para um dos diretórios bin
   # do sistema, como /usr/bin, /usr/local/bin, $HOME/.local/bin, etc.
