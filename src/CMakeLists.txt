@@ -25,3 +25,9 @@ target_link_libraries(gastart problems)
 
 # add_executable(ga4multiknap ${MKP_SOURCES})
 # target_link_libraries(ga4multiknap ga io db)
+
+install(TARGETS gastart problems
+        RUNTIME
+          DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY
+          DESTINATION ${CMAKE_INSTALL_LIBDIR})
