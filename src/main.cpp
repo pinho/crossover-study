@@ -86,11 +86,29 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 
     // Tratamento da população final
     // Problem::Solution final_solution;
+    Chrom __final = population.best_element();
+
+    std::vector<double> filteredConverg;
+    for (auto it = converg.cbegin(); it != converg.cend(); ++it) {
+        filteredConverg.push_back( double(1/it->fitness()) );
+    }
 
     // escrever no banco (se definido)
-    // if (arg.using_db) {
+    if (arg.using_db) {
     // TODO: Classe para escrever no banco de formas diferentes
-    // }
+        DatabaseEntry entry(problem.name(), problem.acronym(), arg.infile,
+                crossover_name.c_str(), arg.crossover_rate, arg.pop_size,
+                arg.epochs, double( 1/__final.fitness() ), filteredConverg, dur);
+
+        try {
+            sqlite::connection con(arg.databasefile);
+            entry.write(con);
+            std::cout << "Dados escritos em " << arg.databasefile << std::endl;
+        }
+        catch (sqlite::database_exception &e) {
+            std::cerr << "Database Exception: " << e.what() << std::endl;
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -106,7 +124,7 @@ int main(int argc, char **argv) {
         vec_args.push_back( argv[i] );
     }
 
-    //pegando somente o primeiro argumento após o nome do programa
+    // pegando somente o primeiro argumento após o nome do programa
     string problem_name = vec_args[1];
     vec_args.erase(vec_args.begin()+1);
     char **newArgs = &vec_args[0];
@@ -115,13 +133,10 @@ int main(int argc, char **argv) {
     // for (int i=0; i < argc-1; i++)
     //     cout << newArgs[i] << " ";
     // cout << endl;
-
-    auto cli = parse(argc, newArgs);
-
-    // Criando uma instância de um problema
-    auto prob = ProblemFabric::create( cli->infile, problem_name );
-
     try {
+        auto cli = parse(argc, newArgs);
+        // Criando uma instância de um problema
+        auto prob = ProblemFabric::create( cli->infile, problem_name );
         exec_algorithm(*prob, *cli);
     }
     catch (std::exception &e) {

@@ -8,9 +8,15 @@
  * Mostra o menu de ajuda das opções de linha de comandos
  */
 void show_help(char **argv) {
-    printf("Use: %s -f [INPUTFILE] [ARGS] ...\n\n", argv[0]);
-    printf("ARGS:\n");
+    printf("Use: %s [problem] -f [input-file] [ARGS] ...\n\n", argv[0]);
 
+    printf("Problems:\n");
+    printf("  scp - Set Covering Problem\n");
+    printf("  mcp - Maximum Clique Problem\n");
+    printf("  mkp - Muldimensional Knapsack Problem\n");
+    printf("  stp - Steiner Tree Problem\n");
+    
+    printf("\nARGS:\n");
     for (unsigned int i = 0; i < NUM_OPTIONS; i++) {
         if (long_options[i].name) {
             if (long_options[i].val) {
