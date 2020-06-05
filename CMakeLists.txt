@@ -5,9 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(GNUInstallDirs)
 
-# Compile libraries
-# add_subdirectory(include)
-
 # Compile unit tests
 if(BUILD_TESTING)
   enable_testing()
