@@ -6,6 +6,7 @@
 #include <ga/genetic_algorithm.h>
 #include <cli/parse.h>
 #include <db/database_entry.hpp>
+#include <io/utils.h>
 // ParadisEO
 #include <paradiseo/eo/ga/eoBitOp.h>
 #include <paradiseo/eo/eoGenContinue.h>
@@ -16,14 +17,32 @@
 
 #include "problem_fabric.h"
 
+
+#ifdef _WIN32
+# define __path_sep '\\'
+#elif __unix__
+# define __path_sep '/'
+#elif __linux__
+# define __path_sep '/'
+#elif __APPLE__
+# define __path_sep '/'
+#endif
+ 
+/**
+ * Cortar o caminho do arquivo de instância
+ */
+std::string cut_instance_path(std::string fullpath) {
+    auto vec = split(fullpath, __path_sep);
+    return vec[vec.size()-1];
+}
+
 /**
  * Função executada dentro de cada geração do algoritmo.
  * Usada para efetuar alguma operação com a população durate a evolução.
  */
 void __gaCallback(int gen, eoPop<Chrom> &pop) {
-    Chrom::Fitness __f = pop.best_element().fitness();
-    std::cout << gen << "a geração --- Melhor fitness: " << __f
-              << std::endl;
+    Chrom::Fitness _f = pop.best_element().fitness();
+    std::cout << gen << "a geração --- Melhor fitness: " << _f << std::endl;
 }
 
 
@@ -55,6 +74,9 @@ void write_into_db(Problem &problem, cl_arguments &args, const char *crossName,
  */
 void exec_algorithm(Problem &problem, cl_arguments &arg) {
     using namespace std::chrono;
+
+    std::string filename = cut_instance_path(arg.infile);
+    std::cout << "Arquivo de instância: " << filename << std::endl;
 
     // Criação da população inicial e avaliação da mesma usando o
     // objeto da classe Problem
@@ -135,6 +157,7 @@ int main(int argc, char **argv) {
     // cout << endl;
     try {
         auto cli = parse(argc, newArgs);
+
         // Criando uma instância de um problema
         auto prob = ProblemFabric::create( cli->infile, problem_name );
         exec_algorithm(*prob, *cli);

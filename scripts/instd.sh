@@ -4,15 +4,15 @@
 #
 # Este script instala softwares necessários para a compilação e/ou execução do
 # projeto. Precisa de permissões de superuser para instalar pacotes e escrever
-# em diretórios protegidos.
-# Os projetos serão baixados e instalados a partir do códigos fonte. São:
+# em diretórios protegidos. Os projetos serão baixados e instalados a partir do
+# códigos fonte. São:
 # ParadisEO framework: http://paradiseo.gforge.inria.fr/
 # Biblioteca SCPxx: https://github.com/pinho/scpxx/
 #
-# by Ronaldd Pinho <ronaldppinho@gmail.com>
+# written by Ronaldd Pinho <ronaldppinho@gmail.com>
 
 if [[ $EUID != 0 ]]; then
-  echo 'Run it using sudo'
+  echo -e "Run it as superuser"
   exit 1
 fi
 
@@ -26,6 +26,8 @@ rm -f $logf
 
 # cmake specs
 EO_ONLY='-DEO_ONLY=ON'
+CMAKE_INSTALL_PREFIX=$PWD
+CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release"
 
 # links to download
 declare -A LINKS
@@ -60,10 +62,11 @@ getAndInstall() {
     echo -e "Compilando $package"
     run "cd /tmp/$package/$package-master/"
     
+    cmake_command="cmake . ${CMAKE_FLAGS}"
     if [ $package == 'paradiseo' ]; then
-        run "cmake . ${EO_ONLY}"
+        run "$cmake_command $EO_ONLY"
     else 
-        run "cmake ."
+        run "$cmake_command"
     fi
     run "make install"
 

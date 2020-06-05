@@ -6,16 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 include(GNUInstallDirs)
 
 # Compile libraries
-add_subdirectory(include)
+# add_subdirectory(include)
 
 # Compile unit tests
-enable_testing()
-add_subdirectory(test)
+if(BUILD_TESTING)
+  enable_testing()
+  message(STATUS "Build of unit tests enabled")
+  add_subdirectory(test)
+endif()
 
 # Add/Compile sources to binaries
 add_subdirectory(src)
-
-# Install binaries on project root directory
-# install(TARGETS ga4scp DESTINATION ${CMAKE_INSTALL_BINDIR})
-# install(TARGETS ga4maxclique DESTINATION ${CMAKE_INSTALL_BINDIR})
-# install(TARGETS ga4multiknap DESTINATION ${CMAKE_INSTALL_BINDIR})

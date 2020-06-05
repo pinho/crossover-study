@@ -1,6 +1,57 @@
 cmake_minimum_required(VERSION 3.6)
 
-# Nome do executavel a ser gerado é o nome do parojeto em lowercase
+# find_library(PEO NAMES eo libeo HINTS /usr/local/lib64)
+# find_library(PEOUTILS NAMES eoutils libeoutils HINTS /usr/local/lib64)
+# if(NOT PEO OR NOT PEOUTILS)
+#   message(FATAL_ERROR "ParadisEO libraries not found")
+# else()
+#   message(STATUS "ParadisEO-EO Library: " ${PEO})
+#   message(STATUS "ParadisEO-EOUtils Library: " ${PEOUTILS})
+# endif()
+
+# É considerado que o vsqlite++ foi instalado externamente
+find_library(VSQL NAMES vsqlitepp libvsqlitepp)
+
+if (VSQL)
+    message(STATUS "VSQLite++ library found: " ${VSQL})
+else()
+    message(FATAL_ERROR "VSQLite++ not found")
+endif()
+
+# Arquivos fonte
+file(GLOB GA_SOURCES ga/*.cpp)
+file(GLOB IO_SOURCES io/*.cpp)
+file(GLOB DB_SOURCES db/*.cpp)
+
+# Arquivos de cabeçalho
+file(GLOB GA_HEADERS ga/*.h)
+file(GLOB IO_HEADERS io/*.h)
+file(GLOB DB_HEADERS db/*.hpp)
+file(GLOB CLI_HEADERS cli/*.h)
+
+# Compilação e linkagem
+add_library(ga ${GA_SOURCES})
+target_link_libraries(ga ${PEO} ${PEOUTILS})
+
+add_library(db db/database_entry.cpp)
+target_link_libraries(db vsqlitepp)
+target_compile_options(db PUBLIC -Wall -Wextra)
+
+add_library(io ${IO_SOURCES})
+
+# Regras de instalação
+install(TARGETS ga io db DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+
+# A opção de instalar os headers deve ser definida no comando cmake
+# usando: cmake -DINSTALL_HEADERS=ON
+if(INSTALL_HEADERS)
+  install(FILES ${GA_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/myresearch/ga)
+  install(FILES ${IO_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/myresearch/io)
+  install(FILES ${CLI_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/myresearch/cli)
+endif()
+
+# Definições sobre o arquivo principal, os problemas e a alvo principal.
+# Nome do executavel a ser gerado é o nome do parojeto em lowercase.
 string(TOLOWER ${PROJECT_NAME} main_target )
 message(STATUS "Main executable: " ${main_target})
 
@@ -14,19 +65,11 @@ include_directories(../include)
 add_library(problems STATIC ${SCP_SOURCES} ${MCP_SOURCES} ${MKP_SOURCES})
 target_link_libraries(problems io ga db)
 
-add_executable(gastart main.cpp problem_fabric.cpp)
-target_link_libraries(gastart problems)
+add_executable(${main_target} main.cpp problem_fabric.cpp)
+target_link_libraries(${main_target} problems)
 
-# add_executable(ga4scp ${SCP_SOURCES})
-# target_link_libraries(ga4scp ga io db)
 
-# add_executable(ga4maxclique ${MCP_SOURCES})
-# target_link_libraries(ga4maxclique ga io db)
-
-# add_executable(ga4multiknap ${MKP_SOURCES})
-# target_link_libraries(ga4multiknap ga io db)
-
-install(TARGETS gastart problems
+install(TARGETS ${main_target} problems
         RUNTIME
           DESTINATION ${CMAKE_INSTALL_BINDIR}
         LIBRARY
