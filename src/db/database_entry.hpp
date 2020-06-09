@@ -29,7 +29,7 @@ public:
      * @param conv, vector de fitnesses com a convergencia do AG
      * @param dur, tempo de execução do Algoritmo Genético
      */
-    DatabaseEntry(Problem *problem, const char *instance, const char *crossover,
+    DatabaseEntry(Problem *problem, std::string instance, std::string crossover,
             cl_arguments *args, Chrom &best_solution, std::vector<Chrom> *const conv,
             std::chrono::system_clock::duration &dur)
             : __problem(problem), __instance(instance), __crossover(crossover),
@@ -93,7 +93,7 @@ public:
 
 private:
     Problem *__problem;
-    const char *__instance, *__crossover;
+    std::string __instance, __crossover;
     cl_arguments *__cli;
     Chrom &__best_solution;
     std::vector<Chrom> *__conv;
