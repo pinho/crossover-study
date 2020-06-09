@@ -91,10 +91,9 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 
     // escrever no banco (se definido)
     if (arg.using_db) {
-        const char *instanceFile = cut_instance_path(arg.infile).c_str();
-        DatabaseEntry entry(&problem, instanceFile, crossover_name.c_str(),
-                &arg, __final, &converg, dur);
-
+        auto instanceFile = cut_instance_path(arg.infile);
+        DatabaseEntry entry(&problem, instanceFile, crossover_name, &arg,
+                __final, &converg, dur);
         try {
             sqlite::connection con(arg.databasefile);
             entry.write(con);

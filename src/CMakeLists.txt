@@ -50,11 +50,6 @@ if(INSTALL_HEADERS)
   install(FILES ${CLI_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/myresearch/cli)
 endif()
 
-# Definições sobre o arquivo principal, os problemas e a alvo principal.
-# Nome do executavel a ser gerado é o nome do parojeto em lowercase.
-string(TOLOWER ${PROJECT_NAME} main_target )
-message(STATUS "Main executable: " ${main_target})
-
 file(GLOB SCP_SOURCES scp/*.cpp)
 file(GLOB MCP_SOURCES mcp/*.cpp)
 file(GLOB MKP_SOURCES mkp/*.cpp)
@@ -65,11 +60,11 @@ include_directories(../include)
 add_library(problems STATIC ${SCP_SOURCES} ${MCP_SOURCES} ${MKP_SOURCES})
 target_link_libraries(problems io ga)
 
-add_executable(${main_target} main.cpp problem_fabric.cpp)
+add_executable(${main_target} main.cxx problem_fabric.cpp)
 target_link_libraries(${main_target} problems vsqlitepp)
 
 install(TARGETS ${main_target} problems
         RUNTIME
           DESTINATION ${CMAKE_INSTALL_BINDIR}
-        LIBRARY
+        ARCHIVE
           DESTINATION ${CMAKE_INSTALL_LIBDIR})

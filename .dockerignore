@@ -2,9 +2,20 @@
 .github/
 .vscode/
 .idea/
+
+# Directories for local build
 cmake-build-debug/
 build/
+dist
+lib
+lib64
+bin
+include
+share
+
+# Uneeded utils
 diagrams/
 
 **/*.md
 LICENSE
+.gitlab-ci.{yml,yaml}

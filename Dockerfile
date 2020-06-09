@@ -1,13 +1,19 @@
-FROM ronalddpinho/cpp-build-base
+# FROM ronalddpinho/cpp-build-base
+FROM ubuntu:latest
 
-# Dependências
-RUN apt-get install -y unzip doxygen libvsqlitepp-dev libboost-graph-dev
-
-COPY ./install_dependencies.sh .
-RUN bash install_dependencies.sh
+RUN apt-get update -y
+RUN apt-get install -y gcc build-essential cmake wget unzip doxygen libboost-graph-dev libvsqlitepp-dev
 
 WORKDIR /app
+
+COPY ./scripts/instd.sh .
+RUN bash instd.sh
+
 COPY . .
 
-RUN mkdir build && cd build && cmake -DINSTALL_HEADERS=ON ..
+COPY ./instances/scp /data/scp
+COPY ./instances/clique /data/mcp
+COPY ./instances/multiknap /data/mkp
+
+RUN mkdir build && cd build && cmake ..
 RUN cd /app/build && make && make install
