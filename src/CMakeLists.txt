@@ -12,7 +12,6 @@ endif()
 
 # É considerado que o vsqlite++ foi instalado externamente
 find_library(VSQL NAMES vsqlitepp libvsqlitepp)
-
 if (VSQL)
     message(STATUS "VSQLite++ library found: " ${VSQL})
 else()
@@ -21,6 +20,10 @@ endif()
 
 include_directories(../include)
 include_directories(./)
+
+# Exportando o número de versão para um arquivo
+configure_file(${CMAKE_SOURCE_DIR}/VERSION.in 
+               ${CMAKE_SOURCE_DIR}/src/version.h)
 
 # Arquivos fonte
 file(GLOB GA_SOURCES ga/*.cpp)
@@ -60,7 +63,7 @@ include_directories(../include)
 add_library(problems STATIC ${SCP_SOURCES} ${MCP_SOURCES} ${MKP_SOURCES})
 target_link_libraries(problems io ga)
 
-add_executable(${main_target} main.cxx problem_fabric.cpp)
+add_executable(${main_target} main.cxx problem_fabric.cxx)
 target_link_libraries(${main_target} problems vsqlitepp)
 
 install(TARGETS ${main_target} problems

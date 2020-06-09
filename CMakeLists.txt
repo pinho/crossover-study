@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(CrossoverStudy
-  VERSION 1.0.0
+  VERSION 1.0.2
   LANGUAGES CXX
   DESCRIPTION "Estudos com operadores de crizamento em algoritmo genéticos em otimização combinatória")
   
@@ -11,7 +11,7 @@ include(GNUInstallDirs)
 # Definições sobre o arquivo principal, os problemas e a alvo principal.
 # Nome do executavel a ser gerado é o nome do parojeto em lowercase.
 string(TOLOWER ${PROJECT_NAME} main_target )
-message(STATUS "Main executable: " ${main_target})
+message(STATUS "Main Target: " ${main_target})
 
 # Add/Compile sources to binaries
 add_subdirectory(src)

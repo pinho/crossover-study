@@ -8,6 +8,7 @@ alguns problemas de otimização combinatória bem conhecidos.
 - [Instalando dependências](#Instalando-dependências) (Linux)
 - [Compilando o projeto](#Compilando-o-projeto)
 - [Executando](#executando)
+- [Imagem Docker](#imagem-docker)
 - [Utilitários Python](#Utilitários-python)
     * [Exemplo de execução](#exemplo-de-execução)
 
@@ -49,16 +50,16 @@ Projeto compilado! :)
 
 ## Executando
 
-O binário executável é `gastart`, ele executa o algoritmo genético a partir de
+O binário executável é `crossoverstudy`, ele executa o algoritmo genético a partir de
 um conjunto de parâmetros: tamanho da população, número de gerações, taxas de
 cruzamento e mutação, operador de crossover, arquivo de instância, arquivo de
 banco de dados para guardar os dados da execução.
 
-Use `gastart --help` para ver as opções
+Use `crossoverstudy --help` para ver as opções
 
 ```console
-% ./bin/gastart --help
-./bin/gastart [problem] -f [input-file] [ARGS]
+% ./bin/crossoverstudy --help
+./bin/crossoverstudy [problem] -f [input-file] [ARGS]
 
 Problems
   scp - Set Covering Problem
@@ -75,6 +76,26 @@ ARGS:
   -c, --xrate       Define a taxa de mutação (%)
   -m, --mrate       Define o operador de crossover utilizado com um ID
   -h, --help        Mostra essa lista de opções
+```
+
+## Imagem Docker
+
+_(Necessário ter o Docker instalado)._
+
+A aplicação fornece um `Dockerfile` para construção de uma imagem docker para
+execução do algoritmo. O docker permite manipular e limitar recursos de hardware
+para os contêineres. Para construir a imagem padrão, use:
+
+```sh
+% sudo docker build -t xoverstudy .
+```
+
+Para executar um comando em um contêiner baseado na imagem da aplicação, use:
+
+```sh
+% sudo docker run -it --rm --name ga_crossover xoverstudy <command>
+# Por exemplo
+% sudo docker run -it --rm --name ga_crossover xoverstudy 'crossover scp -f /data/scp/scp44.txt'
 ```
 
 ## Utilitários Python

@@ -7,16 +7,14 @@
 #include <cli/parse.h>
 #include <db/database_entry.hpp>
 #include <io/utils.h>
-// ParadisEO
 #include <paradiseo/eo/ga/eoBitOp.h>
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoDetTournamentSelect.h>
-// VSQLite++
 #include <sqlite/connection.hpp>
 #include <sqlite/database_exception.hpp>
 
 #include "problem_fabric.h"
-
+#include "version.h"
 
 #ifdef _WIN32
 # define __path_sep '\\'
@@ -117,6 +115,10 @@ int main(int argc, char **argv) {
         std::cout << "Faltando argumentos: ";
         std::cout << "Use " << argv[0] << " --help" << std::endl;
         return 1;
+    }
+    if (string(argv[1]).compare("--version") == 0) {
+        std::cout << argv[0] << " v" << VERSION << std::endl;
+        return 0;
     }
 
     // transformando argumentos em um vector

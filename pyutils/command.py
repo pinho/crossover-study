@@ -27,11 +27,19 @@ class Command():
 
 
     def __str__(self):
-        strcmd = './bin/gastart'
-        strcmd += f' {self.problem_name}'
+        strcmd = 'crossoverstudy' if self.installed_program else './bin/crossoverstudy'
+        strcmd += f' {self.problem_name} '
         for key in self.args:
-            strcmd += f' --{key} {str(self.args[key])}'
+            strcmd += f'--{key} {str(self.args[key])}'
         return strcmd
+
+
+    def docker_command(self):
+        lst = [ 'crossoverstudy', self.problem_name ]
+        for key in self.args:
+            lst.append(f'--{key}')
+            lst.append(str(self.args[key]))
+        return lst
 
 
     def get_params(self) -> dict:

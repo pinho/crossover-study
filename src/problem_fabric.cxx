@@ -16,8 +16,10 @@ Problem *ProblemFabric::create(const char *filename, std::string problemName) {
             msg += "\" não reconhecido";
             throw std::runtime_error(msg);
         }
-    } catch (std::exception &e) {
-        std::cerr << "ProblemFabric(" << filename << ","
-                  << problemName << "): " << e.what() << std::endl;
+    }
+    catch (std::exception &e) {
+        std::string msg = "[ProblemFabric]";
+        msg += std::string(e.what());
+        throw std::runtime_error(msg);
     }
 }
