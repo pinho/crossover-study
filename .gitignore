@@ -4,9 +4,12 @@
 build
 cmake-build-debug
 img
+dist
 bin
 lib
-dist
+include
+share
+lib64
 **/.ipynb-checkpoint*
 
 # IDEs

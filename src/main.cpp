@@ -36,6 +36,7 @@ std::string cut_instance_path(std::string fullpath) {
     return vec[vec.size()-1];
 }
 
+
 /**
  * Função executada dentro de cada geração do algoritmo.
  * Usada para efetuar alguma operação com a população durate a evolução.
@@ -43,28 +44,6 @@ std::string cut_instance_path(std::string fullpath) {
 void __gaCallback(int gen, eoPop<Chrom> &pop) {
     Chrom::Fitness _f = pop.best_element().fitness();
     std::cout << gen << "a geração --- Melhor fitness: " << _f << std::endl;
-}
-
-
-/**
- * Escreve todos os dados na tabela do arquivo .db
- */
-void write_into_db(Problem &problem, cl_arguments &args, const char *crossName,
-        double final_cost, std::vector<Chrom> &converg, std::chrono::nanoseconds &duration)
-{
-    std::vector<double> fits;
-    auto it = converg.begin();
-    
-    for (; it != converg.end(); ++it)
-        fits.push_back( it->fitness() );
-
-    DatabaseEntry entry(problem.name(), problem.acronym(),
-            args.infile, crossName, args.crossover_rate, args.pop_size,
-            args.epochs, final_cost, fits, duration);
-
-    sqlite::connection con(args.databasefile);
-    entry.write(con);
-    std::cout << "Dados salvos em " << args.databasefile << std::endl;
 }
 
 
@@ -110,17 +89,11 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
     // Problem::Solution final_solution;
     Chrom __final = population.best_element();
 
-    std::vector<double> filteredConverg;
-    for (auto it = converg.cbegin(); it != converg.cend(); ++it) {
-        filteredConverg.push_back( double(1/it->fitness()) );
-    }
-
     // escrever no banco (se definido)
     if (arg.using_db) {
-    // TODO: Classe para escrever no banco de formas diferentes
-        DatabaseEntry entry(problem.name(), problem.acronym(), arg.infile,
-                crossover_name.c_str(), arg.crossover_rate, arg.pop_size,
-                arg.epochs, double( 1/__final.fitness() ), filteredConverg, dur);
+        const char *instanceFile = cut_instance_path(arg.infile).c_str();
+        DatabaseEntry entry(&problem, instanceFile, crossover_name.c_str(),
+                &arg, __final, &converg, dur);
 
         try {
             sqlite::connection con(arg.databasefile);
@@ -140,6 +113,13 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 int main(int argc, char **argv) {
     using namespace std;
 
+    // Verifica se foi paasado algum argumento
+    if (argc < 2) {
+        std::cout << "Faltando argumentos: ";
+        std::cout << "Use " << argv[0] << " --help" << std::endl;
+        return 1;
+    }
+
     // transformando argumentos em um vector
     vector<char *> vec_args;
     for (int i=0; i < argc; i++) {
@@ -151,21 +131,27 @@ int main(int argc, char **argv) {
     vec_args.erase(vec_args.begin()+1);
     char **newArgs = &vec_args[0];
 
-    // cout << "Nova lista de args: ";
-    // for (int i=0; i < argc-1; i++)
-    //     cout << newArgs[i] << " ";
-    // cout << endl;
     try {
         auto cli = parse(argc, newArgs);
 
         // Criando uma instância de um problema
         auto prob = ProblemFabric::create( cli->infile, problem_name );
+
+        // Usa o objeto problem e interface de linha de comandos para
+        // criar e executar o algoritmo genético
         exec_algorithm(*prob, *cli);
+    }
+    catch (std::runtime_error &err) {
+        std::cout << "Erro em tempo de execução: " << err.what() << std::endl;
+        return 1;
+    }
+    catch (std::logic_error &err) {
+        std::cout << "Erro de lógica: " << err.what() << std::endl;
+        return 1;
     }
     catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 1;
     }
-
     return 0;
 }

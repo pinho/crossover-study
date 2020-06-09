@@ -25,7 +25,7 @@ include_directories(./)
 # Arquivos fonte
 file(GLOB GA_SOURCES ga/*.cpp)
 file(GLOB IO_SOURCES io/*.cpp)
-file(GLOB DB_SOURCES db/*.cpp)
+# file(GLOB DB_SOURCES db/*.cpp)
 
 # Arquivos de cabeçalho
 file(GLOB GA_HEADERS ga/*.h)
@@ -37,14 +37,10 @@ file(GLOB CLI_HEADERS cli/*.h)
 add_library(ga ${GA_SOURCES})
 target_link_libraries(ga ${PEO} ${PEOUTILS})
 
-add_library(db db/database_entry.cpp)
-target_link_libraries(db vsqlitepp)
-target_compile_options(db PUBLIC -Wall -Wextra)
-
 add_library(io ${IO_SOURCES})
 
 # Regras de instalação
-install(TARGETS ga io db DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install(TARGETS ga io DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
 # A opção de instalar os headers deve ser definida no comando cmake
 # usando: cmake -DINSTALL_HEADERS=ON
@@ -67,11 +63,10 @@ file(GLOB MKP_SOURCES mkp/*.cpp)
 include_directories(../include)
 
 add_library(problems STATIC ${SCP_SOURCES} ${MCP_SOURCES} ${MKP_SOURCES})
-target_link_libraries(problems io ga db)
+target_link_libraries(problems io ga)
 
 add_executable(${main_target} main.cpp problem_fabric.cpp)
-target_link_libraries(${main_target} problems)
-
+target_link_libraries(${main_target} problems vsqlitepp)
 
 install(TARGETS ${main_target} problems
         RUNTIME
