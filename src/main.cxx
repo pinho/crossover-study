@@ -70,17 +70,6 @@ void __gaCallback(int gen, eoPop<Chrom> &pop) {
 
 
 /**
- * Calcular a entropia de uma população.
- * O cálculo é feito para cada gene em um vector onde cada posição representa
- * a entropia em uma posição do cromossomo e em seguida é retornada a média
- * desse vector. */
-// double entropy_average(const eoPop<Chrom> &pop) {
-//     const int SIZE = pop.size();
-// }
- 
-
-
-/**
  * Definição e execução do Algoritmo Genético e armazenamento do dados
  * no banco SQLite;
  */
@@ -93,13 +82,13 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 
     // Criação da população inicial e avaliação da mesma usando o
     // objeto da classe Problem
-    std::cout << "Inicializando população ... " << std::flush;
+    std::cout << "Inicializando população" << std::flush;
     auto population = problem.init_pop( arg.pop_size );
-    std::cout << "OK" << std::endl;
+    std::cout << "\rPopulação inicializada " << std::endl;
 
-    std::cout << "Avaliando população inicial ... " << std::flush;
+    std::cout << "Avaliando população inicial" << std::flush;
     problem.eval(population);
-    std::cout << "OK" << std::endl;
+    std::cout << "\rPopulação inicial avaliada " << std::endl;
 
     // Definição da configuração do Algoritmo Genético:
     // Operadores de seleção, mutação e o critério de parada (continuador)
@@ -117,6 +106,15 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 
     // Vector de cromossomos, usado para armazenar a convergência da execução
     std::vector<Chrom> converg;
+
+   #ifdef __unix__
+    std::cout << "\e[48;5;41m " << std::flush;
+   #endif
+    std::cout << "Iniciando evolução da população ";
+   #ifdef __unix__
+    std::cout << "\e[0m";
+   #endif
+    std::cout << std::endl;
 
     // Execução do processo de evolução da população inicial
     // E armazenamento de tempo (time_points) pro cálculo do tempo de execução.

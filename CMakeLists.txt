@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(CrossoverStudy
-  VERSION 1.2.3
+  VERSION 1.2.7
   LANGUAGES CXX
-  DESCRIPTION "Estudos com operadores de crizamento em algoritmo genéticos em otimização combinatória")
+  DESCRIPTION "Estudos com operadores de cruzamento em algoritmo genéticos em otimização combinatória")
   
 set(CMAKE_CXX_STANDARD 17)
 include(GNUInstallDirs)
