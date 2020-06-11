@@ -21,9 +21,9 @@ const scpxx::Matrix& SetCoveringProblem::get_matrix() {
 
 void SetCoveringProblem::display_info(std::ostream& os) {
     os << '[' << this->__acronym << "] " << this->__name << "\n";
-    os << "Arquivo: " << __infilename << "\n";
     os << "Shape da matriz: " << __matrix.num_rows() << "x"
             << __matrix.num_columns() << "\n";
+    os << "Densidade da matriz: " << __matrix.density() << "\n";
     os << "Tamanho de cromossomos: " << __chromSize << " genes.";
     os << std::endl;
 }
@@ -42,26 +42,26 @@ std::vector<int> SetCoveringProblem::coverage(const Chrom &chromosome) {
     return result;
 }
 
+bool SetCoveringProblem::check_coverage(const Chrom &chromosome) {
+    auto coverageVec = this->coverage(chromosome);
+    for (int &value : coverageVec)
+        if (value == 0) return false;
+    return true;
+}
+
 eoPop<Chrom> SetCoveringProblem::init_pop(uint length) {
     return Random<Chrom>::population(__chromSize, length);
 }
 
 F SetCoveringProblem::objective_function(Chrom &chromosome) {
-    // Vericar cobertura
-    auto vec = this->coverage(chromosome);
-    bool coverall = std::all_of(vec.begin(), vec.end(), [](int item) {
-        return item > 0;
-    });
-
-    if (coverall) {
-        auto costs = this->__matrix.costs();
-        double sum_ = 0.0;
-        for (uint i=0; i < this->__chromSize; i++) {
-            if (chromosome[i])
-                sum_ += costs[i];
+    if (!check_coverage(chromosome))
+        return 0;
+    double sumOfCosts = 0.0;
+    auto costs = __matrix.costs();
+    for (uint i=0; i < __matrix.num_columns(); i++) {
+        if (chromosome[i]) {
+            sumOfCosts += costs[i];
         }
-        return F(1.0/sum_);
     }
-
-    return F(0);
+    return double( 1.0/sumOfCosts );
 }

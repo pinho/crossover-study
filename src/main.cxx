@@ -58,7 +58,14 @@ void __gaCallback(int gen, eoPop<Chrom> &pop) {
     } else {
         _fitness = chrom.fitness();
     }
-    std::cout << "G" << gen << ": Fittest: " << _fitness << std::endl;
+   #ifdef __unix__
+    std::cout << "\e[48;5;88m ";
+   #endif
+    std::cout << "G" << gen << ": Fittest: " << _fitness << std::flush;
+   #ifdef __unix__
+    std::cout << " \e[0m";
+   #endif
+    std::cout << std::endl;
 }
 
 
@@ -67,12 +74,9 @@ void __gaCallback(int gen, eoPop<Chrom> &pop) {
  * O cálculo é feito para cada gene em um vector onde cada posição representa
  * a entropia em uma posição do cromossomo e em seguida é retornada a média
  * desse vector. */
-double entropy_average(const eoPop<Chrom> &pop) {
-    const int SIZE = pop.size();
-    for (int gene = 0; gene < SIZE; gene++) {
-
-    }
-}
+// double entropy_average(const eoPop<Chrom> &pop) {
+//     const int SIZE = pop.size();
+// }
  
 
 
@@ -99,7 +103,7 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 
     // Definição da configuração do Algoritmo Genético:
     // Operadores de seleção, mutação e o critério de parada (continuador)
-    eoDetTournamentSelect<Chrom> select(4);
+    eoDetTournamentSelect<Chrom> select(arg.tour_size);
     eoBitMutation<Chrom> mutation(arg.mutation_rate);
     eoGenContinue<Chrom> continuator(arg.epochs);
 

@@ -30,6 +30,11 @@ public:
     std::vector<int> coverage(const Chrom&);
 
     /**
+     * Faz o calculo de cobertura das linhas na solução e interrompe as
+     * iterações caso a uma linha não esteja sendo coberta */
+    bool check_coverage(const Chrom&);
+
+    /**
      * Verifica se todas as colunas estão sendo cobertas pela dada solução */
 //    bool check_coverage(const Chrom&);
 

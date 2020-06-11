@@ -62,6 +62,9 @@ cl_arguments *parse(int argc, char **argv)
             case 'x':
                 if (optarg) res->crossover_id = std::stoi(optarg);
                 break;
+            case 'r':
+                if (optarg) res->tour_size = std::stoi(optarg);
+                break;
             case 'h':
                 show_help(argv);
                 exit(127);

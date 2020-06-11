@@ -11,6 +11,7 @@ struct cl_arguments {
     uint crossover_id;
     double crossover_rate;
     double mutation_rate;
+    uint tour_size;
     char *databasefile;
     bool using_db;
 
@@ -22,6 +23,7 @@ struct cl_arguments {
         this->crossover_id = 0;
         this->crossover_rate = 0.8;
         this->mutation_rate = 0.05;
+        this->tour_size = 4;
         this->databasefile = (char *) "";
         this->using_db = false;
     }
@@ -43,35 +45,38 @@ struct cl_arguments {
         os << "Crossover  : " << cross_name << "\n";
         os << "Tx de cruz.: " << cli.crossover_rate*100 << "%\n";
         os << "Tx de muta.: " << cli.mutation_rate*100 << "%\n";
+        os << "Tam.Torneio: " << cli.tour_size << "\n";
         return os;
     }
 };
 
 option long_options[] = {
-    {"db", required_argument, 0, 'd'},
     {"infile", required_argument, 0, 'f'},
+    {"db", required_argument, 0, 'd'},
     {"popsize", required_argument, 0, 'p'},
     {"epochs", required_argument, 0, 'g'},
     {"crossover", required_argument, 0, 'x'},
     {"xrate", required_argument, 0, 'c'},
     {"mrate", required_argument, 0, 'm'},
+    {"ring", required_argument, 0, 'r'},
     {"help", no_argument, 0, 'h'},
     {0, 0, 0, 0}
 };
 
-const char *short_options = "d:f:p:g:x:c:m:h";
+const char *short_options = "f:d:p:g:x:c:m:r:h";
 
-const unsigned int NUM_OPTIONS = 8;
+const unsigned int NUM_OPTIONS = 9;
 
 const char *DESC[NUM_OPTIONS] = {
-        "Define o arquivo .db para salvar os dados. Se não definido não salva",
-        "Arquivo de instância do problema",
-        "Define o tamanho da população",
-        "Define o número de épocas/gerações",
-        "Define a taxa de cruzamento (%)",
-        "Define a taxa de mutação (%)",
-        "Define o operador de crossover utilizado com um ID",
-        "Mostra essa lista de opções"
+    "Arquivo de instância do problema",
+    "Arquivo .db para salvar os dados. Se não definido não salva",
+    "Tamanho da população",
+    "Número de épocas/gerações",
+    "Operador de crossover utilizado com um ID",
+    "Taxa de cruzamento (%)",
+    "Taxa de mutação (%)",
+    "Tamanho do Ring do operador de seleção por torneio determinístico",
+    "Mostra essa lista de opções"
 };
 
 #endif // CROSSOVERRESEARCH_OPTIONS_H
