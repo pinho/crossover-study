@@ -42,3 +42,4 @@ lib64
 **/*.ipynb_checkpoints
 **.ipynb
 resultados/
+src/version.h
