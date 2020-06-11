@@ -1,6 +1,7 @@
 #include <iostream>
-#include <chrono>
 #include <algorithm>
+#include <chrono>
+#include <cmath>
 #include <ga/encoding.h>
 #include <ga/crossover_fabric.h>
 #include <ga/genetic_algorithm.h>
@@ -34,15 +35,45 @@ std::string cut_instance_path(std::string fullpath) {
     return vec[vec.size()-1];
 }
 
+/**
+ * Imprimir traços para separar linhas no console
+ */
+void sep_line(const uint ndashes = 80) {
+    for (uint i=0; i < ndashes; i++)
+        std::cout << "-" << std::flush;
+    std::cout << std::endl;
+}
+
+bool MINIMIZE;
 
 /**
  * Função executada dentro de cada geração do algoritmo.
  * Usada para efetuar alguma operação com a população durate a evolução.
  */
 void __gaCallback(int gen, eoPop<Chrom> &pop) {
-    Chrom::Fitness _f = pop.best_element().fitness();
-    std::cout << gen << "a geração --- Melhor fitness: " << _f << std::endl;
+    Chrom chrom = pop.best_element();
+    double _fitness;
+    if (MINIMIZE) {
+        _fitness = 1/chrom.fitness();
+    } else {
+        _fitness = chrom.fitness();
+    }
+    std::cout << "G" << gen << ": Fittest: " << _fitness << std::endl;
 }
+
+
+/**
+ * Calcular a entropia de uma população.
+ * O cálculo é feito para cada gene em um vector onde cada posição representa
+ * a entropia em uma posição do cromossomo e em seguida é retornada a média
+ * desse vector. */
+double entropy_average(const eoPop<Chrom> &pop) {
+    const int SIZE = pop.size();
+    for (int gene = 0; gene < SIZE; gene++) {
+
+    }
+}
+ 
 
 
 /**
@@ -54,15 +85,21 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 
     std::string filename = cut_instance_path(arg.infile);
     std::cout << "Arquivo de instância: " << filename << std::endl;
+    sep_line();
 
     // Criação da população inicial e avaliação da mesma usando o
     // objeto da classe Problem
+    std::cout << "Inicializando população ... " << std::flush;
     auto population = problem.init_pop( arg.pop_size );
+    std::cout << "OK" << std::endl;
+
+    std::cout << "Avaliando população inicial ... " << std::flush;
     problem.eval(population);
+    std::cout << "OK" << std::endl;
 
     // Definição da configuração do Algoritmo Genético:
     // Operadores de seleção, mutação e o critério de parada (continuador)
-    eoDetTournamentSelect<Chrom> select;
+    eoDetTournamentSelect<Chrom> select(4);
     eoBitMutation<Chrom> mutation(arg.mutation_rate);
     eoGenContinue<Chrom> continuator(arg.epochs);
 
@@ -137,6 +174,13 @@ int main(int argc, char **argv) {
 
         // Criando uma instância de um problema
         auto prob = ProblemFabric::create( cli->infile, problem_name );
+
+        // Natureza da otimização
+        MINIMIZE = string("SCP").compare(prob->acronym()) == 0;
+
+        cout << prob->name() << ": " << flush;
+        if (MINIMIZE) cout << "Minimização" << endl;
+        else cout << "Maximização" << endl;
 
         // Usa o objeto problem e interface de linha de comandos para
         // criar e executar o algoritmo genético
