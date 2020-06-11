@@ -178,10 +178,8 @@ int main(int argc, char **argv) {
 
         // Criando uma instância de um problema
         auto prob = ProblemFabric::create( cli->infile, problem_name );
-
-        // Natureza da otimização
-        MINIMIZE = string("SCP").compare(prob->acronym()) == 0;
-
+        MINIMIZE = prob->is_minimization();
+        
         cout << prob->name() << ": " << flush;
         if (MINIMIZE) cout << "Minimização" << endl;
         else cout << "Maximização" << endl;

@@ -49,6 +49,7 @@ MaximumCliqueProblem::MaximumCliqueProblem (const char *filename) {
         this->__acronym = (char *) "MCP";
         this->__name = (char *) "Max Clique Problem";
         this->__infilename = (char *) filename;
+        this->__minimize = true;
         std::vector<std::string> vecString = DimacsReader::read_elements(__infilename);
 
         // set attributes

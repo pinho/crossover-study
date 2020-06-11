@@ -1,3 +1,4 @@
+import platform, sys
 from .config_file import ConfigFile
 from .command import Command
 
@@ -54,8 +55,14 @@ class Runner:
                                     mutation_rate=mutation_r,
                                     database=database
                                 )
-                                # print(comm)
                                 e += 1
-                                print(f'\r[ {e}/{total_num_commands} ] {comm.get_params()}', end='')
+
+                                if (platform.system() == "Linux"):
+                                    sys.stdout.write(f"\r\u001b[44;1m {e} de {total_num_commands} \u001b[0m ")
+                                else:
+                                    sys.stdout.write(f"\r{e} de {total_num_commands} ")
+                                    
+                                print(f'{comm.get_params()}', end='')
+                                # print('\n', comm)
                                 comm.run(suppress_log=suppress)
         return

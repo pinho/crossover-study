@@ -31,6 +31,10 @@ public:
 	const char *acronym();
 
 	/**
+	 * Check if is a minimization problem */
+	bool is_minimization();
+
+	/**
 	 * Evaluator of chromosomes.
 	 * This method apply the objective function with a chromosome computing
 	 * the fitness and set the resultant fitness value to the chromosome. */
@@ -61,6 +65,7 @@ protected:
 	uint __chromSize; // size of the chromosomes in this problem instance
 	char *__infilename; // name of input file of this instance
 	char *__name, *__acronym; // name and sigle of the problem
+	bool __minimize;
 };
 
 #endif //CROSSOVERRESEARCH_PROBLEM_H

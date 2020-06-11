@@ -23,7 +23,6 @@ class ConfigFile:
         try:
             self.key_exists('run', conf)
             self.key_exists('problem', conf['run'])
-            self.key_exists('installed', conf['run'])
             self.key_exists('instance', conf['run'])
             self.key_exists('args', conf['run'])
             self.key_exists('crossover', conf['run']['args'])
@@ -35,7 +34,6 @@ class ConfigFile:
             raise KeyError(f'A valid key is missing on {filename}')
 
         self.problem_name = conf['run']['problem']
-        self.installed = conf['run']['installed']
         self.instance_file = conf['run']['instance']
         self.parameters = conf['run']['args']
 

@@ -9,6 +9,7 @@ SetCoveringProblem::SetCoveringProblem(const char *filename) {
     this->__infilename = (char *) filename;
     this->__acronym = (char *) "SCP";
     this->__name = (char *) "Set Covering Problem";
+    this->__minimize = true;
     scpxx::SCPFile scpfile_(this->__infilename);
     scpfile_.bufferize();
     this->__matrix = scpfile_.generate_matrix();

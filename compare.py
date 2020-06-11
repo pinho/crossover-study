@@ -24,7 +24,7 @@ def main(config, num, db):
     end = time.time()
 
     print(f'\nFinalizado')
-    print(f'Todas as chamadas levaram um total de {round(end-begin, 2)}s em execução')
+    print(f'Todas as chamadas levaram um total de {round(end-begin, 3)} segundos em execução')
 
 
 

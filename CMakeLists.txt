@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(CrossoverStudy
-  VERSION 1.2.4
+  VERSION 1.2.3
   LANGUAGES CXX
   DESCRIPTION "Estudos com operadores de crizamento em algoritmo genéticos em otimização combinatória")
   

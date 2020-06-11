@@ -25,3 +25,7 @@ const char *Problem::name() {
 const char *Problem::acronym() {
     return this->__acronym;
 }
+
+bool Problem::is_minimization() {
+    return this->__minimize;
+}
