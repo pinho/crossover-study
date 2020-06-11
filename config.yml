@@ -6,16 +6,9 @@ run:
   # --- mcp: clique máximo
   # --- stp: árvore de Steiner
   problem: scp
-
-  # 'installed' define se o executável foi movido para um dos diretórios bin
-  # do sistema, como /usr/bin, /usr/local/bin, $HOME/.local/bin, etc.
-  ##
-  # Caso o projeto seja somente compilado no próprio diretório do projeto,
-  # a linha "program" deve ser alterada para bin/ga4scp e "installed" para false
-  installed: true
   
   # Caminho para o arquivo de instância do problema
-  instance: /home/ronaldd/Projects/scpxx/instances/scp41.txt
+  instance: instances/scp/scp41.txt
 
   # Definição dos parâmetros de execuções
   args:
@@ -26,7 +19,7 @@ run:
     mutation_rate: 0.04
 
     # Crossover: (0) Uniforme, (1) Um-ponto e (4) 4-pontos ...
-    crossover: 0
+    crossover: [ 0, 1, 2, 16, 120 ]
 
     # Tamanho de população
     population: 50
