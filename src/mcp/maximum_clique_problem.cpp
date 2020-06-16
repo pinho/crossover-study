@@ -1,5 +1,7 @@
 #include "maximum_clique_problem.h"
 
+#include <paradiseo/eo/utils/eoRNG.h>
+
 // Util functions
 
 bool is_connected(int indexU, int indexV, const Graph *graph) {
@@ -19,7 +21,8 @@ bool all_equals(std::vector<T>& vec, T value) {
     return true;
 }
 
-
+// O vector de pares representa um [nó, grau], onde o grau ao fim do processo
+// terá o valor da contagem de adjacências do respectivo nó
 void count_adjacency(std::vector<std::pair<int, int>>& nodes, const Graph *graph_) {
     // count the number of adjacencies of each node
     for (auto&& [v, c] : nodes) {
@@ -32,7 +35,7 @@ void count_adjacency(std::vector<std::pair<int, int>>& nodes, const Graph *graph
     }
 }
 
-
+// Pra cada par [nó; grau], verifica se o grau é igual ao número de nós no vector
 bool check_counting(std::vector<std::pair<int, int>>& nodes) {
     for (auto& p : nodes) {
         int max = (int) nodes.size()-1;
@@ -42,14 +45,12 @@ bool check_counting(std::vector<std::pair<int, int>>& nodes) {
 }
 
 
-// Class scope
-
 MaximumCliqueProblem::MaximumCliqueProblem (const char *filename) {
     try {
         this->__acronym = (char *) "MCP";
         this->__name = (char *) "Max Clique Problem";
         this->__infilename = (char *) filename;
-        this->__minimize = true;
+        this->__minimize = false;
         std::vector<std::string> vecString = DimacsReader::read_elements(__infilename);
 
         // set attributes
@@ -89,10 +90,10 @@ Graph *MaximumCliqueProblem::get_graph() {
 
 
 void MaximumCliqueProblem::display_info(std::ostream &os) {
-    os << "[" << __acronym << "] " << __name << "\n";
-    os << "  Número de vértices: " << boost::num_vertices(*__graph) << "\n";
-    os << "  Número de arestas: " << boost::num_edges(*__graph) << "\n";
-    os << "  Tamanho de cromossomo: " << __chromSize << "\n";
+    os << "Informações do problema [" << __acronym << "]:\n";
+    os << "- Número de vértices: " << boost::num_vertices(*__graph) << "\n";
+    os << "- Número de arestas: " << boost::num_edges(*__graph) << "\n";
+    os << "- Tamanho de cromossomo: " << __chromSize << "\n";
 }
 
 
@@ -104,28 +105,25 @@ eoPop<Chrom> MaximumCliqueProblem::init_pop(uint length) {
 void MaximumCliqueProblem::repair_clique(Chrom& chromosome) {
     assert(chromosome.size() == this->__chromSize);
 
-    // create a vector with the nodes that is in solution
+    // cria um novo vector com os vértices que estão na solução
     std::vector<std::pair<int, int>> nodes_included;
     for (uint i=0; i < __chromSize; i++)
         if (chromosome[i]) nodes_included.emplace_back(i, 0);
 
     count_adjacency(nodes_included, __graph);
-    bool cont = !check_counting(nodes_included);
+    // bool cont = !check_counting(nodes_included);
 
-    while (cont) {
-        // sorting
+    while ( !check_counting(nodes_included) ) {
+        // Ordenando os elementos [nó; grau]
         std::sort(nodes_included.begin(), nodes_included.end(),
-                [](const auto &a, const auto &b) {
-                    return a.second < b.second;
-                }
+            [](const auto &a, const auto &b) { return a.second < b.second; }
         );
-        // eliminate the minor
+
+        // eliminar o menor
         chromosome[nodes_included.begin()->first] = 0;
         nodes_included.erase( nodes_included.begin() );
-        // re-counting
+        // re-contagem
         count_adjacency(nodes_included, __graph);
-        // re-check
-        cont = !check_counting(nodes_included);
     }
 }
 
@@ -166,9 +164,12 @@ MaximumCliqueProblem::objective_function(Chrom& chromosome) {
     assert(chromosome.size() == this->__chromSize);
 
     repair_clique(chromosome);
-    expand_clique(chromosome, 0);
 
-    // FIXME: FO está somando a quantidade de vértices na solução
+    // Usar expand_clique a partir de um no aleatório
+    // uint rnd = eo::random<uint>(0, __numNodes-1);
+    // expand_clique(chromosome, rnd);
+
+    // FIXME: Função Objetivo está usando somente número de nós na solução
     Fitness sum = 0;
     for (uint index = 0; index < __chromSize; index++) {
         if (chromosome[index]) {

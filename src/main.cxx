@@ -11,6 +11,7 @@
 #include <paradiseo/eo/ga/eoBitOp.h>
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoDetTournamentSelect.h>
+#include <paradiseo/eo/eoRankingSelect.h>
 #include <sqlite/connection.hpp>
 #include <sqlite/database_exception.hpp>
 
@@ -79,6 +80,8 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
     std::string filename = cut_instance_path(arg.infile);
     std::cout << "Arquivo de instância: " << filename << std::endl;
     sep_line();
+    problem.display_info(std::cout);
+    sep_line();
 
     // Criação da população inicial e avaliação da mesma usando o
     // objeto da classe Problem
@@ -92,7 +95,8 @@ void exec_algorithm(Problem &problem, cl_arguments &arg) {
 
     // Definição da configuração do Algoritmo Genético:
     // Operadores de seleção, mutação e o critério de parada (continuador)
-    eoDetTournamentSelect<Chrom> select(arg.tour_size);
+    // eoDetTournamentSelect<Chrom> select(arg.tour_size);
+    eoRankingSelect<Chrom> select;
     eoBitMutation<Chrom> mutation(arg.mutation_rate);
     eoGenContinue<Chrom> continuator(arg.epochs);
 
