@@ -16,7 +16,7 @@ run:
     crossover_rate: 1.0
 
     # Taxa de mutação de 4%
-    mutation_rate: 0.04
+    mutation_rate: 0.05
 
     # Crossover: (0) Uniforme, (1) Um-ponto e (4) 4-pontos ...
     crossover: [ 0, 1, 2, 16, 120 ]

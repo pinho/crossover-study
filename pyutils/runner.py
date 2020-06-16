@@ -58,11 +58,10 @@ class Runner:
                                 e += 1
 
                                 if (platform.system() == "Linux"):
-                                    sys.stdout.write(f"\r\u001b[44;1m {e} de {total_num_commands} \u001b[0m ")
+                                    sys.stdout.write(f"\r\u001b[44;1m {e} de {total_num_commands} \u001b[0m {comm.get_params()}")
                                 else:
-                                    sys.stdout.write(f"\r{e} de {total_num_commands} ")
+                                    sys.stdout.write(f"\r{e} de {total_num_commands} {comm.get_params()}")
                                     
-                                print(f'{comm.get_params()}', end='')
                                 # print('\n', comm)
                                 comm.run(suppress_log=suppress)
         return
