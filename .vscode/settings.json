@@ -16,6 +16,9 @@
         "**/build/": false,
         "diagrams/": true,
         "lib/": true,
+        "lib64/": true,
+        "build/": true,
+        "share/": true,
         "**/*.ipynb*": true
     },
     "files.associations": {
