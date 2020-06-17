@@ -10,5 +10,8 @@ include_directories(../include)
 link_libraries(core-ga)
 add_compile_options(-Wall -Wunused -Wextra)
 
-add_executable(${main_target} main.cxx)
-
+add_executable(${main_target}
+  main.cxx
+  maximum_clique_problem.cxx)
+  
+target_link_libraries(${main_target} core-utils core-ga)

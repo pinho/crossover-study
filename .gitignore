@@ -7,10 +7,12 @@ img
 dist
 bin
 lib
-include
+include/paradiseo
+include/scpxx
 share
 lib64
 **/.ipynb-checkpoint*
+.idea
 
 # IDEs
 .vscode
