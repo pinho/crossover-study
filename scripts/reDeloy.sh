@@ -1,14 +1,23 @@
 #!/bin/bash
 
-# Apagar a pasta build se existir
-rm -rfv build
+manageDirs() {
+  # Apagar a pasta build se existir
+  rm -rfv build
+  # recriar a pasta build
+  mkdir build 
+}
 
-# recriar a pasta build
-mkdir build 
 cd build
 
-# Gerar arquivos de bild com cmake
-cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local ..
+# flag para nao gerar novamente os Makefiles
+if [ $# == 1 ]; then
+  if [ $1 == --no-cmake ]; then
+    echo 'Pulando geração dos Makefiles'
+  fi
+else
+  manageDirs
+  cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local ..
+fi
 
 # Compilar e instalar
 make -j $(nproc)

@@ -17,7 +17,6 @@
 
 #define print(txt) std::cout << txt << std::flush
 #define println(txt) std::cout << txt << std::endl
-#define print_bgred(txt) std::cout << "\e[48;5;196m " << txt << " \e[0m" << std::flush
 #define println_bgred(txt) std::cout << "\e[48;5;196m " << txt << " \e[0m" << std::endl
 #define sepline(n) \
   for (int i=0; i < n; i++) { \
@@ -47,7 +46,7 @@ int exec(int argc, char **argv) {
   sepline(60);
 
   // Geração da população inicial
-  auto pop = mc.init_pop(args->pop_size, 0.1);
+  auto pop = mc.init_pop(args->pop_size, 0.2);
   println("População inicializada");
 
   // Avaliando população inicial
@@ -56,14 +55,13 @@ int exec(int argc, char **argv) {
   mc.eval(pop);
   println("\rPopulação inicial avaliada ");
 
-  pop.sort();
-  for (auto& chrom : pop) {
-    std::cout << chrom.fitness() << "  ";
-  }
-  std::cout << std::endl;
-
-  // Cromossomos da população devem passar pelo algoritmo de reparo
-  // TODO: Implementar reparo para clique máximo
+  // pop.sort();
+  // println("Fitnesses da população inicial:");
+  // for (auto& chrom : pop) {
+  //   std::cout << chrom.fitness() << " ";
+  // }
+  // std::cout << std::endl;
+  sepline(60);
 
   // Definição dos parâmetros do AG
   eoGenContinue<Chrom> term(args->epochs);
@@ -75,6 +73,9 @@ int exec(int argc, char **argv) {
 
   GeneticAlgorithm ga(
     mc, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
+
+  sepline(60);
+  println_bgred("Iniciando evolução");
 
   std::vector<Chrom> conv;
   ga(pop, conv, [](int g, eoPop<Chrom> &p) {
