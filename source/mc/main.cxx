@@ -50,9 +50,9 @@ void __within_generations (int g, eoPop<Chrom> &p) {
 
 int exec(int argc, char **argv) {
   using namespace std::chrono;
+  std::cout << "\e[1;3m\e[38;5;47mProblema do Clique Máximo\e[0m" << std::endl;
 
   auto args = parse(argc, argv);
-
   auto filename = *(
     split(Str(args->infile), '/')
       .end()-1
@@ -80,23 +80,22 @@ int exec(int argc, char **argv) {
   eoGenContinue<Chrom> term(args->epochs);
   eoBitMutation<Chrom> mutation( args->mutation_rate );
   eoRankingSelect<Chrom> select;
-
   auto *crossover = CrossoverFabric::create(args->crossover_id);
-  auto crossover_name = CrossoverFabric::name(args->crossover_id);
 
+  // define a instância da classe de Algoritmo genético
   GeneticAlgorithm ga(
     mc, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
-
   sepline(60);
+
   std::cout << UEC(226) << "Iniciando evolução" << UEC(255) << std::endl;
 
+  // Vector de convergências
   std::vector<Chrom> conv;
 
+  // Execução da evolução
   auto start_point = std::chrono::system_clock::now();
   ga(pop, conv, __within_generations);
-
-  // Duração em nanosegundos
-  auto dur_ns = system_clock::now() - start_point;
+  auto dur_ns = system_clock::now() - start_point; // Duração em nanosegundos
 
   sepline(60);
 
@@ -107,23 +106,31 @@ int exec(int argc, char **argv) {
   // Solução final
   sepline(60);
   Chrom melhor = pop.best_element();
-  println("Melhor solução:");
+  std::vector<int> solution;
 
-  println("Clique de " << melhor.fitness() << " vértices");
+  println("Melhor solução:");
+  println("Clique de " << (uint) melhor.fitness() << " vértices");
   print("Vértices: ");
+
+  // Iterações pelo cromossomo pegando os índices dos genes '1' para definir
+  // os vértices que fazem parte da solução final encontrada
   for (size_t i = 0; i < melhor.size(); i++) {
-    if (melhor[i])
+    if (melhor[i]) {
+      solution.push_back(i+1);
       print(i+1 << " ");
+    }
   }
   std::cout << std::endl;
 
-  // Escrevenco dados no banco de dados se for defini um argumento para
+  // Escrevenco dados no banco se for definido um argumento para
   // a opção "--db"
   if (args->using_db) {
     int clqsize = (int) melhor.fitness();
 
     auto con = db_create(args->databasefile, db_structure::mc);
-    db_entry(*con, db_structure::mc, args, clqsize);
+    db_entry(*con, db_structure::mc, args, clqsize, solution, conv,
+        filename, duration_cast<milliseconds>(dur_ns));
+
     std::cout << "Dados escritos em " << args->databasefile << std::endl;
   }
 

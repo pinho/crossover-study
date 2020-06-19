@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <chrono>
+#include <sstream>
 #include <sqlite/connection.hpp>
 #include <sqlite/execute.hpp>
 #include "../ga/problem.h"
@@ -14,6 +15,35 @@
 #include "modes.hpp"
 
 using namespace sqlite;
+
+/**
+ * Converte um vector para uma string contendo todos os seus valores
+ * separados por vírgula
+ */
+template <typename T>
+std::string sequence_to_string(std::vector<T>& seq) {
+    std::stringstream ss;
+    auto it = seq.cbegin();
+    for (; it != seq.cend(); ++it) {
+        ss << *it;
+        if ( it != seq.cend()-1 ) {
+            ss << ',';
+        }
+    }
+    return ss.str();
+}
+
+std::string convergence_to_string(std::vector<Chrom>& c) {
+    std::stringstream ss;
+    auto it = c.cbegin();
+    for (; it != c.cend(); ++it) {
+        ss << it->fitness();
+        if ( it != c.cend()-1 ) {
+            ss << ',';
+        }
+    }
+    return ss.str();
+}
 
 /**
  * Escreve dados de um dos problemas em um arquivo de banco de dados
@@ -26,21 +56,30 @@ using namespace sqlite;
  * @param conv convergência da função objetivo durante a evolução
  * @param duration tempo de duração da evolução
  */
-void db_entry(connection& con, db_structure mode, CLI *args, int clique_size) {
+void db_entry(connection& con, db_structure mode, CLI *args, int clique_size,
+        std::vector<int>& clique_nodes, std::vector<Chrom>& conv,
+        std::string file, std::chrono::milliseconds duration) {
     std::string sql;
 
-    //-------------------------------
+    //------------------------------------
     // Problema do Clique Máximo
-    //-------------------------------
+    //------------------------------------
     if (mode == db_structure::mc) {
-        // TODO: Adicionar os outros valores no banco
         sql += "INSERT INTO execucoes_mc (";
         sql += "pop_length, num_gen, cross_rate, mutation_rate, crossover, ";
-        sql += "solution_size";
-        sql += ") VALUES (?, ?, ?, ?, ?, ?);";
+        sql += "solution_size, solution, convergence, instance_file, duration_ms";
+        sql += ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+        // Pré-processamento
 
         // Nome do operador de crossover
         auto cn = CrossoverFabric::name(args->crossover_id);
+        
+        // Lista de nós do clique
+        std::string nodes = sequence_to_string<int>(clique_nodes);
+
+        // Lista de valores da convergência da evolução
+        std::string conv_str = convergence_to_string(conv);
 
         execute ins(con, sql);
         ins % (int) args->pop_size
@@ -48,8 +87,11 @@ void db_entry(connection& con, db_structure mode, CLI *args, int clique_size) {
             % (double) args->crossover_rate
             % (double) args->mutation_rate
             % cn // nome do crossover
-            % clique_size;
-            // TODO: Convergência, duração, solução, arquivo
+            % clique_size
+            % nodes
+            % conv_str
+            % file
+            % duration.count();
         ins();
     }
 }
