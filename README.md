@@ -9,8 +9,6 @@ alguns problemas de otimização combinatória bem conhecidos.
 - [Compilando o projeto](#Compilando-o-projeto)
 - [Executando](#executando)
 - [Imagem Docker](#imagem-docker)
-- [Utilitários Python](#Utilitários-python)
-    * [Exemplo de execução](#exemplo-de-execução)
 
 ## Instalando dependências
 
@@ -50,33 +48,28 @@ Projeto compilado! :)
 
 ## Executando
 
-O binário executável é `crossoverstudy`, ele executa o algoritmo genético a partir de
-um conjunto de parâmetros: tamanho da população, número de gerações, taxas de
-cruzamento e mutação, operador de crossover, arquivo de instância, arquivo de
-banco de dados para guardar os dados da execução.
+A compilação gera quatro binários executáveis - um para cada problema.
+Todos seguem as mesma regras e opções de argumentos para a execução.
 
-Use `crossoverstudy --help` para ver as opções
+Veja as opções usando a flag `--help`
 
 ```console
-% ./bin/crossoverstudy --help
-./bin/crossoverstudy [problem] -f [input-file] [ARGS]
-
-Problems
-  scp - Set Covering Problem
-  mcp - Maximum Clique Problem
-  mkp - Muldimensional Knapsack Problem
-  stp - Steiner Tree Problem
-
+% ./bin/crossoverstudy-mc --help
+Problema do Clique Máximo
+Use: ./bin/crossoverstudy-mc -f [input-file] [ARGS] ...
 ARGS:
-  -d, --db          Define o arquivo .db para salvar os dados. Se não definido não salva
   -f, --infile      Arquivo de instância do problema
-  -p, --popsize     Define o tamanho da população
-  -g, --epochs      Define o número de épocas/gerações
-  -x, --crossover   Define a taxa de cruzamento (%)
-  -c, --xrate       Define a taxa de mutação (%)
-  -m, --mrate       Define o operador de crossover utilizado com um ID
+  -d, --db          Arquivo .db para salvar os dados. Se não definido não salva
+  -p, --popsize     Tamanho da população [default = 100]
+  -g, --epochs      Número de épocas/gerações [default = 100]
+  -x, --crossover   Operador de crossover utilizado com um ID [default = 0]
+  -c, --xrate       Taxa de cruzamento (%) [default = 0.8]
+  -m, --mrate       Taxa de mutação (%) [default = 0.05]
+  -r, --ring        Tamanho do Ring do operador de seleção por torneio determinístico [default = 8]
   -h, --help        Mostra essa lista de opções
 ```
+
+O único argumento obrigatório é o arquivo de entrada: `-f caminho/para/o/arquivo`
 
 ## Imagem Docker
 
@@ -84,57 +77,42 @@ _(Necessário ter o Docker instalado)._
 
 A aplicação fornece um `Dockerfile` para construção de uma imagem docker para
 execução do algoritmo. O docker permite manipular e limitar recursos de hardware
-para os contêineres. Para construir a imagem padrão, use:
+para os contêineres. 
 
-```sh
-% sudo docker build -t xoverstudy .
+Para construir a imagem padrão, use:
+
+```console
+# docker build -t estudos .
+```
+
+Criar um volume para persistir os arquivo de bancos de dados que podem ser
+gerados para armazenar informações de execuções:
+
+```console
+# docker volume create studyvol
 ```
 
 Para executar um comando em um contêiner baseado na imagem da aplicação, use:
 
-```sh
-% sudo docker run -it --rm --name ga_crossover xoverstudy <command>
+```zsh
+% docker run -d \
+  --rm \
+  --name ga_crossover \
+  estudos <command>
+
 # Por exemplo
-% sudo docker run -it --rm --name ga_crossover xoverstudy 'crossover scp -f /data/scp/scp44.txt'
+
+% docker run -d \
+  --rm \
+  --name ga_crossover \
+  estudos \
+  crossoverstudy-mc scp -f /data/scp/scp44.txt -x 32 --db /data/max_clique.sqlite
 ```
 
-## Utilitários Python
 
-Um módulo Python simples foi desenvolvido para auxiliar no processo de execução
-de muitas chamadas com diferentes combinações de parâmetros. O script
-`compare.py` dispara uma sequeência de execuções no sistema usando um arquivo de
-configuração para definir os parâmetros que serão combinados bem como o problema
-e seu arquivo de instância e o arquivo de banco de dados para amazenamento de
-dados de todas as execuções na sequência.
+## Python Starter
 
-Os arquivos de configurações são do formato [YAML](https://yaml.org). Para um
-exemplo, veja [config.yml](config.yml)
-
-### Exemplo de execução
-
-Para executar o script `compare.py`, certifique-se de que o caminho para o
-arquivo de instância definido no arquivo yaml existe.
-
-Faça uma cópia da estrutura do banco de dados para outro arquivo:
-
-```console
-cp database/model.db exemplo.db
-```
-
-Execute o `compare.py` no diretório raíz do projeto:
-
-```console
-./compare -n 10 --db exemplo.db
-```
-
-O script irá procurar por um arquivo `config.yml` no diretório atual e executará
-cada combinação possível do parâmetros definidos no arquivo 10 vezes.
-
-Para usar seu próprio arquivob de configuração use a opção `-c` do script:
-
-```console
-./compare -c myOwnConfig.yml -n 10 --db exemplo.db
-```
+...
 
 ## License
 
