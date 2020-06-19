@@ -20,7 +20,6 @@
 
 #define print(txt) std::cout << txt << std::flush
 #define println(txt) std::cout << txt << std::endl
-#define println_bgred(txt) std::cout << "\e[48;5;196m " << txt << " \e[0m" << std::endl
 #define sepline(n) \
   for (int i=0; i < n; i++) { \
     std::cout << '-'; \
@@ -87,7 +86,7 @@ int exec(int argc, char **argv) {
     mc, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
   sepline(60);
 
-  std::cout << UEC(226) << "Iniciando evolução" << UEC(255) << std::endl;
+  std::cout << UEC(47) << "Iniciando evolução" << UEC(255) << std::endl;
 
   // Vector de convergências
   std::vector<Chrom> conv;

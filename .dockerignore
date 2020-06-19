@@ -2,22 +2,24 @@
 .github/
 .vscode/
 .idea/
+.gitlab-ci.{yml,yaml}
+.gitignore
+**/*.md
+LICENSE
 
 # Directories for local build
 cmake-build-debug/
 build
 dist
+bin
+share
 lib
 lib64
-bin
 include/paradiseo
 include/scpxx
-share
 
 # Uneeded utils
 diagrams/
-
-**/*.md
-LICENSE
-.gitlab-ci.{yml,yaml}
-.gitignore
+analysis/
+pyutils/
+compare.py

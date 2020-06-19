@@ -1,19 +1,41 @@
-# FROM ronalddpinho/cpp-build-base
+# Usando Docker Multi-stage build resource.
+# As compilações de vários estágios são um novo recurso que requer o Docker 17.05
+# ou superior no daemon e no cliente. As compilações de vários estágios são úteis
+# para quem luta para otimizar os Dockerfiles, mantendo-os fáceis de ler e manter.
+FROM ronalddpinho/cpp-build-base AS build
+
+RUN apt-get update -y
+RUN apt-get install -y wget unzip libvsqlitepp-dev libboost-graph-dev
+
+WORKDIR /usr/src
+
+# Copiar os arquivos do projeto para o contêiner
+COPY . .
+
+# Executar o script para instalar dependências a partir do github
+RUN bash scripts/instd.sh
+
+# Geração dos Makefiles usando cmake
+RUN cmake . 
+
+# Compilando o projeto
+RUN make install
+
+
+# Imagem de produção será contruída a parte e copia somente o necessário da
+# imagem de build para execuções, como os binários, bibliotecas e arquivos
+# de instâncias para testes
 FROM ubuntu:latest
 
 RUN apt-get update -y
-RUN apt-get install -y gcc build-essential cmake wget unzip doxygen libboost-graph-dev libvsqlitepp-dev
+RUN apt-get install -y libvsqlitepp-dev
 
-WORKDIR /app
+# Copia somente os executáveis gerados na imagem de build
+COPY --from=build /usr/local/bin/crossoverstudy-mc /usr/local/bin
 
-COPY ./scripts/instd.sh .
-RUN bash instd.sh
-
-COPY . .
-
-COPY ./instances/scp /data/scp
-COPY ./instances/clique /data/mcp
-COPY ./instances/multiknap /data/mkp
-
-RUN mkdir build && cd build && cmake ..
-RUN cd /app/build && make && make install
+# Coiando arquivos de instância para a imagem em /data/in e definindo o
+# diretório "data" como um volume. Um diretório /data/out para armazenar
+# arquivos .sqlite
+COPY --from=build /usr/src/data /data/in
+VOLUME [ "/data" ]
+# OBS: O ponto de montagem no host deve ser especificada ao subir o contêiner
