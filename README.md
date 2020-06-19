@@ -106,7 +106,7 @@ Para executar um comando em um contêiner baseado na imagem da aplicação, use:
   --rm \
   --name ga_crossover \
   estudos \
-  crossoverstudy-mc scp -f /data/scp/scp44.txt -x 32 --db /data/max_clique.sqlite
+  crossoverstudy-mc -f /data/in/brock400_4.clq -x 32 --db /data/max_clique.sqlite
 ```
 
 
