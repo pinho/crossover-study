@@ -5,12 +5,13 @@
 
 # Directories for local build
 cmake-build-debug/
-build/
+build
 dist
 lib
 lib64
 bin
-include
+include/paradiseo
+include/scpxx
 share
 
 # Uneeded utils
@@ -19,3 +20,4 @@ diagrams/
 **/*.md
 LICENSE
 .gitlab-ci.{yml,yaml}
+.gitignore

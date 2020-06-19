@@ -12,6 +12,9 @@
 #include <core/ga/crossover_fabric.h>
 #include <core/ga/genetic_algorithm.h>
 #include <core/utils/split.h>
+#include <core/time_parse.hpp>
+#include <core/db/create.hpp>
+#include <core/db/entry.hpp>
 
 #include "maximum_clique_problem.h"
 
@@ -24,12 +27,30 @@
   } \
   std::cout << std::endl
 
+// Unix Escape Color
+#define UEC(number) "\e[38;5;"+ std::to_string(number) +"m"
+
 using Str = std::string;
 
-matrix *M;
+
+/**
+ * Função executada dentro do algortimo genético a cada geração após os
+ * a aplicação dos operadores genéticos
+ */
+void __within_generations (int g, eoPop<Chrom> &p) {
+#ifdef __unix__
+  std::cout << UEC(86) << std::flush;
+#endif
+  std::cout << "G" << g << " -- Melhor fitness: " << p.best_element().fitness();
+#ifdef __unix__
+  std::cout << UEC(255) << std::endl;
+#endif
+}
 
 
 int exec(int argc, char **argv) {
+  using namespace std::chrono;
+
   auto args = parse(argc, argv);
 
   auto filename = *(
@@ -46,7 +67,7 @@ int exec(int argc, char **argv) {
   sepline(60);
 
   // Geração da população inicial
-  auto pop = mc.init_pop(args->pop_size, 0.2);
+  auto pop = mc.init_pop(args->pop_size, 0.25);
   println("População inicializada");
 
   // Avaliando população inicial
@@ -54,14 +75,6 @@ int exec(int argc, char **argv) {
   print("Avaliando população inicial");
   mc.eval(pop);
   println("\rPopulação inicial avaliada ");
-
-  // pop.sort();
-  // println("Fitnesses da população inicial:");
-  // for (auto& chrom : pop) {
-  //   std::cout << chrom.fitness() << " ";
-  // }
-  // std::cout << std::endl;
-  sepline(60);
 
   // Definição dos parâmetros do AG
   eoGenContinue<Chrom> term(args->epochs);
@@ -75,30 +88,44 @@ int exec(int argc, char **argv) {
     mc, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
 
   sepline(60);
-  println_bgred("Iniciando evolução");
+  std::cout << UEC(226) << "Iniciando evolução" << UEC(255) << std::endl;
 
   std::vector<Chrom> conv;
-  ga(pop, conv, [](int g, eoPop<Chrom> &p) {
-  #ifdef __unix__
-    std::cout << "\e[48;5;88m " << std::flush;
-  #endif
-  std::cout << "G" << g << " -- Melhor fitness: " << p.best_element().fitness();
-  #ifdef __unix__
-    std::cout << " \e[0m" << std::endl;
-  #endif
-  });
+
+  auto start_point = std::chrono::system_clock::now();
+  ga(pop, conv, __within_generations);
+
+  // Duração em nanosegundos
+  auto dur_ns = system_clock::now() - start_point;
+
+  sepline(60);
+
+  // Converter duração para segundos
+  std::cout << std::fixed << "Tempo de evolução: " << UEC(47)
+            << parse_duration(dur_ns) << UEC(255) << std::endl;
 
   // Solução final
+  sepline(60);
   Chrom melhor = pop.best_element();
-  println("\nMelhor solução:");
+  println("Melhor solução:");
 
   println("Clique de " << melhor.fitness() << " vértices");
   print("Vértices: ");
   for (size_t i = 0; i < melhor.size(); i++) {
     if (melhor[i])
-      print(i << " ");
+      print(i+1 << " ");
   }
   std::cout << std::endl;
+
+  // Escrevenco dados no banco de dados se for defini um argumento para
+  // a opção "--db"
+  if (args->using_db) {
+    int clqsize = (int) melhor.fitness();
+
+    auto con = db_create(args->databasefile, db_structure::mc);
+    db_entry(*con, db_structure::mc, args, clqsize);
+    std::cout << "Dados escritos em " << args->databasefile << std::endl;
+  }
 
   return 0;
 }

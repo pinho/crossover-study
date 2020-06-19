@@ -59,9 +59,9 @@ public:
    * @param x o cromossomo para verificar
    */
   bool is_clique(const std::vector<bool>& x) {
-    for (int i = 0; i < x.size(); i++) {
+    for (size_type i = 0; i < x.size(); i++) {
       if (x[i]) {
-        for (int k = x.size()-1; k != i; k--) {
+        for (size_type k = x.size()-1; k != i; k--) {
           if (x[k] and k != i) {
             if (this->get(i,k) == 0) {
               return false;
@@ -82,16 +82,23 @@ public:
     std::ifstream f(filename);
     char ch;
     std::string s;
-    int V, E, u, v;
-
-    f >> ch >> s >> V >> E;
-    matrix A(V);
+    uint64_t V, E, u, v;
+    matrix A;
 
     while ( !f.eof() ) {
-      f >> ch >> u >> v;
-      if (ch == 'e') {
+      f >> ch;
+      if (ch == 'c') {
+        f.ignore(256, '\n');
+      } else if (ch == 'p') {
+        f >> s >> V >> E;
+        A = matrix(V);
+      } else if (ch == 'e') {
+        f >> u >> v;
         A.set(u-1, v-1);
+      } else {
+        f.ignore(256, '\n');
       }
+      ch = -1;
     }
     f.close();
     
