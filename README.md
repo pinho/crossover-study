@@ -41,6 +41,7 @@ Tenha certeza de ter o `cmake` instalado na versão 3.6+. Use o comando
 % cmake .. -DCMAKE_INSTALL_PREFIX=..
 % make -j $(nproc)
 % make install
+% make image # para build da imagem docker
 ```
 
 Projeto compilado! :)
@@ -79,13 +80,14 @@ A aplicação fornece um `Dockerfile` para construção de uma imagem docker par
 execução do algoritmo. O docker permite manipular e limitar recursos de hardware
 para os contêineres. 
 
-Para construir a imagem padrão, use:
+Se o Docker estiver instalado no computador o comando cmake irá criar um alvo
+para a build da imagem. Para construir a imagem padrão, use:
 
 ```console
-# docker build -t estudos .
+% sudo make image
 ```
 
-Criar um volume para persistir os arquivo de bancos de dados que podem ser
+Crie um volume para persistir os arquivo de bancos de dados que podem ser
 gerados para armazenar informações de execuções:
 
 ```console

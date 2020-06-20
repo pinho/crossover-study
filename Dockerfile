@@ -31,11 +31,12 @@ RUN apt-get update -y
 RUN apt-get install -y libvsqlitepp-dev
 
 # Copia somente os executáveis gerados na imagem de build
-COPY --from=build /usr/local/bin/crossoverstudy-mc /usr/local/bin
+COPY --from=build /usr/local/bin/maxclique /usr/bin
 
 # Coiando arquivos de instância para a imagem em /data/in e definindo o
-# diretório "data" como um volume. Um diretório /data/out para armazenar
-# arquivos .sqlite
+# diretório "data" como um volume. Esse diretório deve ser usado para armazenar
+# os arquivos de banco de dados (.sqlite) das execuções
 COPY --from=build /usr/src/data /data/in
+
 VOLUME [ "/data" ]
 # OBS: O ponto de montagem no host deve ser especificada ao subir o contêiner
