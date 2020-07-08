@@ -21,5 +21,3 @@ jobs:
         sudo bash scripts/instd.sh
     - name: Compile project
       run: cmake . && make
-    - name: CTest
-      run: make test
