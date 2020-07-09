@@ -2,7 +2,7 @@
 
 ## Clique máximo
 
-OBS: Todos os arquivos de clique máximo deve ter sido convertidos para o formato
+OBS: Todos os arquivos de clique máximo foram - devem ter sido - convertidos para o formato
 de arquivos de grafos do DIMACS.
 
 Arquivo            |  [V]  |   [E]   | CM | Link
@@ -13,4 +13,6 @@ Arquivo            |  [V]  |   [E]   | CM | Link
 `socfb-Haverford76`| 1_446 |  59_589 | ??? | http://networkrepository.com/socfb-Haverford76.php
 `fb-pages-food`    |  620  |  2_102  | ??? | http://networkrepository.com/fb-pages-food.php
 
+> [V]   : Número de vértices <br>
+> [E]   : Número de arestas <br>
 > CM    : limite inferior do tamanho do clique máximo
