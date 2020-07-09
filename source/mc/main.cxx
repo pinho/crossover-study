@@ -53,8 +53,7 @@ int exec(int argc, char **argv) {
 
   auto args = parse(argc, argv);
   auto filename = *(
-    split(Str(args->infile), '/')
-      .end()-1
+    split(Str(args->infile), '/').end()-1
   );
 
   // leitura do arquivo de definição do grafo e instanciação do problema

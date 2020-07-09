@@ -10,7 +10,7 @@ using namespace sqlite;
 #include "modes.hpp"
 
 connection* db_create(std::string filename, db_structure dbmode) {
-  auto con = new connection(filename);
+  sqlite::connection *con = new connection(filename);
   std::string query;
 
   if (dbmode == db_structure::mc) {
@@ -29,9 +29,9 @@ connection* db_create(std::string filename, db_structure dbmode) {
     query += "duration_ms REAL";
     query += ");";
     execute(*con, query, true);
-
-    return con;
   }
+  
+  return con;
 }
 
 #endif

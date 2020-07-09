@@ -3,8 +3,8 @@
 MCProblem::MCProblem(const char *filepath) {
   this->M = matrix::read_from_file(filepath);
   this->__chromSize = M.get_num_nodes();
-  this->__name = "Problema do Clique Máximo";
-  this->__acronym = "MCP";
+  this->__name = (char *) "Problema do Clique Máximo";
+  this->__acronym = (char *) "MCP";
   this->__minimize = false;
   this->__infilename = (char *)filepath;
 
