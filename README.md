@@ -15,7 +15,7 @@ alguns problemas de otimização combinatória bem conhecidos.
 ### Arch Linux
 
 ```sh
-sudo pacman -Sy --ignore cmake wget unzip doxygen boost boost-libs vsqlite++ 
+sudo pacman -Sy --ignore cmake wget unzip doxygen fmt boost boost-libs vsqlite++ 
 sudo bash scripts/instd.sh
 ```
 
@@ -23,7 +23,7 @@ sudo bash scripts/instd.sh
 
 ```sh
 sudo apt-get update
-sudo apt-get install cmake wget unzip doxygen libboost-graph-dev libvsqlitepp-dev
+sudo apt-get install cmake wget unzip doxygen libfmt-dev libboost-graph-dev libvsqlitepp-dev
 sudo bash scripts/instd.sh
 ```
 

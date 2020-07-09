@@ -7,8 +7,14 @@ project(CrossoverStudy
 ## Usando padrão C++ 17
 set(CMAKE_CXX_STANDARD 17)
 
+include(GNUInstallDirs)
+
 # Bibliotecas construídas localmente
 add_subdirectory(include/core)
+
+add_executable(run source/run.cxx)
+target_link_libraries(run fmt)
+install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 
 # Cada problema tem um projeto próprio implementando um executável para cada
 # problema abordado na pesquisa
