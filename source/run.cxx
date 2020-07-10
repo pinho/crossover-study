@@ -4,12 +4,11 @@
  */
 
 #include <string>
-#include <fmt/core.h>
 #include <iostream>
 
 int main(int argc, char **argv) {
   if (argc <= 1) {
-    fmt::print("Arguments are required\n");
+    std::cout << "Arguments are required\n";
     return 1;
   }
 
@@ -20,7 +19,7 @@ int main(int argc, char **argv) {
   try {
     number_executions = std::stoul(arg1);
   } catch (std::exception& e) {
-    fmt::print("First argument should be an unsigned integer\n");
+    std::cout << "First argument should be an unsigned integer\n";
     return 1;
   }
 
@@ -42,9 +41,9 @@ int main(int argc, char **argv) {
 }
 
 // void help() {
-//   fmt::print("Executa um comando N vezes\n");
-//   fmt::print("\nUsage: run [N] [COMMAND]\n");
-//   fmt::print("\nWhere:\n"); 
-//   fmt::print("  N       é o número de vezes para executar");
-//   fmt::print("  COMMAND é o comando a ser repetido\n");
+//   std::cout << "Executa um comando N vezes\n";
+//   std::cout << "\nUsage: run [N] [COMMAND]\n";
+//   std::cout << "\nWhere:\n";
+//   std::cout << "  N       é o número de vezes para executar";
+//   std::cout << "  COMMAND é o comando a ser repetido" << std::endl;
 // }

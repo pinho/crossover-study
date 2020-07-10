@@ -8,12 +8,12 @@ project(CrossoverStudy
 set(CMAKE_CXX_STANDARD 17)
 
 include(GNUInstallDirs)
+string(TOLOWER ${PROJECT_NAME} project_lower_name)
 
 # Bibliotecas construídas localmente
 add_subdirectory(include/core)
 
 add_executable(run source/run.cxx)
-target_link_libraries(run fmt)
 install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 
 # Cada problema tem um projeto próprio implementando um executável para cada
@@ -35,7 +35,7 @@ else()
   set(DOCKERFILE_PATH ${CMAKE_SOURCE_DIR})
   
   add_custom_target(image
-  COMMAND ${DOCKER_EXECUTABLE} build -t estudos ${DOCKERFILE_PATH}
-  COMMENT "Building Docker image"
+  COMMAND ${DOCKER_EXECUTABLE} build -t ${project_lower_name} ${DOCKERFILE_PATH}
+  COMMENT "Building Docker image: \"${project_lower_name}\""
   VERBATIM) 
 endif()

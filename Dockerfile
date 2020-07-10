@@ -5,7 +5,7 @@
 FROM ronalddpinho/cpp-build-base AS build
 
 RUN apt-get update -y
-RUN apt-get install -y wget unzip libvsqlitepp-dev libboost-graph-dev
+RUN apt-get install -y wget unzip libvsqlitepp-dev libboost-dev
 
 WORKDIR /usr/src
 
@@ -31,6 +31,7 @@ RUN apt-get update -y
 RUN apt-get install -y libvsqlitepp-dev
 
 # Copia somente os executáveis gerados na imagem de build
+COPY --from=build /usr/local/bin/run /usr/bin
 COPY --from=build /usr/local/bin/maxclique /usr/bin
 
 # Coiando arquivos de instância para a imagem em /data/in e definindo o
@@ -38,5 +39,5 @@ COPY --from=build /usr/local/bin/maxclique /usr/bin
 # os arquivos de banco de dados (.sqlite) das execuções
 COPY --from=build /usr/src/data /data/in
 
-VOLUME [ "/data" ]
+VOLUME [ "/data/out" ]
 # OBS: O ponto de montagem no host deve ser especificada ao subir o contêiner
