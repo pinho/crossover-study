@@ -27,15 +27,22 @@ add_subdirectory(source/mc) # clique máximo
 find_program(DOCKER_EXECUTABLE
   docker HINTS /usr/bin /usr/local/bin )
 
+# Verifica se o docker está instalado
+# Se sim: alvos para a imagem e para o volume serão criados
 if(NOT DOCKER_EXECUTABLE)
-  message(WARNING "Docker not found. Image will not built")
+  message(WARNING "Docker not found. Image and Volume will not built")
 else()
-  message(STATUS "Docker image build enabled")
-  
+  message(STATUS "Targets for Docker image and volume is enabled")
   set(DOCKERFILE_PATH ${CMAKE_SOURCE_DIR})
   
   add_custom_target(image
-  COMMAND ${DOCKER_EXECUTABLE} build -t ${project_lower_name} ${DOCKERFILE_PATH}
-  COMMENT "Building Docker image: \"${project_lower_name}\""
-  VERBATIM) 
+    COMMAND ${DOCKER_EXECUTABLE} build -t ${project_lower_name} ${DOCKERFILE_PATH}
+    COMMENT "Construindo Imagem Docker: \"${project_lower_name}\""
+    VERBATIM) 
+  
+  add_custom_target(volume
+    COMMAND ${DOCKER_EXECUTABLE} volume create studyvol
+    COMMENT "Construindo Volume Docker: studyvol"
+    VERBATIM
+  )
 endif()
