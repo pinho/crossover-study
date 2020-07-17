@@ -1,7 +1,7 @@
 crossover: 0
 xrate: 1.0
 mrate: 0.05
-popsize: 10
-epochs: 10
+popsize: 100
+epochs: 200
 ring: 8
-db: /data/res.sqlite
+db: /data/out/FirstTestsMaxclique.sqlite

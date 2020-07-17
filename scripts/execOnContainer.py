@@ -1,3 +1,4 @@
+#!/bin/python3
 # Lançar uma execução no container docker 
 # 
 # Deve receber:
