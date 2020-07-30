@@ -23,6 +23,8 @@ public:
 
   bool break_constraint(const Chrom &chromosome);
 
+  std::vector<std::vector<float>> *get_weights();
+
 private:
   uint m_num_capacities, m_num_items, m_optimal;
   std::vector<float> m_capacities, m_profits;

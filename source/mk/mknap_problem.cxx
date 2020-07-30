@@ -24,6 +24,33 @@ template <typename T> void print_vec(std::vector<T> &vec, std::ostream &os) {
 
 
 /**
+ * Soma condicional
+ * Retornar a soma do vector somente para os genes iguais a 1 no cromossomo
+ */
+float sum_by_genes(std::vector<float>::iterator _vecFirst,
+                   std::vector<float>::iterator _vecLast,
+                   Chrom::const_iterator _chromFirst,
+                   Chrom::const_iterator _chromLast)
+{
+  float __sum = 0.0F;
+  for (; _vecFirst != _vecLast; ++_vecFirst) {
+    if (*_chromFirst) {
+      __sum += *_vecFirst;
+    }
+    if (_chromFirst == _chromLast) {
+      break;
+    }
+    ++_chromFirst;
+  }
+  return __sum;
+}
+
+// -------------------
+// Métodos da classe
+// -------------------
+
+
+/**
  * Implementa a leitura do arquivo de instância deinifindo
  * todos os atributos membros
  */
@@ -39,9 +66,6 @@ MKnapsackProblem::MKnapsackProblem (const char *filename) {
   std::ifstream f(filename);
   
   if (f.is_open()) {
-    // f.bufferize();
-    // auto _values = f.values();
-
     // Pegando todo o conteúdo do arquivo
     std::string all_from_file(
       (std::istreambuf_iterator<char>(f)),
@@ -65,9 +89,9 @@ MKnapsackProblem::MKnapsackProblem (const char *filename) {
         m_profits[i] = _values[i+3];
 
     // Lendo valores das restrições
-    m_weights = vector<vector<float>>(m_num_items, vector<float>(m_num_capacities));
-    for (uint i=0; i < m_num_items; i++) {
-      for (uint j=0; j < m_num_capacities; j++) {
+    m_weights = vector<vector<float>>(m_num_capacities, vector<float>(m_num_items));
+    for (uint i=0; i < m_num_capacities; i++) {
+      for (uint j=0; j < m_num_items; j++) {
         m_weights[i][j] = _values[ 3 + m_num_items + j + i*m_num_items ];
       }
     }
@@ -102,30 +126,48 @@ void MKnapsackProblem::display_info(std::ostream &os) {
 MKnapsackProblem::Fitness MKnapsackProblem::objective_function(Chrom& chromosome_) {
   assert(chromosome_.size() == m_num_items);
   // Check constraint
-  // Sum r_ij * x_j
   if (break_constraint(chromosome_)) {
     return Fitness(0);
   }
-  Fitness _sum = Fitness(0);
-  for (uint i=0; i < m_num_items; i++) {
-    if (chromosome_[i])
-      _sum += m_profits[i];
-  }
-  return _sum;
+  // Sum r_ij * x_j
+  // Fitness _sum = Fitness(0);
+  // for (uint i=0; i < m_num_items; i++) {
+  //   if (chromosome_[i])
+  //     _sum += m_profits[i];
+  // }
+
+  return sum_by_genes(m_profits.begin(), m_profits.end(),
+      chromosome_.cbegin(), chromosome_.cend());
 }
 
 
 bool MKnapsackProblem::break_constraint(const Chrom& chromosome_) {
-  // somando ...
-  std::vector<float> _sum(m_num_capacities);
-  for (uint i=0; i < m_num_capacities; i++) {
-    for (uint j=0; j < m_num_items; j++) {
-      _sum[i] += (float) (m_weights[i][j] * chromosome_[j]);
+  try {
+    std::vector<float> somas;
+    // Calcular a soma de cada linha (pesos de um item) na matriz de pesos
+    for (std::vector<float>& weights_of_item : m_weights) {
+      somas.push_back(
+        sum_by_genes(
+          weights_of_item.begin(), weights_of_item.end(),
+          chromosome_.cbegin(), chromosome_.cend()
+        )
+      );
     }
-    // checando a soma
-    if (_sum[i] <= m_capacities[i]) {
-      continue;
-    } else return true;
+    for (std::size_t i=0; i < m_num_capacities; i++) {
+      if (somas[i] > m_capacities[i]) {
+        return true;
+      }
+    }
+    return false;
   }
-  return false;
+  catch (std::exception &e) {
+    auto msg = std::string("break_constraint::") + e.what();
+    throw std::runtime_error(msg);
+  }
+}
+
+
+
+std::vector< std::vector<float> > *MKnapsackProblem::get_weights() {
+  return &this->m_weights;
 }

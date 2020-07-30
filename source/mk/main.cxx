@@ -1,5 +1,9 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
+#include <chrono>
+using std::chrono::system_clock;
+
 #include <paradiseo/eo/ga/eoBitOp.h>
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoTimeContinue.h>
@@ -45,11 +49,49 @@ int exec(int argc, char **argv) {
   mkp.display_info(std::cout);
   SEPLINE(60);
 
+  auto weightsMatrix = mkp.get_weights();
+  for (int i=0; i < weightsMatrix->size(); i++) {
+    for (int k=0; k < weightsMatrix->at(0).size(); k++) {
+      std::cout << std::setw(4) << weightsMatrix->at(i).at(k);
+    }
+    std::cout << std::endl;
+  }
+
   PRINT("Inicializando população");
   auto pop = mkp.init_pop(args->pop_size);
   PRINTLN("\rPopulação inicializada!");
 
+  PRINT("Avaliando população");
+  mkp.eval(pop);
+
+  // Definição dos parâmetros do AG
+  eoGenContinue<Chrom> term(args->epochs);
+  eoBitMutation<Chrom> mutation( args->mutation_rate );
+  eoRankingSelect<Chrom> select;
+  auto *crossover = CrossoverFabric::create(args->crossover_id);
+
+  // define a instância da classe de Algoritmo genético
+  GeneticAlgorithm ga(
+    mkp, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
+  SEPLINE(60);
+  std::cout << UEC(47) << "Iniciando evolução" << UEC(255) << std::endl;
+
+  // Vector de convergências
+  std::vector<Chrom> conv;
+
+  // Execução da evolução
+  auto start_point = std::chrono::system_clock::now();
+  ga(pop, conv, searchCallback);
+  auto dur_ns = system_clock::now() - start_point; // Duração em nanosegundos
+
+  // Converter duração para segundos
+  std::cout << std::fixed << "Tempo de evolução: " << UEC(47)
+            << parse_duration(dur_ns) << UEC(255) << std::endl;
+
+  // TODO: Impressão da solução final
   
+
+  // TODO: Armazenamento no banco de dados
 
   return 0;
 }
@@ -59,7 +101,7 @@ int main(int argc, char **argv) {
   try {
     return exec(argc, argv);
   } catch (std::exception &e) {
-    std::cerr << "Exception catched: " << e.what() << std::endl;
+    std::cerr << "\nmain: " << e.what() << std::endl;
     return 127;
   }
   return 0;
