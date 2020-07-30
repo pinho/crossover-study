@@ -19,9 +19,9 @@ install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 # Cada problema tem um projeto próprio implementando um executável para cada
 # problema abordado na pesquisa
 add_subdirectory(source/mc) # clique máximo
+add_subdirectory(source/mk) # mochila multidimensional
 # add_subdirectory(sc) # cobertura de conjuntos
 # add_subdirectory(st) # Árvore de Steiner
-# add_subdirectory(mk) # mochila multidimensional
 
 # Automatizar a construção da imagem docker
 find_program(DOCKER_EXECUTABLE

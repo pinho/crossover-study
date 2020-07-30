@@ -23,5 +23,5 @@ file(GLOB UTILS_SOURCES utils/split.cpp)
 add_library(core-utils ${UTILS_SOURCES})
 
 # Regras de instalação das bibliotecas
-install(TARGETS core-ga core-utils
+install(TARGETS core-ga
         DESTINATION ${CMAKE_INSTALL_LIBDIR})
