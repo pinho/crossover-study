@@ -15,7 +15,7 @@ alguns problemas de otimização combinatória bem conhecidos.
 ### Arch Linux
 
 ```sh
-sudo pacman -Sy --ignore cmake wget unzip doxygen fmt boost boost-libs vsqlite++ 
+sudo pacman -Sy --ignore cmake wget unzip doxygen boost boost-libs vsqlite++ 
 sudo bash scripts/instd.sh
 ```
 
@@ -23,7 +23,7 @@ sudo bash scripts/instd.sh
 
 ```sh
 sudo apt-get update
-sudo apt-get install cmake wget unzip doxygen libfmt-dev libboost-graph-dev libvsqlitepp-dev
+sudo apt-get install cmake wget unzip doxygen libboost-graph-dev libvsqlitepp-dev
 sudo bash scripts/instd.sh
 ```
 
@@ -38,10 +38,13 @@ Tenha certeza de ter o `cmake` instalado na versão 3.6+. Use o comando
 
 ```sh
 % mkdir build && cd build
-% cmake .. -DCMAKE_INSTALL_PREFIX=..
+% cmake .. -DCMAKE_INSTALL_PREFIX=../dist
 % make -j $(nproc)
 % make install
-% make image # para build da imagem docker
+
+# alvos para artefatos docker
+% make image
+% make volume
 ```
 
 Projeto compilado! :)
@@ -55,7 +58,7 @@ Todos seguem as mesma regras e opções de argumentos para a execução.
 Veja as opções usando a flag `--help`
 
 ```console
-% ./bin/crossoverstudy-mc --help
+% ./maxclique --help
 Problema do Clique Máximo
 Use: ./bin/crossoverstudy-mc -f [input-file] [ARGS] ...
 ARGS:
@@ -85,13 +88,7 @@ para a build da imagem. Para construir a imagem padrão, use:
 
 ```console
 % sudo make image
-```
-
-Crie um volume para persistir os arquivo de bancos de dados que podem ser
-gerados para armazenar informações de execuções:
-
-```console
-# docker volume create studyvol
+% sudo make volume
 ```
 
 Para executar um comando em um contêiner baseado na imagem da aplicação, use:
@@ -108,13 +105,21 @@ Para executar um comando em um contêiner baseado na imagem da aplicação, use:
   --rm \
   --name ga_crossover \
   estudos \
-  crossoverstudy-mc -f /data/in/brock400_4.clq -x 32 --db /data/max_clique.sqlite
+  crossoverstudy-mc -f /data/in/brock400_4.clq -x 32 --db /data/maxclique.sqlite
 ```
 
 
 ## Python Starter
 
-...
+Na pasta `scripts` há um script Python criado para subir um container Docker com a imagem
+da aplicação com um comando de algoritmo que pode ser executado `N` vezes em sequência no
+mesmo contêiner.
+
+Executar com `--help` para ver as opções:
+
+```console
+% sudo ./scripts/execOnContainer.py --help
+```
 
 ## License
 

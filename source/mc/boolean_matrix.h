@@ -12,7 +12,7 @@ struct matrix : public std::vector<std::vector<bool>> {
 public:
 
   // Modos de leitura: formatações de arquivos de grafos
-  enum fmt { dimacs, orlibrary };
+  enum fmt { dimacs, networkrepo };
 
   /*
    * ctor padrão 
@@ -85,23 +85,49 @@ public:
     uint64_t V, E, u, v;
     matrix A;
 
-    while ( !f.eof() ) {
-      f >> ch;
-      if (ch == 'c') {
-        f.ignore(256, '\n');
-      } else if (ch == 'p') {
-        f >> s >> V >> E;
-        A = matrix(V);
-      } else if (ch == 'e') {
-        f >> u >> v;
-        A.set(u-1, v-1);
-      } else {
-        f.ignore(256, '\n');
+    // Para o formato de arquivo do DIMACS
+    if (mode == fmt::dimacs) {
+
+      while ( !f.eof() ) {
+        f >> ch;
+        if (ch == 'c') {
+          f.ignore(256, '\n');
+        } else if (ch == 'p') {
+          f >> s >> V >> E;
+          A = matrix(V);
+        } else if (ch == 'e') {
+          f >> u >> v;
+          A.set(u-1, v-1);
+        } else {
+          f.ignore(256, '\n');
+        }
+        ch = -1;
       }
-      ch = -1;
+      f.close();
+      return A;
     }
-    f.close();
-    
+
+    // Para o formato de arquivos do networkrepository.com
+    else if (mode == fmt::networkrepo) {
+      bool qtd_was_read = false;
+      
+      while ( !f.eof() ) {
+        f >> ch;
+        if (ch == '%') {
+          f.ignore(256, '\n');
+        } else if (!qtd_was_read) {
+          f >> s >> V >> E;
+          A = matrix(V);
+        } else {
+          f >> u >> v;
+          A.set(u-1, v-1);
+        }
+        ch = -1;
+      }
+      f.close();
+      return A;
+    }
+
     return A;
   }
 

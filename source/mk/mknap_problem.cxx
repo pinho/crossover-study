@@ -1,0 +1,131 @@
+#include "mknap_problem.h"
+
+/**
+ * Converter um vector de strings para um vector de floats
+ */
+std::vector<float> convert_vec(std::vector<std::string>& source) {
+  auto *target = new std::vector<float>;
+  try {
+    for (auto &string_element : source) {
+      target->push_back( std::stof(string_element) );
+    }
+  } catch (std::exception &e) {
+    throw e;
+  }
+  return *target;
+}
+
+template <typename T> void print_vec(std::vector<T> &vec, std::ostream &os) {
+  os << "[ ";
+  for (T& elem : vec)
+    os << elem << " ";
+  os << "]" << std::endl;
+}
+
+
+/**
+ * Implementa a leitura do arquivo de instância deinifindo
+ * todos os atributos membros
+ */
+MKnapsackProblem::MKnapsackProblem (const char *filename) {
+  using std::vector;
+
+  this->__acronym = (char *) "MKP";
+  this->__name = (char *) "Problema da Mochila Muldimensional";
+  this->__infilename = (char *) filename;
+  this->__minimize = false;
+  
+  // scpxx::InstanceFile<float> f(filename);
+  std::ifstream f(filename);
+  
+  if (f.is_open()) {
+    // f.bufferize();
+    // auto _values = f.values();
+
+    // Pegando todo o conteúdo do arquivo
+    std::string all_from_file(
+      (std::istreambuf_iterator<char>(f)),
+      (std::istreambuf_iterator<char>())
+    );
+
+    // std::cout << "all_from_file = " << all_from_file << std::endl;
+    auto _string_values = split(all_from_file, ' ');
+    auto _values = convert_vec(_string_values);
+    
+
+    this->m_num_items = (uint) _values[0];
+    this->m_num_capacities = (uint) _values[1];
+    this->m_optimal = _values[2];
+
+    this->__chromSize = m_num_items;
+
+    // Lendo os itens e seus valores
+    m_profits = vector<float>(m_num_items);
+    for (uint i=0; i < m_num_items; i++)
+        m_profits[i] = _values[i+3];
+
+    // Lendo valores das restrições
+    m_weights = vector<vector<float>>(m_num_items, vector<float>(m_num_capacities));
+    for (uint i=0; i < m_num_items; i++) {
+      for (uint j=0; j < m_num_capacities; j++) {
+        m_weights[i][j] = _values[ 3 + m_num_items + j + i*m_num_items ];
+      }
+    }
+    int _i = 3 + m_num_items + m_num_items*m_num_capacities;
+    m_capacities = vector<float>(m_num_capacities);
+    for (uint i=0; i < m_num_capacities; i++) {
+      m_capacities[i] = _values[_i]; _i++;
+    }
+  }
+}
+
+
+MKnapsackProblem::~MKnapsackProblem() = default;
+
+
+eoPop<Chrom> MKnapsackProblem::init_pop(uint length, double bias) {
+  return Random<Chrom>::population(__chromSize, length, bias);
+}
+
+
+void MKnapsackProblem::display_info(std::ostream &os) {
+  os << this->__name << " - " << (__minimize?"Minimização":"Maximização") <<std::endl;
+  os << this->m_num_items << " items\n";
+  os << "Profits: ";
+  print_vec<float>(m_profits, os);
+  os << this->m_num_capacities << " restrições\n";
+  os << "Capacidades: ";
+  print_vec<float>(m_capacities, os);
+}
+
+
+MKnapsackProblem::Fitness MKnapsackProblem::objective_function(Chrom& chromosome_) {
+  assert(chromosome_.size() == m_num_items);
+  // Check constraint
+  // Sum r_ij * x_j
+  if (break_constraint(chromosome_)) {
+    return Fitness(0);
+  }
+  Fitness _sum = Fitness(0);
+  for (uint i=0; i < m_num_items; i++) {
+    if (chromosome_[i])
+      _sum += m_profits[i];
+  }
+  return _sum;
+}
+
+
+bool MKnapsackProblem::break_constraint(const Chrom& chromosome_) {
+  // somando ...
+  std::vector<float> _sum(m_num_capacities);
+  for (uint i=0; i < m_num_capacities; i++) {
+    for (uint j=0; j < m_num_items; j++) {
+      _sum[i] += (float) (m_weights[i][j] * chromosome_[j]);
+    }
+    // checando a soma
+    if (_sum[i] <= m_capacities[i]) {
+      continue;
+    } else return true;
+  }
+  return false;
+}

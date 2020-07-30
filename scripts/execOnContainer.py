@@ -44,7 +44,8 @@ class ConfigFile:
   help="Número de vezes para executar os comando", type=int, default=1, show_default=True)
 @click.option('-c', '--config', type=str, help="Arquivo de configuração dos parâmetros", default=None)
 @click.option('--name', help="Nome para o container")
-def main(command, count, config, name):
+@click.option('--rm', help="Remover contêiner ao finalizar", type=bool, default=False)
+def main(command, count, config, name, rm):
   """Lançar um comando no container Docker"""
 
   CMD = ["run"]
@@ -69,7 +70,7 @@ def main(command, count, config, name):
   client = docker.from_env()
   container = client.containers.run(IMAGE_NAME, command=CMD,
       detach=True,
-      remove=True,
+      remove=rm,
       name=name,
       mounts=[ docker.types.Mount("/data/out", "studyvol") ],
       cpu_shares=500 )

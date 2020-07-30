@@ -5,7 +5,7 @@
 #include "split.h"
 
 std::vector<std::string> split(const std::string &txt, const char separator) {
-	std::vector<std::string> result;
+  std::vector<std::string> result;
 	uint begin = 0;
 	for (uint64_t i=0; i < txt.size(); i++) {
 		if (txt[i] == separator) {
