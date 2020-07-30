@@ -97,4 +97,41 @@ void db_entry(connection& con, db_structure mode, CLI *args, int clique_size,
 }
 
 
+/**
+ * Entrada na tabela para o problema da mochila multidimensional
+ */
+void db_knapsack_entry(connection &con, CLI *args, std::vector<Chrom> &conv,
+        std::vector<uint> &item_indices, float final_costs,
+        std::string file, std::chrono::milliseconds &duration) {
+    std::string sql;
+    sql += "INSERT INTO execucoes_mknap (";
+    sql += " pop_length, num_gen, cross_rate, mutation_rate, crossover,";
+    sql += " instance_file, item_indices, total_costs, convergence, duration_ms";
+    sql += ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+    // Pré-processamento
+    // Nome do operador de crossover
+    auto crossover_name = CrossoverFabric::name(args->crossover_id);
+
+    // Índices dos items na solução
+    std::string items_str = sequence_to_string<uint>(item_indices);
+
+    // Lista de valores da convergência da evolução
+    std::string conv_str = convergence_to_string(conv);
+
+    execute ins(con, sql);
+    ins % (int) args->pop_size
+        % (int) args->epochs
+        % (double) args->crossover_rate
+        % (double) args->mutation_rate
+        % crossover_name
+        % file
+        % items_str
+        % final_costs
+        % conv_str
+        % duration.count();
+    ins();
+}
+
+
 #endif

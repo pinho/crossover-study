@@ -89,9 +89,38 @@ int exec(int argc, char **argv) {
             << parse_duration(dur_ns) << UEC(255) << std::endl;
 
   // TODO: Impressão da solução final
-  
+  SEPLINE(60);
+  Chrom melhor = pop.best_element();
+  std::vector<uint> indices;
+  std::cout << "Items: [ ";
+  for (uint i = 0; i < melhor.size(); i++) {
+    if (melhor[i]) {
+      indices.push_back(i);
+      std::cout << i << " ";
+    }
+  }
+  std::cout << "] ";
+  std::cout << "Custos: " << std::setprecision(2) << melhor.fitness()
+            << std::endl;
+  SEPLINE(60);
 
   // TODO: Armazenamento no banco de dados
+  if (args->using_db) {
+    using namespace std::chrono;
+    auto dur_ms = duration_cast<milliseconds>(dur_ns);
+    
+    try {
+      auto con = db_create(args->databasefile, db_structure::mk);
+      std::cout << "Arquivo \"" << args->databasefile << "\" criado.\n";
+      db_knapsack_entry(*con, args, conv, indices, melhor.fitness(),
+          filename, dur_ms);
+      std::cout << "dados escritos em " << args->databasefile << std::endl;
+    }
+    catch (std::exception &e) {
+      std::cerr << "Erro ao escrever no BD \"" << args->databasefile
+          << "\"; " << e.what() << std::endl;
+    }
+  }
 
   return 0;
 }

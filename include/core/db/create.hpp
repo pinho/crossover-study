@@ -31,6 +31,24 @@ connection* db_create(std::string filename, db_structure dbmode) {
     execute(*con, query, true);
   }
   
+  else if (dbmode == db_structure::mk) {
+    // Contrói a tabela com estrutura pro problema da mochila multidimensional
+    query = "CREATE TABLE IF NOT EXISTS execucoes_mknap (";
+    query += "id INTEGER PRIMARY KEY AUTOINCREMENT, "; 
+    query += "pop_length INTEGER, ";
+    query += "num_gen INTEGER, ";
+    query += "cross_rate REAL, ";
+    query += "mutation_rate REAL, ";
+    query += "crossover TEXT, ";
+    query += "instance_file TEXT, ";
+    query += "item_indices TEXT, ";
+    query += "total_costs REAL, ";
+    query += "convergence TEXT, ";
+    query += "duration_ms REAL";
+    query += ");";
+    execute(*con, query, true);
+  }
+
   return con;
 }
 
