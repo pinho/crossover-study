@@ -1,5 +1,7 @@
 # Files ignored by Git
 
+/RELATORIO.md
+
 ## Folders to ignore
 build
 cmake-build-debug
@@ -49,5 +51,3 @@ lib64
 **/__pycache__/
 **/*.ipynb_checkpoints
 **.ipynb
-resultados/
-src/version.h
