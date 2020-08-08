@@ -38,7 +38,8 @@ COPY --from=build /usr/local/bin/multiknap /usr/bin
 # Coiando arquivos de instância para a imagem em /data/in e definindo o
 # diretório "data" como um volume. Esse diretório deve ser usado para armazenar
 # os arquivos de banco de dados (.sqlite) das execuções
-COPY --from=build /usr/src/data /data/in
+COPY --from=build /usr/src/data/mkp /data/mk
+COPY --from=build /usr/src/data/mcp /data/mc
 
 VOLUME [ "/data/cs_outputs" ]
 # OBS: O ponto de montagem no host deve ser especificada ao subir o contêiner
