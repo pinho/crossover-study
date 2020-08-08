@@ -4,12 +4,16 @@
  * Converter um vector de strings para um vector de floats
  */
 std::vector<float> convert_vec(std::vector<std::string>& source) {
+  using Str = std::string;
   auto *target = new std::vector<float>;
   try {
     for (auto &string_element : source) {
-      target->push_back( std::stof(string_element) );
+      if (string_element != Str("\n") and string_element != Str(" ")) {
+        target->push_back( std::stof(string_element) );
+      }
     }
   } catch (std::exception &e) {
+    std::cerr << "convert_vec: impossível converter string para float\n";
     throw e;
   }
   return *target;
@@ -45,10 +49,10 @@ float sum_by_genes(std::vector<float>::iterator _vecFirst,
   return __sum;
 }
 
+
 // -------------------
 // Métodos da classe
 // -------------------
-
 
 /**
  * Implementa a leitura do arquivo de instância deinifindo
@@ -71,12 +75,9 @@ MKnapsackProblem::MKnapsackProblem (const char *filename) {
       (std::istreambuf_iterator<char>(f)),
       (std::istreambuf_iterator<char>())
     );
-
-    // std::cout << "all_from_file = " << all_from_file << std::endl;
     auto _string_values = split(all_from_file, ' ');
     auto _values = convert_vec(_string_values);
     
-
     this->m_num_items = (uint) _values[0];
     this->m_num_capacities = (uint) _values[1];
     this->m_optimal = _values[2];
@@ -168,6 +169,18 @@ bool MKnapsackProblem::break_constraint(const Chrom& chromosome_) {
 
 
 
-std::vector< std::vector<float> > *MKnapsackProblem::get_weights() {
+std::vector< std::vector<float> > *MKnapsackProblem::weights() {
   return &this->m_weights;
+}
+
+float MKnapsackProblem::optimal() {
+  return this->m_optimal;
+}
+
+std::vector<float>& MKnapsackProblem::profits() {
+  return this->m_profits;
+}
+
+std::vector<float>& MKnapsackProblem::capacities() {
+  return this->m_capacities;
 }

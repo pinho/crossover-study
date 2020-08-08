@@ -49,7 +49,7 @@ int exec(int argc, char **argv) {
   mkp.display_info(std::cout);
   SEPLINE(60);
 
-  auto weightsMatrix = mkp.get_weights();
+  auto weightsMatrix = mkp.weights();
   for (int i=0; i < weightsMatrix->size(); i++) {
     for (int k=0; k < weightsMatrix->at(0).size(); k++) {
       std::cout << std::setw(4) << weightsMatrix->at(i).at(k);
@@ -88,23 +88,28 @@ int exec(int argc, char **argv) {
   std::cout << std::fixed << "Tempo de evolução: " << UEC(47)
             << parse_duration(dur_ns) << UEC(255) << std::endl;
 
-  // TODO: Impressão da solução final
   SEPLINE(60);
+
+  if (mkp.optimal() > 0.0f) {
+    std::cout << "Solução ótima: "<< std::setprecision(2) <<mkp.optimal() <<'\n';
+  }
+
   Chrom melhor = pop.best_element();
+  std::vector<float> &cap = mkp.capacities();
   std::vector<uint> indices;
   std::cout << "Items: [ ";
   for (uint i = 0; i < melhor.size(); i++) {
     if (melhor[i]) {
       indices.push_back(i);
-      std::cout << i << " ";
+      std::cout << cap[i] << "("<< i <<") ";
     }
   }
   std::cout << "] ";
   std::cout << "Custos: " << std::setprecision(2) << melhor.fitness()
-            << std::endl;
+            << " " << (melhor.fitness() / mkp.optimal()) << "%"
+            << " de aproximação." << std::endl;
   SEPLINE(60);
 
-  // TODO: Armazenamento no banco de dados
   if (args->using_db) {
     using namespace std::chrono;
     auto dur_ms = duration_cast<milliseconds>(dur_ns);
@@ -130,7 +135,7 @@ int main(int argc, char **argv) {
   try {
     return exec(argc, argv);
   } catch (std::exception &e) {
-    std::cerr << "\nmain: " << e.what() << std::endl;
+    std::cerr << "exec: " << e.what() << std::endl;
     return 127;
   }
   return 0;

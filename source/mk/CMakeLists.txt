@@ -7,6 +7,7 @@ string(TOLOWER ${PROJECT_NAME} main_target)
 
 include_directories(../../include)
 link_libraries(core-ga core-utils vsqlitepp)
+add_compile_options("-Wunused")
 
 add_executable(${main_target}
   main.cxx
