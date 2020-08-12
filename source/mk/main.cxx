@@ -90,24 +90,27 @@ int exec(int argc, char **argv) {
 
   SEPLINE(60);
 
-  if (mkp.optimal() > 0.0f) {
-    std::cout << "Solução ótima: "<< std::setprecision(2) <<mkp.optimal() <<'\n';
-  }
-
   Chrom melhor = pop.best_element();
-  std::vector<float> &cap = mkp.capacities();
+  std::vector<float> &objectValues = mkp.profits();
   std::vector<uint> indices;
-  std::cout << "Items: [ ";
+  std::cout << "Items: { \n";
   for (uint i = 0; i < melhor.size(); i++) {
     if (melhor[i]) {
       indices.push_back(i);
-      std::cout << cap[i] << "("<< i <<") ";
+      std::cout << std::setw(4) << "["<<i<<"] " << std::setprecision(2)
+                << objectValues[i] << "\n";
     }
   }
-  std::cout << "] ";
-  std::cout << "Custos: " << std::setprecision(2) << melhor.fitness()
-            << " " << (melhor.fitness() / mkp.optimal()) << "%"
-            << " de aproximação." << std::endl;
+  std::cout << "} \n";
+  std::cout << "Custo total: " << std::setprecision(2) << melhor.fitness()
+            << std::endl;
+
+  if (mkp.optimal() > 0.0f) {
+    std::cout << (melhor.fitness() / mkp.optimal())*100 << "\% de aproximação.";
+    std::cout << "\nSolução ótima: "<< std::setprecision(2) <<mkp.optimal()
+              << std::endl;
+  }
+
   SEPLINE(60);
 
   if (args->using_db) {
