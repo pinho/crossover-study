@@ -13,13 +13,13 @@ string(TOLOWER ${PROJECT_NAME} project_lower_name)
 # Bibliotecas construídas localmente
 add_subdirectory(include/core)
 
-add_executable(run source/run.cxx)
+add_executable(run src/run.cxx)
 install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 
 # Cada problema tem um projeto próprio implementando um executável para cada
 # problema abordado na pesquisa
-add_subdirectory(source/mc) # clique máximo
-add_subdirectory(source/mk) # mochila multidimensional
+add_subdirectory(src/mc) # clique máximo
+add_subdirectory(src/mk) # mochila multidimensional
 # add_subdirectory(sc) # cobertura de conjuntos
 # add_subdirectory(st) # Árvore de Steiner
 
