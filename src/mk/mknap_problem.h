@@ -6,6 +6,7 @@
 #include <core/ga/problem.h>
 #include <core/ga/random.h>
 #include <core/utils/split.h>
+#include <core/utils/vectors.h>
 // #include <scpxx/InstanceFile.h>
 
 class MKnapsackProblem : public Problem {

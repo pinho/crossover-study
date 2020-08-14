@@ -1,0 +1,90 @@
+#include "steiner_tree.h"
+
+SteinerTreeProblem::SteinerTreeProblem(const char* filename) {
+  this->__infilename = (char*) filename;
+  this->__name = (char*) "Steiner Tree Problem";
+  this->__acronym = (char*) "STP";
+  this->__minimize = true;
+
+  // Ler o arquivo de texto
+  std::ifstream file(filename);
+  if (file.is_open()) {
+    std::string* file_content = new std::string(
+      std::istreambuf_iterator<char>(file),
+      std::istreambuf_iterator<char>()
+    );
+    std::vector<std::string> file_content_vec = split(*file_content, ' ');
+    std::vector<float> file_content_numbers = convert_vec(file_content_vec);
+    file.close();
+
+    // Lendo as quantidades e tamanhos
+    uint index = 0;
+    this->num_nodes = file_content_numbers[index++]; // 0 -> 1
+    this->num_edges = file_content_numbers[index++]; // 1 -> 2
+    this->num_steiner_nodes = file_content_numbers[2 + 3*num_edges];
+    this->__chromSize = this->num_steiner_nodes;
+
+    // Criação dos arrays
+    this->nodes_vec_ptr = new std::vector<int>(num_nodes);
+    this->steiner_nodes_vec_ptr = new std::vector<int>(num_steiner_nodes);
+    this->weights_vec_ptr = new std::vector<float>();
+    this->edges_vec_ptr = new std::vector<edge_t>();
+
+    // Atribuindo os valores aos arrays de arestas e pesos
+    for (; index < this->num_edges*3; index+=3) {
+      this->edges_vec_ptr->emplace_back(
+        edge_t(file_content_numbers[index], file_content_numbers[index+1])
+      );
+      this->weights_vec_ptr->emplace_back(file_content_numbers[index+2]);
+    }
+
+    // Atribuindo os valores do array de vértices de Steiner
+    index += 1; // pula o número de vértices de Steiner (já foi lido)
+    for (size_t i=0; i < this->steiner_nodes_vec_ptr->size(); i++) {
+      this->steiner_nodes_vec_ptr->at(i) = file_content_numbers[index];
+      index++;
+    }
+
+    // Liberando memória alocada pelo construtor
+    // free(file_content);
+    // delete[] &file_content_vec;
+    // delete[] &file_content_numbers;
+  }
+}
+
+SteinerTreeProblem::~SteinerTreeProblem() {
+  free(this->nodes_vec_ptr);
+  free(this->steiner_nodes_vec_ptr);
+  free(this->weights_vec_ptr);
+  free(this->edges_vec_ptr);
+}
+
+void SteinerTreeProblem::display_info(std::ostream& os) {
+  os << this->__acronym << " - " << this->__name << std::endl;
+  os << "Vértices terminais : " << this->num_nodes << std::endl;
+  os << "Vértices de Steiner: " << this->num_steiner_nodes << std::endl;
+  os << "Arestas: " << this->num_edges << std::endl;
+}
+
+eoPop<Chrom> SteinerTreeProblem::init_pop(uint len, double bias) {
+  return Random<Chrom>::population(this->__chromSize, len, bias);
+}
+
+SteinerTreeProblem::Fitness
+SteinerTreeProblem::objective_function(Chrom& chromosome) {
+  // TODO: Função objetivo do Steiner Tree
+  return 0;
+}
+
+void
+SteinerTreeProblem::remove_node(std::vector<edge_t>& edges,
+    std::vector<float>& weights, int node)
+{
+  for (std::size_t i=0; i < edges.size(); i++) {
+    if (edges[i].first == node or edges[i].second == node) {
+      edges.erase(edges.begin()+i);
+      weights.erase(weights.begin()+i);
+      i--;
+    }
+  }
+}

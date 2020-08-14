@@ -20,8 +20,8 @@ install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 # problema abordado na pesquisa
 add_subdirectory(src/mc) # clique máximo
 add_subdirectory(src/mk) # mochila multidimensional
+add_subdirectory(src/st) # Árvore de Steiner
 # add_subdirectory(sc) # cobertura de conjuntos
-# add_subdirectory(st) # Árvore de Steiner
 
 # Automatizar a construção da imagem docker
 find_program(DOCKER_EXECUTABLE

@@ -19,9 +19,9 @@ add_library(core-ga ${GA_SOURCES})
 target_link_libraries(core-ga ${PEO} ${PEOUTILS})
 
 # Biblioteca de utilitários
-file(GLOB UTILS_SOURCES utils/split.cpp)
+file(GLOB UTILS_SOURCES utils/*.cpp)
 add_library(core-utils ${UTILS_SOURCES})
 
 # Regras de instalação das bibliotecas
-install(TARGETS core-ga
+install(TARGETS core-ga core-utils
         DESTINATION ${CMAKE_INSTALL_LIBDIR})
