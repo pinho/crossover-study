@@ -8,11 +8,11 @@ include(GNUInstallDirs)
 include_directories(../../include)
 add_compile_options(-Wunused)
 
-add_executable(steintree_bin
+add_executable(steintree
   main.cpp
   steiner_tree.cpp
   minimum_spanning_tree.cpp)
   
-target_link_libraries(steintree_bin core-ga core-utils)
+target_link_libraries(steintree core-ga core-utils vsqlitepp)
 
-install(TARGETS ${main_target} DESTINATION ${CMAKE_INSTALL_BINARYDIR})
+install(TARGETS steintree DESTINATION ${CMAKE_INSTALL_BINARYDIR})

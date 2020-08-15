@@ -18,6 +18,8 @@ public:
   eoPop<Chrom> init_pop(uint len, double _bias = 0.5);
   Fitness objective_function(Chrom& chromosome);
 
+  std::vector<int> *const steiner_nodes();
+
   // Remover todas as arestas adjacentes a um conjunto de vértices
   void remove_node(std::vector<edge_t>& edges, std::vector<float>& weights, int node);
 

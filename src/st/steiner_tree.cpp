@@ -100,3 +100,7 @@ SteinerTreeProblem::remove_node(std::vector<edge_t>& edges,
     }
   }
 }
+
+std::vector<int> *const SteinerTreeProblem::steiner_nodes() {
+  return this->steiner_nodes_vec_ptr;
+}

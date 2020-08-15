@@ -134,4 +134,17 @@ void db_knapsack_entry(connection &con, CLI *args, std::vector<Chrom> &conv,
 }
 
 
+void db_steinertree_entry(connection& con, CLI* args, std::vector<Chrom>& conv,
+        std::vector<uint>& solution, float final_costs, std::string file,
+        std::chrono::milliseconds &duration)
+{
+    std::string sql;
+    sql += "INSERT INTO execucoes_steiner (";
+    sql += " pop_length, num_gen, cross_rate, mutation_rate, crossover,";
+    sql += " instance_file, steiner_nodes_selected, total_costs, convergence,";
+    sql += " duration_ms) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+
+}
+
 #endif
