@@ -17,3 +17,24 @@ Arquivo            |   [V]  |   [E]   | CM | Link
 > [V]   : Número de vértices <br>
 > [E]   : Número de arestas <br>
 > CM    : limite inferior do tamanho do clique máximo
+
+## Mochila Multidimensional
+
+## Árvore de Steiner
+
+A fonte de arquivos de intância é a
+[OR-Library](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/).
+
+Todo e qualquer arquivo de definição de um grafo para testes com o poblema da
+árvore de Steiner deve estar na formatação definida pelos arquivos da OR-Library.
+
+Arquivo         | Vértices (de Steiner)| Arestas | Link 
+----------------|----------------------|---------|------
+`steinb1.txt`   | 50   (9)             | 63      | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb1.txt)
+`steinb2.txt`   | 50   (13)            | 63      | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb2.txt)
+`steinb3.txt`   | 50   (32)            | 63      | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb3.txt)
+`steinb4.txt`   | 50   (9)             | 100     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb4.txt)
+`steinb5.txt`   | 50   (13)            | 100     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb5.txt)
+`steinb6.txt`   | 50   (25)            | 100     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb6.txt)
+
+## Cobertura de Conjuntos
