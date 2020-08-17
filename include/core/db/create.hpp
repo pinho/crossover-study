@@ -60,8 +60,8 @@ connection* db_create(std::string filename, db_structure dbmode) {
     query += "crossover TEXT, ";
     query += "instance_file TEXT, ";
     query += "convergence TEXT, ";
-    query += "duration_ms REAL";
-    query += "total_costs REAL, ";
+    query += "duration_ms REAL,";
+    query += "total_costs REAL,";
     query += "steiner_nodes_selected TEXT ";
     query += ");";
     execute(*con, query, true);

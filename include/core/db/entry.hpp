@@ -144,7 +144,22 @@ void db_steinertree_entry(connection& con, CLI* args, std::vector<Chrom>& conv,
     sql += " instance_file, steiner_nodes_selected, total_costs, convergence,";
     sql += " duration_ms) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
+    auto crossover_name = CrossoverFabric::name(args->crossover_id);
+    std::string stnodes_selected = sequence_to_string<uint>(solution);
+    std::string convergence = convergence_to_string(conv);
 
+    execute ins(con, sql);
+    ins % (int) args->pop_size
+        % (int) args->epochs
+        % (double) args->crossover_rate
+        % (double) args->mutation_rate
+        % crossover_name
+        % file
+        % stnodes_selected
+        % final_costs
+        % convergence
+        % duration.count();
+    ins();
 }
 
 #endif
