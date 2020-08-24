@@ -51,7 +51,7 @@ int exec(CLI *args) {
   sep_line(60);
   std::cout << "Inicializando população ..." << std::flush;
   auto population = stein.init_pop( args->pop_size );
-  std::cout << population << std::endl;
+  // std::cout << population << std::endl;
 
   sep_line(60);
   std::cout << "Avaliando população inicial ..." << std::flush;

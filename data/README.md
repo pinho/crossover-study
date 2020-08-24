@@ -36,5 +36,14 @@ Arquivo         | Vértices (de Steiner)| Arestas | Link
 `steinb4.txt`   | 50   (9)             | 100     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb4.txt)
 `steinb5.txt`   | 50   (13)            | 100     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb5.txt)
 `steinb6.txt`   | 50   (25)            | 100     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb6.txt)
+`steinb9.txt`   | 75   (38)            | 94      | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb9.txt)
+`steinb10.txt`  | 75   (13)            | 150     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb10.txt)
+`steinb12.txt`  | 75   (38)            | 150     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb12.txt)
+`steinb14.txt`  | 100  (25)            | 125     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb14.txt)
+`steinb15.txt`  | 100  (50)            | 125     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb15.txt)
+`steinb18.txt`  | 100  (50)            | 200     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinb18.txt)
+`steinc3.txt`   | 500  (83)            | 625     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinc3.txt)
+`steinc4.txt`   | 500  (125)           | 625     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinc4.txt)
+`steinc5.txt`   | 500  (250)           | 625     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinc5.txt)
 
 ## Cobertura de Conjuntos

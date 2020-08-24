@@ -21,7 +21,7 @@ install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 add_subdirectory(src/mc) # clique máximo
 add_subdirectory(src/mk) # mochila multidimensional
 add_subdirectory(src/st) # Árvore de Steiner
-# add_subdirectory(sc) # cobertura de conjuntos
+add_subdirectory(src/sc) # cobertura de conjuntos
 
 # Automatizar a construção da imagem docker
 find_program(DOCKER_EXECUTABLE
@@ -36,7 +36,7 @@ else()
   set(DOCKERFILE_PATH ${CMAKE_SOURCE_DIR})
   
   add_custom_target(image
-    COMMAND ${DOCKER_EXECUTABLE} build -t ${project_lower_name} ${DOCKERFILE_PATH}
+    COMMAND ${DOCKER_EXECUTABLE} build --rm -t ${project_lower_name} ${DOCKERFILE_PATH}
     COMMENT "Construindo Imagem Docker: \"${project_lower_name}\""
     VERBATIM) 
   

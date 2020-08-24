@@ -14,7 +14,6 @@ from collections.abc import Iterable
 
 IMAGE_NAME  = 'crossoverstudy'
 VOLUME_NAME = 'studyvol'
-MOUNT = docker.types.Mount(source=VOLUME_NAME, target="/data")
 
 class ConfigFile:
   filename: str
