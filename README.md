@@ -2,8 +2,13 @@
 
 ![Actions Status](https://github.com/pinho/crossover-research/workflows/C++%20CI/badge.svg)
 
-Comparação de Opeardores de crossover em Algoritmos Genéticos aplicando a 
-alguns problemas de otimização combinatória bem conhecidos.
+Este projeto é resultado da pesquisa conduzida no 
+_[Laboratory of Applied Artificial Intelligence](http://laai.ufpa.br)_ (LAAI)
+acerca de operadores de cruzamento em algoritmos genéticos (AG) aplicados a
+alguns problemas NP-Completos de Karp, problemas clássicos de otimização
+combinatória em ciência da computação e pesquisa operacional. O trabalho visa
+conhecer mais sobre o efeito dos operadores de crossover mais usados no processo
+de busca de um AG no tipo de problema abordado (otimização combinatoria).
 
 - [Instalando dependências](#Instalando-dependências) (Linux)
 - [Compilando o projeto](#Compilando-o-projeto)
@@ -111,9 +116,11 @@ Para executar um comando em um contêiner baseado na imagem da aplicação, use:
 
 ## Python Starter
 
-Na pasta `scripts` há um script Python criado para subir um container Docker com a imagem
-da aplicação com um comando de algoritmo que pode ser executado `N` vezes em sequência no
-mesmo contêiner.
+> Deve ser executado como superuser
+
+Na pasta `scripts` há um script Python criado para subir um container Docker com
+a imagem da aplicação com um comando de algoritmo que pode ser executado `N`
+vezes em sequência no mesmo contêiner.
 
 Executar com `--help` para ver as opções:
 
