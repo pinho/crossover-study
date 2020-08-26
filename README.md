@@ -1,4 +1,4 @@
-# Crossovers Comparison
+# Crossovers Operators Comparisons
 
 ![Actions Status](https://github.com/pinho/crossover-research/workflows/C++%20CI/badge.svg)
 
@@ -10,10 +10,22 @@ combinatória em ciência da computação e pesquisa operacional. O trabalho vis
 conhecer mais sobre o efeito dos operadores de crossover mais usados no processo
 de busca de um AG no tipo de problema abordado (otimização combinatoria).
 
-- [Instalando dependências](#Instalando-dependências) (Linux)
-- [Compilando o projeto](#Compilando-o-projeto)
-- [Executando](#executando)
-- [Imagem Docker](#imagem-docker)
+Os estudos foram executados para os seguintes problemas:
+- Árvore de Steiner
+- Clique Máximo
+- Mochila Multidimensional
+- Cobertura de Conjuntos
+
+<!-- TODO: Link para a OR-ibrary -->
+Os quatro problemas foram implementados e executados para instâncias fornecidas
+principalmente pela OR-Library
+
+## Summary
+
+* [Instalando dependências](#Instalando-dependências) (Linux)
+* [Compilando o projeto](#Compilando-o-projeto)
+* [Executar os binários](#executando)
+* [Imagem Docker](#imagem-docker)
 
 ## Instalando dependências
 
