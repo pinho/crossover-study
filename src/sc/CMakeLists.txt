@@ -10,7 +10,6 @@ add_compile_options(-Wunused)
 
 add_executable(${executable_name}
   main.cpp
-  subset.cpp
   scp_matrix.cpp
   set_covering_problem.cpp
 )

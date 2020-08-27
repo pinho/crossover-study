@@ -45,5 +45,6 @@ SetCoveringProblem::init_pop(unsigned int length, double bias = 0.5) {
 
 SetCoveringProblem::Fitness
 SetCoveringProblem::objective_function(Chrom& chrom) {
+  // TODO: Função objetivo da cobertura de conjuntos
   return Fitness(0);
 }

@@ -7,21 +7,31 @@ using namespace std::chrono;
 #include "scp_matrix.h"
 #include "set_covering_problem.h"
 
+void break_lines(std::ostream &os, unsigned short __n = 60) {
+  unsigned short n = 0;
+  while (n++ < __n)
+    os << '-';
+  os << std::endl;
+}
+
+const char* trim_filename(const char *filename) {
+  std::string str_filename(filename);
+  return (split(str_filename, '/').end()-1)->c_str();
+}
+
 /**
  * Função de execução d programa principal inteiro
  */
 int exec(CLI *args) {
+  const char *fname = trim_filename(args->infile);
+  std::cout << "Cobertura de conjuntos: " << fname << std::endl;
+  break_lines(std::cout);
 
-  SetCoveringProblem *scp = nullptr;
-  try {
-    scp = new SetCoveringProblem(args->infile);
-  } catch (std::runtime_error &re) {
-    std::cout << "Não foi possível instanciar um objeto do problem SCP\n";
-    throw re;
-  }
+  SetCoveringProblem prob(args->infile);
+  prob.display_info(std::cout);
+  break_lines(std::cout);
 
-  scp->display_info(std::cout);
-  std::cout << *(scp->get_matrix()) << std::endl;
+  // TODO: Implementar AG
 
   return 0;
 }

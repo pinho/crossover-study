@@ -62,11 +62,6 @@ matrix::matrix(std::ifstream& inputfile) {
       size_t columnsNumber = std::stoul(fileContentVec[index++]);
       size_t currentIndex = index;
 
-      // TODO: Verificar se não está invertido
-      // Pode ser que definição dos valores na matriz esteja inversa
-      // ao invés de ler coluna por coluna e definir as linhas que ela cobre
-      // seja necessário ler linha a linha definindo as colunas que ela cobre.
-
       for (; index < currentIndex+columnsNumber; index++) {
         size_t columnIndex = std::stoul(fileContentVec[index]) -1;
         this->set(rowIndex, columnIndex);
