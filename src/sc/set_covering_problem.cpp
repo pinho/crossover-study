@@ -10,21 +10,29 @@ SetCoveringProblem::SetCoveringProblem(const char *filename) {
   if (file.is_open()) {
     this->coverage_matrix = new matrix(file);
     this->__chromSize = this->coverage_matrix->num_columns;
+    this->num_subsets = this->coverage_matrix->num_columns;
+    this->num_elements = this->coverage_matrix->num_rows;
   } else {
-    throw std::runtime_error("SCP input file not open");
+    std::cerr << "Use a opção -f" << std::endl;
+    throw std::runtime_error(
+      "Não foi possível abrir o arquivo no caminho: "+ std::string(filename)
+    );
   }
 }
-
 
 // Destrutor
 SetCoveringProblem::~SetCoveringProblem() = default;
 
 // Métodos herdados de "Problem"
 
+matrix* SetCoveringProblem::get_matrix() {
+  return this->coverage_matrix;
+}
+
 void SetCoveringProblem::display_info(std::ostream& os) {
   os << this->__name << " (" << this->__acronym << ")\n";
-  os << "Número de elementos no conjunto universo: " << num_elements << "\n";
-  os << "Número de subconjuntos: " << num_subsets;
+  os << "Número de elementos no conjunto universo: " << this->num_elements << "\n";
+  os << "Número de subconjuntos: " << this->num_subsets;
   os << std::endl;
 }
 

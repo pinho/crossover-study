@@ -1,10 +1,9 @@
 #ifndef CROSSOVERSTUDY_SCP_MATRIX_H
 #define CROSSOVERSTUDY_SCP_MATRIX_H
 
-#include <cstdio>
 #include <cstdlib>
 #include <cassert>
-#include <ostream>
+#include <iostream>
 #include <fstream>
 #include <core/utils/split.h>
 

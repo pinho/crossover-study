@@ -27,7 +27,7 @@ public:
   Fitness objective_function(Chrom &chromosome);
 
   // Métodos relacionados à manipulação da matriz
-  
+  matrix* get_matrix();
 
 private:
   size_t num_elements; // Número de linhas na matriz

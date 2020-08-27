@@ -12,8 +12,16 @@ using namespace std::chrono;
  */
 int exec(CLI *args) {
 
-  SetCoveringProblem scp("/home/ronaldd/Projects/crossover-study/data/scp41.txt");
-  scp.display_info(std::cout);
+  SetCoveringProblem *scp = nullptr;
+  try {
+    scp = new SetCoveringProblem(args->infile);
+  } catch (std::runtime_error &re) {
+    std::cout << "Não foi possível instanciar um objeto do problem SCP\n";
+    throw re;
+  }
+
+  scp->display_info(std::cout);
+  std::cout << *(scp->get_matrix()) << std::endl;
 
   return 0;
 }
@@ -30,7 +38,7 @@ int main(int argc, char **argv) {
     return exec(arguments);
   }
   catch (std::exception& e) {
-    std::cerr << "Exception at[main()]: \"" << e.what() << "\"" << std::endl;
+    std::cerr << "Exception at main(): \"" << e.what() << "\"" << std::endl;
     return 1;
   }
   return 0;

@@ -53,17 +53,26 @@ matrix::matrix(std::ifstream& inputfile) {
     for (; index < this->num_columns; index++) {
       this->weights[index] = std::stof(fileContentVec[index]);
     }
+#   ifdef _DEBUG
+    std::cout << "Pesos foram lidos" << std::endl;
+#   endif
 
-    size_t columnIndex = 0;
-    while (index < fileContentVec.size()) {
-      size_t coverageSize = std::stoul(fileContentVec[index++]);
+    size_t rowIndex = 0;
+    while (rowIndex < this->num_rows) {
+      size_t columnsNumber = std::stoul(fileContentVec[index++]);
       size_t currentIndex = index;
 
-      for (; index < currentIndex+coverageSize; index++) {
-        size_t rowIndex = std::stoul(fileContentVec[index]) -1;
+      // TODO: Verificar se não está invertido
+      // Pode ser que definição dos valores na matriz esteja inversa
+      // ao invés de ler coluna por coluna e definir as linhas que ela cobre
+      // seja necessário ler linha a linha definindo as colunas que ela cobre.
+
+      for (; index < currentIndex+columnsNumber; index++) {
+        size_t columnIndex = std::stoul(fileContentVec[index]) -1;
         this->set(rowIndex, columnIndex);
+        // std::cout << "(i, k) = (" << rowIndex << ", " << columnIndex << ")\n";
       }
-      columnIndex++;
+      rowIndex++;
     }
 
     free(fileContent);
@@ -119,7 +128,9 @@ std::ostream& operator<<(std::ostream &os, matrix &m) {
     for (size_t i = 0; i < m.num_columns; i++) {
       os << m.get_weight(i) << " ";
     }
+    os << std::endl;
+  } else {
+    os << "[Largura da matrix é maior que 60]";
   }
-  os << std::endl;
   return os;
 }
