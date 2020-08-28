@@ -53,9 +53,6 @@ matrix::matrix(std::ifstream& inputfile) {
     for (; index < this->num_columns; index++) {
       this->weights[index] = std::stof(fileContentVec[index]);
     }
-#   ifdef _DEBUG
-    std::cout << "Pesos foram lidos" << std::endl;
-#   endif
 
     size_t rowIndex = 0;
     while (rowIndex < this->num_rows) {
@@ -100,6 +97,10 @@ float matrix::get_weight(size_t k) {
 void matrix::set_weight(size_t k, float value) {
   ASSERT_THROW( k < this->num_columns, "Column index is greater" );
   this->weights[k] = value;
+}
+
+float* matrix::get_weights_pointer() {
+  return this->weights;
 }
 
 std::ostream& operator<<(std::ostream &os, matrix &m) {

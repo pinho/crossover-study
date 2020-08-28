@@ -27,6 +27,7 @@
     void flip(size_t i, size_t k);
     float get_weight(size_t k);
     void set_weight(size_t k, float value);
+    float* get_weights_pointer();
 
     friend std::ostream& operator<<(std::ostream &os, matrix &m);
 

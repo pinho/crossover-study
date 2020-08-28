@@ -71,7 +71,6 @@ eoPop<Chrom> SteinerTreeProblem::init_pop(uint len, double bias) {
 
 SteinerTreeProblem::Fitness
 SteinerTreeProblem::objective_function(Chrom& chromosome) {
-  // TODO: Função objetivo do Steiner Tree
   std::vector<edge_t> edges(*this->edges_vec_ptr);
   std::vector<float> weights(*this->weights_vec_ptr);
   int num_removed_nodes = 0;
