@@ -28,16 +28,6 @@ lib64
 **/*.ar
 **/*.so
 
-## Possible executables
-**/ga4scp
-**/ga4maxclique
-**/ga4steintree
-**/ga4multiknap
-**/maxclique
-**/setcovering
-**/multiknap
-**/steintree
-
 ## Temporary test sources
 **/t-*.cpp
 **/t-*.cxx
