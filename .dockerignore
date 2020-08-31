@@ -22,4 +22,4 @@ include/scpxx
 diagrams/
 analysis/
 pyutils/
-compare.py
+results/
