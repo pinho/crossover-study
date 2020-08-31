@@ -5,10 +5,10 @@
 Este projeto é resultado da pesquisa conduzida no 
 _[Laboratory of Applied Artificial Intelligence](http://laai.ufpa.br)_ (LAAI)
 acerca de operadores de cruzamento em algoritmos genéticos (AG) aplicados a
-alguns problemas NP-Completos de Karp, problemas clássicos de otimização
+alguns [problemas NP-Completos de Karp](), problemas clássicos de otimização
 combinatória em ciência da computação e pesquisa operacional. O trabalho visa
 conhecer mais sobre o efeito dos operadores de crossover mais usados no processo
-de busca de um AG no tipo de problema abordado (otimização combinatoria).
+de busca de um AG no tipo de problema abordado (otimização combinatória).
 
 Os estudos foram executados para os seguintes problemas:
 - Árvore de Steiner
@@ -17,10 +17,11 @@ Os estudos foram executados para os seguintes problemas:
 - Cobertura de Conjuntos
 
 <!-- TODO: Link para a OR-ibrary -->
-Os quatro problemas foram implementados e executados para instâncias fornecidas
-principalmente pela OR-Library
+Os quatro problemas foram implementados e executados usando instâncias de
+problemas obtidas da [OR-Library](http://people.brunel.ac.uk/~mastjjb/jeb/info.html)
+e da [networkrepository.com](https://networkrepository.com)
 
-## Summary
+## Sumário
 
 * [Instalando dependências](#Instalando-dependências) (Linux)
 * [Compilando o projeto](#Compilando-o-projeto)
@@ -29,11 +30,13 @@ principalmente pela OR-Library
 
 ## Instalando dependências
 
+> OBS: O projeto foi desenvolvido e requer um ambiente Linux.
+
 ### Arch Linux
 
 ```sh
 sudo pacman -Sy --ignore cmake wget unzip doxygen boost boost-libs vsqlite++ 
-sudo bash scripts/instd.sh
+sudo ./scripts/instd.sh
 ```
 
 ### Debian
@@ -41,7 +44,7 @@ sudo bash scripts/instd.sh
 ```sh
 sudo apt-get update
 sudo apt-get install cmake wget unzip doxygen libboost-graph-dev libvsqlitepp-dev
-sudo bash scripts/instd.sh
+sudo ./scripts/instd.sh
 ```
 
 O script `instd.sh` baixa e instala outras dependências a partir do código fonte
@@ -54,18 +57,16 @@ Tenha certeza de ter o `cmake` instalado na versão 3.6+. Use o comando
 `cmake --version` para verificar.
 
 ```sh
-% mkdir build && cd build
-% cmake .. -DCMAKE_INSTALL_PREFIX=../dist
-% make -j $(nproc)
-% make install
+# cria os MakeFiles e inicia a compilação
+mkdir build && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=../dist
+make -j $(nproc)
 
-# alvos para artefatos docker
-% make image
-% make volume
+# compila e instala os binários e libs
+make install
 ```
 
 Projeto compilado! :)
-
 
 ## Executando
 
@@ -96,6 +97,9 @@ O único argumento obrigatório é o arquivo de entrada: `-f caminho/para/o/arqu
 
 _(Necessário ter o Docker instalado)._
 
+Alvos para artefatos docker são configurados para fazer *build* da imagem docker
+e criar o volume.
+
 A aplicação fornece um `Dockerfile` para construção de uma imagem docker para
 execução do algoritmo. O docker permite manipular e limitar recursos de hardware
 para os contêineres. 
@@ -103,32 +107,22 @@ para os contêineres.
 Se o Docker estiver instalado no computador o comando cmake irá criar um alvo
 para a build da imagem. Para construir a imagem padrão, use:
 
+> OBS: Requer o Docker instalado.
+>
+> Se o Docker for encontrado na máquina os alvos `image` e `volume` serão
+> configurados. Porém, se não for encontrado, os alvos não serão configurados e
+> os comandos abaixo não funcionarão.
+
 ```console
 % sudo make image
 % sudo make volume
 ```
 
-Para executar um comando em um contêiner baseado na imagem da aplicação, use:
+## Instânciando um contêiner de execução
 
-```zsh
-% docker run -d \
-  --rm \
-  --name ga_crossover \
-  estudos <command>
+> Deve ser executado como _root_
 
-# Por exemplo
-
-% docker run -d \
-  --rm \
-  --name ga_crossover \
-  estudos \
-  crossoverstudy-mc -f /data/in/brock400_4.clq -x 32 --db /data/maxclique.sqlite
-```
-
-
-## Python Starter
-
-> Deve ser executado como superuser
+> O alvo `image` deve ter sido construído. Veja [Imagem Docker](#Imagem-Docker)
 
 Na pasta `scripts` há um script Python criado para subir um container Docker com
 a imagem da aplicação com um comando de algoritmo que pode ser executado `N`
