@@ -26,6 +26,8 @@ public:
   eoPop<Chrom> init_pop(uint length, double bias = 0.5);
   Fitness objective_function(Chrom &chromosome);
 
+  bool atend_constraint(const Chrom& chrom);
+
   // Métodos relacionados à manipulação da matriz
   matrix* get_matrix();
   float* get_weights();

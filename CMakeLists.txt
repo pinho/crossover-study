@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
-
-project(CrossoverStudy
-  VERSION 1.3.0
-  LANGUAGES CXX)
+project(CrossoverStudy LANGUAGES CXX)
   
 ## Usando padrão C++ 17
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG")
 
 include(GNUInstallDirs)
 string(TOLOWER ${PROJECT_NAME} project_lower_name)
@@ -20,8 +18,12 @@ install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 # problema abordado na pesquisa
 add_subdirectory(src/maximum_clique) # clique máximo
 add_subdirectory(src/multi_knapsack) # mochila multidimensional
-add_subdirectory(src/steiner_tree)   # Árvore de Steiner
+add_subdirectory(src/steiner_tree)   # árvore de Steiner
 add_subdirectory(src/setcovering)    # cobertura de conjuntos
+
+# Teste com o problema da cobertura de conjuntos usando estruturas diferentes
+# da matriz booleana para representar o problema
+# add_subdirectory(src/setcovering_with_set_struct)
 
 # Automatizar a construção da imagem docker
 find_program(DOCKER_EXECUTABLE

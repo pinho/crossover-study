@@ -162,4 +162,33 @@ void db_steinertree_entry(connection& con, CLI* args, std::vector<Chrom>& conv,
     ins();
 }
 
+
+void db_setcovering_entry(connection& con, CLI* args, std::vector<Chrom>& conv,
+        std::vector<uint>& columns, int finalcost, std::string instfile,
+        std::chrono::milliseconds& duration)
+{
+    std::string sql;
+    sql += "INSERT INTO execucoes_scp (";
+    sql += " pop_length, num_gen, cross_rate, mutation_rate, crossover,";
+    sql += " instance_file, columns, total_cost, convergence, duration_ms";
+    sql += " ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+    auto crossover_name = CrossoverFabric::name(args->crossover_id);
+    std::string columns_selected = sequence_to_string<uint>(columns);
+    std::string convergence = convergence_to_string(conv);
+
+    execute ins(con, sql);
+    ins % (int) args->pop_size
+        % (int) args->epochs
+        % (double) args->crossover_rate
+        % (double) args->mutation_rate
+        % crossover_name
+        % instfile
+        % columns_selected
+        % finalcost
+        % convergence
+        % duration.count();
+    ins();
+}
+
 #endif

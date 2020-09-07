@@ -41,28 +41,59 @@ void SetCoveringProblem::display_info(std::ostream& os) {
   os << std::endl;
 }
 
+/**
+ * Versão 1 do método de inicialização de população:
+ * Todos os cromossomos da população são inicializados com a mesma taxa de
+ * alelos "1", definida pelo param "bias" */
+// eoPop<Chrom>
+// SetCoveringProblem::init_pop(unsigned int length, double bias) {
+//   return Random<Chrom>::population(__chromSize, length, bias);
+// }
+
+/**
+ * Versão 2 do método de inicialização de população:
+ * A população é inicializada com diferentes probabilidades de geração de
+ * alelos "1", para cada crossomo é usada uma probabilidade diferente que é
+ * gerada aleatoriamente entre o "bias" passado e 0.5 (um valor padrão). */
 eoPop<Chrom>
 SetCoveringProblem::init_pop(unsigned int length, double bias) {
-  return Random<Chrom>::population(__chromSize, length, bias);
+  eoPop<Chrom> aux_pop;
+  unsigned int i = 1;
+  do {
+    Chrom generated;
+    eoBooleanGenerator bitRng(Random<Chrom>::uniform(bias, 0.500001));
+    eoInitFixedLength<Chrom> init(this->__chromSize, bitRng);
+    init(generated);
+    aux_pop.push_back(generated);
+  } while (i++ < length);
+
+  return aux_pop;
 }
 
 
-// TODO: Função objetivo da cobertura de conjuntos
-SetCoveringProblem::Fitness
-SetCoveringProblem::objective_function(Chrom& chrom) {
-  std::vector<int> coverVec(num_elements, false);
-
+bool SetCoveringProblem::atend_constraint(const Chrom& chrom) {
   // Conta quantas colunas cobrem cada linha
-  for (size_t row = 0; row < num_elements; row++) {
-    for (size_t col = 0; col < num_subsets; col++) {
+  std::vector<int> coverVec(this->num_elements, 0);
+
+  for (size_t row = 0; row < this->num_elements; row++) {
+    for (size_t col = 0; col < this->num_subsets; col++) {
       if (chrom[col]) {
         coverVec[row] += (int) this->coverage_matrix->get(row, col);
       }
     }
+    if (coverVec[row] == 0) {
+      return false;
+    }
   }
+  return true;
+}
+
+
+// Função objetivo da cobertura de conjuntos
+SetCoveringProblem::Fitness SetCoveringProblem::objective_function(Chrom& chrom)
+{
   // Verifica se alguma linha tem contagem = zero
-  if (std::any_of(coverVec.begin(), coverVec.end(), 
-      [](const int& i) {return i <= 0;})) {
+  if (!this->atend_constraint(chrom)) {
     return Fitness(0);
   }
 
