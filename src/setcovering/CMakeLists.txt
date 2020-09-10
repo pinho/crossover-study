@@ -6,12 +6,13 @@ string(TOLOWER ${PROJECT_NAME} executable_name)
 
 include(GNUInstallDirs)
 include_directories(../../include)
-add_compile_options(-Wunused)
+add_compile_options(-Wall -Wextra -Wunused -Wbool-compare)
 
 add_executable(${executable_name}
   main.cpp
   scp_matrix.cpp
   set_covering_problem.cpp
+  genetic_algorithm_scp.cpp
 )
 
 target_link_libraries(${executable_name} core-ga core-utils vsqlitepp)

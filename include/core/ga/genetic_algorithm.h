@@ -11,6 +11,7 @@
 class GeneticAlgorithm {
 public:
 	typedef typename Chrom::Fitness Fitness;
+	typedef void (*GAInternFunctionCall)(int, eoPop<Chrom>&);
 
 	// Default constructor
 	explicit GeneticAlgorithm(
@@ -37,8 +38,8 @@ public:
 	// Gets a reference to a population object and evolve it
 	// Gets also a function to manipulate the population and is called
 	// at end of each generation
-	void operator()(eoPop<Chrom>& population, std::vector<Chrom>& conv,
-			void (int, eoPop<Chrom>&) );
+	virtual void operator()(eoPop<Chrom>& population, std::vector<Chrom>& conv,
+			GAInternFunctionCall callback);
 
 protected:
 	Problem& problem;
