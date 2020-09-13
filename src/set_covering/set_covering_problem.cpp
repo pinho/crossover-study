@@ -115,30 +115,16 @@ std::set<uint> SetCoveringProblem::coverage_set(const Chrom& chrom) {
 
 
 bool SetCoveringProblem::atend_constraint(const Chrom& chrom) {
-  // Conta quantas colunas cobrem cada linha
-  // std::vector<int> coverVec(this->num_elements, 0);
-
-  // for (size_t row = 0; row < this->num_elements; row++) {
-  //   for (size_t col = 0; col < this->num_subsets; col++) {
-  //     if (chrom[col]) {
-  //       coverVec[row] += (int) this->coverage_matrix->get(row, col);
-  //     }
-  //   }
-  //   if (coverVec[row] == 0) {
-  //     return false;
-  //   }
-  // }
   std::set<unsigned int> coverage;
   for (size_t i=0; i < chrom.size(); i++) {
     if (chrom[i]) {
       coverage.insert(rows_covered_by[i].begin(), rows_covered_by[i].end());
     }
   }
-
   return (coverage.size() == this->num_elements);
 }
 
-
+// Operador de factibilidade
 void SetCoveringProblem::make_feasible(Chrom& chrom) {
   if (!this->atend_constraint(chrom)) {
     auto set_rows_covered = this->coverage_set(chrom);
@@ -163,7 +149,7 @@ void SetCoveringProblem::make_feasible(Chrom& chrom) {
 // Função objetivo da cobertura de conjuntos
 SetCoveringProblem::Fitness SetCoveringProblem::objective_function(Chrom& chrom)
 {
-  // Verifica se alguma linha tem contagem = zero
+  // Verifica se o indiivíduo é viável
   if (!this->atend_constraint(chrom)) {
     return Fitness(0);
   }

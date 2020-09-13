@@ -17,9 +17,9 @@ install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 # Cada problema tem um projeto próprio implementando um executável para cada
 # problema abordado na pesquisa
 add_subdirectory(src/maximum_clique) # clique máximo
-add_subdirectory(src/multi_knapsack) # mochila multidimensional
+add_subdirectory(src/multidimensional_knapsack) # mochila multidimensional
 add_subdirectory(src/steiner_tree)   # árvore de Steiner
-add_subdirectory(src/setcovering)    # cobertura de conjuntos
+add_subdirectory(src/set_covering)    # cobertura de conjuntos
 
 # Teste com o problema da cobertura de conjuntos usando estruturas diferentes
 # da matriz booleana para representar o problema

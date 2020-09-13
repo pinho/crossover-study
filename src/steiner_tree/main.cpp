@@ -14,7 +14,7 @@ using namespace std::chrono;
 #include <core/ga/genetic_algorithm.h>
 #include <core/db/create.hpp>
 #include <core/db/entry.hpp>
-#include <core/time_parse.hpp>
+#include <core/utils/parse_duration.h>
 #include "steiner_tree.h"
 #include "graph.h"
 

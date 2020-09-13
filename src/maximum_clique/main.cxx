@@ -4,7 +4,7 @@
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoTimeContinue.h>
 #include <paradiseo/eo/eoRankingSelect.h>
-// #include <paradiseo/eo/eoDetTournamentSelect.h>
+#include <paradiseo/eo/eoDetTournamentSelect.h>
 
 #include <core/cli/parse.h>
 #include <core/ga/encoding.h>
@@ -12,7 +12,7 @@
 #include <core/ga/crossover_fabric.h>
 #include <core/ga/genetic_algorithm.h>
 #include <core/utils/split.h>
-#include <core/time_parse.hpp>
+#include <core/utils/parse_duration.h>
 #include <core/db/create.hpp>
 #include <core/db/entry.hpp>
 
@@ -78,6 +78,7 @@ int exec(int argc, char **argv) {
   eoGenContinue<Chrom> term(args->epochs);
   eoBitMutation<Chrom> mutation( args->mutation_rate );
   eoRankingSelect<Chrom> select;
+  // eoDetTournamentSelect<Chrom> select;
   auto *crossover = CrossoverFabric::create(args->crossover_id);
 
   // define a instância da classe de Algoritmo genético

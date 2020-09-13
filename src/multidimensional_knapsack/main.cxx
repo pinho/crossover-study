@@ -15,7 +15,8 @@ using std::chrono::system_clock;
 #include <core/ga/crossover_fabric.h>
 #include <core/ga/genetic_algorithm.h>
 #include <core/utils/split.h>
-#include <core/time_parse.hpp>
+#include <core/utils/parse_duration.h>
+#include <core/utils/trim_filename.h>
 #include <core/db/create.hpp>
 #include <core/db/entry.hpp>
 
@@ -39,7 +40,7 @@ void searchCallback (int g, eoPop<Chrom> &p) {
 
 int exec(int argc, char **argv) {
   auto args = parse(argc, argv);
-  auto filename = *(split(Str(args->infile), '/').end()-1);
+  auto filename = trim_filename(args->infile);
   std::cout << "Problema da Mochila Multi-dimensional: " << filename << std::endl;
   SEPLINE(60);
   std::cout << *args;

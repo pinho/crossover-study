@@ -1,13 +1,6 @@
-#ifndef TIME_PARSE_HPP_
-#define TIME_PARSE_HPP_
+#include "parse_duration.h"
 
-#include <chrono>
-#include <sstream>
-
-/**
- * Analisar um valor de procurando formatar em segundos, minutos ou horas,
- * dependendo do tamanho */
-std::string parse_duration(std::chrono::nanoseconds dur) {
+std::string parse_duration(std::chrono::nanoseconds& dur) {
   using namespace std::chrono;
   std::stringstream ss;
 
@@ -24,5 +17,3 @@ std::string parse_duration(std::chrono::nanoseconds dur) {
 
   return ss.str();
 }
-
-#endif

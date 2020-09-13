@@ -1,5 +1,5 @@
 #ifndef CROSSOVERSTUDY_SCP_MATRIX_H
-#define CROSSOVERSTUDY_SCP_MATRIX_H
+#define CROSSOVERSTUDY_SCP_MATRIX_H 1
 
 #include <cstdlib>
 #include <cassert>
@@ -18,8 +18,10 @@
     /**
      * Construtor padrão (NxM) */
     explicit matrix(size_t num_rows, size_t num_columns);
+
     /**
-     * Construtor a partir de um arquivo de entrada */
+     * @brief Construtor a partir de um arquivo de entrada
+     * @p inputfile instancia do arquivo de entrada */
     matrix(std::ifstream& inputfile);
 
     bool get(size_t i, size_t k);

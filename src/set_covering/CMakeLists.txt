@@ -13,6 +13,7 @@ add_executable(${executable_name}
   scp_matrix.cpp
   set_covering_problem.cpp
   genetic_algorithm_scp.cpp
+  # scp_database_strategy.cpp
 )
 
 target_link_libraries(${executable_name} core-ga core-utils vsqlitepp)

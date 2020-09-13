@@ -10,13 +10,14 @@ using namespace std::chrono;
 #include <paradiseo/eo/eoDetTournamentSelect.h>
 #include <sqlite/database_exception.hpp>
 #include <core/cli/parse.h>
-// #include <core/ga/genetic_algorithm.h>
 #include <core/ga/crossover_fabric.h>
 #include <core/db/create.hpp>
 #include <core/db/entry.hpp>
-#include <core/time_parse.hpp>
+#include <core/db/database.hpp>
+#include <core/utils/parse_duration.h>
+#include <core/utils/trim_filename.h>
+#include <core/utils/logger.h>
 
-#include "scp_matrix.h"
 #include "set_covering_problem.h"
 #include "genetic_algorithm_scp.h"
 #include "decoder.h"
@@ -31,14 +32,6 @@ inline void break_lines(std::ostream &os, unsigned short __n = 60) {
   while (n++ < __n)
     os << '-';
   os << std::endl;
-}
-
-/**
- * Corta o caminho do arquivo reduzindo-o a somente o
- * nome do arquivo */
-const char* trim_filename(const char *filename) {
-  std::string str_filename(filename);
-  return (split(str_filename, '/').end()-1)->c_str();
 }
 
 /**
@@ -70,7 +63,7 @@ int exec(CLI *args) {
   break_lines(std::cout);
 
   std::cout << "Inicializando população " << std::flush;
-  auto pop = prob.init_pop( args->pop_size, 0.4 );
+  auto pop = prob.init_pop( args->pop_size, 0.3 );
   std::cout << "[" << green("done") << "]" << std::endl;
 
   std::cout << "Avaliando população inicial " << std::flush;
@@ -86,7 +79,7 @@ int exec(CLI *args) {
   scp::GeneticAlgorithmSCP ga(
     prob, select,
     *crossover, args->crossover_rate, 
-    mutation, 1.0, 
+    mutation, 0.75, 
     term);
 
   // Preparando para iniciar a execução
