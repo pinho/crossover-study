@@ -1,8 +1,8 @@
-crossover: [0, 1, 2, 4] 
+crossover: [ 0, 1, 2, 4, 8, 16, 32, 64 ]
 xrate: 1.0
-mrate: 0.005
+mrate: 0.003
 popsize: 100
 epochs: 500
 ring: 8
-infile: /data/scp/scp41.txt
-db: "/db/setcovering.sqlite"
+infile: /data/scp/scp54.txt
+db: "/db/ExperimentosSCP.db3"

@@ -122,13 +122,13 @@ def docker_create(fullcommand) -> docker.models.containers.Container:
       detach=True, mounts=[ Mount("/db", VOLUME_NAME) ], cpu_shares=500)
   return cont
 
-
 # Main function 
 @click.command()
 @click.argument('binaryname')
 @click.option('-n','--count',help="Repetir execuções N vezes", default=1, show_default=True)
-@click.option('--max',help="Número máximo de contêiners ativos", default=2, show_default=True)
-def main(binaryname, count, max):
+@click.option('--max-con',help="Número máximo de contêiners ativos", default=2, show_default=True)
+@click.option('-t', '--wait-time', help="Tempo entre as verficações de contêineres (segundos)", default=30, show_default=True)
+def main(binaryname, count, max_con, wait_time):
   c = ConfigFile(CONFIG_FILE)
   combinations = c.parse_combinations()
   containers = []
@@ -136,20 +136,37 @@ def main(binaryname, count, max):
   for parCombination in combinations:
     command = Command(binaryname, params=parCombination)
     full_command = f"run {count} '{command}'"
-    print("[*******]", full_command, end="", flush=True)
-    
     containers.append( docker_create(full_command) )
-    time.sleep(.5)
-    print(f"\r[CREATED] {full_command}", flush=True)
+  ids = [ c.attrs['Id'] for c in containers ]
+  
+  # num_created_containers = len(containers)
+  client = docker.from_env()
+  nc = len(containers) # Número de containers escalonados
+  nr = 0 # Número de containers rodando
 
-  containers_running = 0
-  for cont in containers:
-    print(cont)
-    cont.start()
-    containers_running += 1
-    # time.sleep(2)
-    if containers_running == max:
-      cont.wait()
+  for id in ids:
+    cont = client.containers.get(id)
+    
+    if len(client.containers.list()) < max_con:
+      nr += 1
+      print(f"[{nr} de {nc}] Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"", flush=True)
+      cont.start()
+    else:
+      print("Esperando algum contêiner finalizar", flush=True)
+      start_wait = time.time()
+      while not len(client.containers.list()) < max_con:
+        time.sleep(wait_time)
+        print("#", end="", flush=True)
+      print()
+      print(f"Tempo de espera:", round((time.time()-start_wait)/60, 2), "min")
+      nr += 1
+      print(f"[{nr} de {nc}]Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"", flush=True)
+      cont.start()
+      pass
+  
+  print("----------------------------------------")
+  print("Todos os contêineres foram disparados.\nValeu falou ;)")
+  return
 
 # ---------------------------------------------------------------------------- #
 if __name__ == "__main__":
