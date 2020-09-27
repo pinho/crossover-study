@@ -52,33 +52,4 @@ struct CLI {
     }
 };
 
-option long_options[] = {
-    {"infile", required_argument, 0, 'f'},
-    {"db", required_argument, 0, 'd'},
-    {"popsize", required_argument, 0, 'p'},
-    {"epochs", required_argument, 0, 'g'},
-    {"crossover", required_argument, 0, 'x'},
-    {"xrate", required_argument, 0, 'c'},
-    {"mrate", required_argument, 0, 'm'},
-    {"ring", required_argument, 0, 'r'},
-    {"help", no_argument, 0, 'h'},
-    {0, 0, 0, 0}
-};
-
-const char *short_options = "f:d:p:g:x:c:m:r:h";
-
-const unsigned int NUM_OPTIONS = 9;
-
-const char *DESC[NUM_OPTIONS] = {
-    "Arquivo de instância do problema",
-    "Arquivo .db para salvar os dados. Se não definido não salva",
-    "Tamanho da população [default = 100]",
-    "Número de épocas/gerações [default = 100]",
-    "Operador de crossover utilizado com um ID [default = 0]",
-    "Taxa de cruzamento (%) [default = 0.8]",
-    "Taxa de mutação (%) [default = 0.05]",
-    "Tamanho do Ring do operador de seleção por torneio determinístico [default = 8]",
-    "Mostra essa lista de opções"
-};
-
 #endif // CROSSOVERRESEARCH_OPTIONS_H

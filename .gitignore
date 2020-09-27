@@ -2,6 +2,9 @@
 
 /RELATORIO.md
 
+config.yml
+config.yaml
+
 ## Folders to ignore
 build
 cmake-build-debug

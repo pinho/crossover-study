@@ -13,6 +13,10 @@ endif()
 
 include_directories(../)
 
+# Biblioteca de interface de linha de comandos
+file(GLOB CLI_SOURCES cli/*.cpp)
+add_library(cliargs SHARED ${CLI_SOURCES})
+
 # Biblioteca para o Algoritmo genético
 file(GLOB GA_SOURCES ga/*.cpp)
 add_library(core-ga ${GA_SOURCES})

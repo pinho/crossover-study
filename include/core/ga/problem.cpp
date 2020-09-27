@@ -12,10 +12,14 @@ void Problem::eval(Chrom& chromosome) {
 void Problem::eval(eoPop<Chrom>& pop) {
     for (uint i=0; i < pop.size(); i++) {
         this->eval(pop[i]);
-        std::cout << "\r" << i+1 << " de " << pop.size() 
-                << " indivíduos avaliados" << std::flush;
+#ifndef NDEBUG
+    }
+#else
+        std::cout << "\r" << i+1 << " de " << pop.size()
+            << " indivíduos avaliados" << std::flush;
     }
     std::cout << std::endl;
+#endif
 }
 
 const char *Problem::name() {

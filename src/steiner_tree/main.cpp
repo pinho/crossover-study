@@ -6,19 +6,20 @@ using namespace std::chrono;
 
 #include <paradiseo/eo/ga/eoBitOp.h>
 #include <paradiseo/eo/eoGenContinue.h>
-#include <paradiseo/eo/eoTimeContinue.h>
-#include <paradiseo/eo/eoRankingSelect.h>
-#include <sqlite/database_exception.hpp>
+#include <paradiseo/eo/eoSelectOne.h>
+#include <paradiseo/eo/eoDetTournamentSelect.h>
 #include <core/cli/parse.h>
-#include <core/ga/crossover_fabric.h>
 #include <core/ga/genetic_algorithm.h>
-#include <core/db/create.hpp>
-#include <core/db/entry.hpp>
 #include <core/utils/parse_duration.h>
+#include <core/utils/trim_filename.h>
+#include <core/db/database.hpp>
+
 #include "steiner_tree.h"
+#include "steiner_tree_table.h"
 #include "graph.h"
 
-#define UEC(number) "\e[38;5;"+ std::to_string(number) +"m"
+#define UNIX_COLOR(number) "\e[38;5;"+ std::to_string(number) +"m"
+#define green(output) UNIX_COLOR(113) + std::string(output) + UNIX_COLOR(0)
 
 /**
  * Printa uma sequência de traços para separar linhas de log */
@@ -28,19 +29,18 @@ void sep_line(unsigned int n) {
   std::cout << std::endl;
 }
 
-
 /**
  * Função pra executar a cada geração do Algoritmo Genético
  */
 void ga_callback(int gen, eoPop<Chrom> &pop) {
-  std::cout << gen << "a geração: " << " Fitness = "
-    << pop.best_element().fitness() << std::endl;
+  float fitness = pop.best_element().fitness();
+  std::cout << gen << "a geração: " << " Custo = " << 1/fitness << std::endl;
 }
 
 
 int exec(CLI *args) {
   sep_line(60);
-  auto filename = *(split(std::string(args->infile), '/').end()-1);
+  auto filename = std::string(trim_filename(args->infile));
   std::cout << "Parâmetros\n";
   std::cout << *args;
 
@@ -49,45 +49,41 @@ int exec(CLI *args) {
   stein.display_info(std::cout);
 
   sep_line(60);
-  std::cout << "Inicializando população ..." << std::flush;
+  std::cout << "Inicializando população ..." << std::endl;
   auto population = stein.init_pop( args->pop_size );
-  // std::cout << population << std::endl;
 
   sep_line(60);
-  std::cout << "Avaliando população inicial ..." << std::flush;
+  std::cout << "Avaliando população inicial ..." << std::endl;
   stein.eval( population );
 
   // Definição do Algoritmo genético e operadores
   eoGenContinue<Chrom> term(args->epochs);
   eoBitMutation<Chrom> mutation( args->mutation_rate );
-  eoRankingSelect<Chrom> select;
+  eoDetTournamentSelect<Chrom> select(args->tour_size);
   auto *crossover = CrossoverFabric::create(args->crossover_id);
-  GeneticAlgorithm ga(
-    stein, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
+  GeneticAlgorithm ga(stein, select,
+      *crossover, args->crossover_rate, mutation, 1.0f, term);
 
   std::cout << "Iniciando evolução" << std::endl;
   sep_line(60);
   std::vector<Chrom> conv;
   auto start_point = system_clock::now();
-  ga(population, conv, ga_callback); // algoritmo é executado aqui
-  auto evolving_duration = system_clock::now() - start_point;
-
+  ga(population, conv, ga_callback);
+  auto duration = system_clock::now() - start_point;
   sep_line(60);
-  // Converter duração para segundos
-  std::cout << std::fixed << "Tempo de evolução: " << UEC(47)
-            << parse_duration(evolving_duration) << UEC(255) << std::endl;
 
-  auto melhor = population.best_element();
-  float melhor_custo = (float) (1/melhor.fitness());
-  std::cout << "Melhor custo obtido: " << melhor_custo << std::endl;
+  // Decodificação da solução final e informações associadas
+  Chrom best_individual = population.best_element();
+  float best_cost = float(1/best_individual.fitness());
+  std::cout << "\e[0mMelhor custo obtido: " << best_cost << std::endl;
 
   auto *steiner_nodes = stein.steiner_nodes();
-  std::vector<uint> solution_vec;
+  std::vector<int> solution_vec;
 
   std::cout << "Vértices de Steiner: ";
   for (size_t i=0; i < stein.get_chromsize(); i++) {
     std::cout << " ";
-    if (melhor[i]) {
+    if (best_individual[i]) {
       std::cout << "\e[38;5;40m";
       solution_vec.push_back(steiner_nodes->at(i));
     }
@@ -97,13 +93,19 @@ int exec(CLI *args) {
 
   // Integração com banco de dados sqlite
   if (args->using_db) {
-    sep_line(60);
-    auto duration_in_ms = duration_cast<milliseconds>(evolving_duration);
+    auto duration_in_ms = duration_cast<milliseconds>(duration);
 
     try {
-      auto conn = db_create(args->databasefile, db_structure::st);
-      db_steinertree_entry(*conn, args, conv, solution_vec, melhor_custo,
-          filename, duration_in_ms);
+      SteinerTreeTable sttb(args);
+      sttb.set_convergence(conv);
+      sttb.instance_file = filename;
+      sttb.duration_in_ms = duration_in_ms.count();
+      sttb.set_solution_data(solution_vec);
+      sttb.total_costs = best_cost;
+
+      Database db(args->databasefile);
+      db.set_controller(&sttb);
+      db.insert_data();
 
       std::cout << "Dados salvos em " << args->databasefile << std::endl;
     }
