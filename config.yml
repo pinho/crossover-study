@@ -1,6 +1,8 @@
-xrate: 1.
-mrate: 0.004
+crossover: [0, 1, 2, 4] 
+xrate: 1.0
+mrate: 0.005
 popsize: 100
 epochs: 500
-ring: 4
-db: "/databases/scp.sqlite"
+ring: 8
+infile: /data/scp/scp41.txt
+db: "/db/setcovering.sqlite"
