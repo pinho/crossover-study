@@ -14,16 +14,9 @@ add_subdirectory(include/core)
 add_executable(run src/run.cxx)
 install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 
-# Cada problema tem um projeto próprio implementando um executável para cada
-# problema abordado na pesquisa
-add_subdirectory(src/maximum_clique) # clique máximo
-add_subdirectory(src/multidimensional_knapsack) # mochila multidimensional
-add_subdirectory(src/steiner_tree)   # árvore de Steiner
-add_subdirectory(src/set_covering)    # cobertura de conjuntos
-
-# Teste com o problema da cobertura de conjuntos usando estruturas diferentes
-# da matriz booleana para representar o problema
-# add_subdirectory(src/setcovering_with_set_struct)
+# O diretório "src" possui subprojetos, um para cada problema de
+# otimização abordado no estudo
+add_subdirectory(src)
 
 # Automatizar a construção da imagem docker
 find_program(DOCKER_EXECUTABLE
@@ -37,11 +30,13 @@ else()
   message(STATUS "Targets for Docker image and volume is enabled")
   set(DOCKERFILE_PATH ${CMAKE_SOURCE_DIR})
   
+  # Alvo personalizado para construir a imagem
   add_custom_target(image
     COMMAND ${DOCKER_EXECUTABLE} build --rm -t ${project_lower_name} ${DOCKERFILE_PATH}
     COMMENT "Construindo Imagem Docker: \"${project_lower_name}\""
     VERBATIM) 
   
+  # Alvo personalizado para construir o volume
   add_custom_target(volume
     COMMAND ${DOCKER_EXECUTABLE} volume create studyvol
     COMMENT "Construindo Volume Docker: studyvol"

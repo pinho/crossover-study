@@ -13,6 +13,10 @@ endif()
 
 include_directories(../)
 
+# Biblioteca de interface de linha de comandos
+file(GLOB CLI_SOURCES cli/*.cpp)
+add_library(cliargs ${CLI_SOURCES})
+
 # Biblioteca para o Algoritmo genético
 file(GLOB GA_SOURCES ga/*.cpp)
 add_library(core-ga ${GA_SOURCES})
@@ -23,5 +27,5 @@ file(GLOB UTILS_SOURCES utils/*.cpp)
 add_library(core-utils ${UTILS_SOURCES})
 
 # Regras de instalação das bibliotecas
-install(TARGETS core-ga core-utils
+install(TARGETS core-ga core-utils cliargs
         DESTINATION ${CMAKE_INSTALL_LIBDIR})

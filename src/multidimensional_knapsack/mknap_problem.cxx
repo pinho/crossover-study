@@ -141,7 +141,6 @@ bool MKnapsackProblem::break_constraint(const Chrom& chromosome_) {
 }
 
 
-
 std::vector< std::vector<float> > *MKnapsackProblem::weights() {
   return &this->m_weights;
 }

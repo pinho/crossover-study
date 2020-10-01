@@ -10,16 +10,18 @@ using namespace std::chrono;
 #include <paradiseo/eo/eoDetTournamentSelect.h>
 #include <sqlite/database_exception.hpp>
 #include <core/cli/parse.h>
+#include <core/ga/genetic_algorithm.h>
 #include <core/ga/crossover_fabric.h>
-#include <core/db/create.hpp>
-#include <core/db/entry.hpp>
+// #include <core/db/create.hpp>
+// #include <core/db/entry.hpp>
 #include <core/db/database.hpp>
 #include <core/utils/parse_duration.h>
 #include <core/utils/trim_filename.h>
 #include <core/utils/logger.h>
 
 #include "set_covering_problem.h"
-#include "genetic_algorithm_scp.h"
+#include "scp_table.h"
+// #include "genetic_algorithm_scp.h"
 #include "decoder.h"
 
 #define green(msg) "\e[1;32m" + std::string(msg) + "\e[0m"
@@ -68,7 +70,6 @@ int exec(CLI *args) {
 
   std::cout << "Avaliando população inicial " << std::flush;
   prob.eval(pop);
-  // std::cout << pop << std::endl;
 
   // Definição do Algoritmo genético e operadores
   eoGenContinue<Chrom> term(args->epochs);
@@ -76,11 +77,9 @@ int exec(CLI *args) {
   eoDetTournamentSelect<Chrom> select(args->tour_size);
   auto *crossover = CrossoverFabric::create(args->crossover_id);
 
-  scp::GeneticAlgorithmSCP ga(
-    prob, select,
+  GeneticAlgorithm ga(prob, select,
     *crossover, args->crossover_rate, 
-    mutation, 0.75, 
-    term);
+    mutation, 0.75, term);
 
   // Preparando para iniciar a execução
   break_lines(std::cout);
@@ -90,38 +89,34 @@ int exec(CLI *args) {
   // Início da execução do algoritmo
   auto start_point = system_clock::now();
   ga(pop, convergence, ga_callback);
-  auto end_point   = system_clock::now();
-  nanoseconds dur_ns = end_point - start_point;
-
-  break_lines(std::cout);
-  std::cout << std::fixed << "Tempo de evolução: "
-            << parse_duration(dur_ns) << std::endl;
+  nanoseconds duration = system_clock::now() - start_point;
 
   break_lines(std::cout);
   Chrom best = pop.best_element();
   auto best_cost = 1 / best.fitness();
 
-  std::cout << std::accumulate(best.cbegin(), best.cend(), 0)
-            << " colunas escolhidas. Custo:  "
-            << (int) best_cost
-            << std::endl;
+  size_t qty_columns = std::accumulate(best.cbegin(), best.cend(), 0);
+  std::cout << qty_columns << " colunas escolhidas.\n";
+  std::cout << "Custo: " << (int) best_cost << std::endl;
   
   // Escrita dos dados no arquivo de banco de dados
   if (args->using_db) {
     std::vector<unsigned int> cols = Decoder::solution(best);
-    milliseconds duration = duration_cast<milliseconds>(end_point - start_point);
+    milliseconds duration = duration_cast<milliseconds>(duration);
+    // Organização dos dados da tabela para inserção
+    SCPTable table(args);
+    table.set_convergence(convergence);
+    table.num_columns = qty_columns;
+    table.instance_file = instance_filename;
+    table.total_costs = best_cost;
+    table.duration_in_ms = duration.count();
+    table.columns = TableController::sequence_to_string(cols);
 
-    try {
-      auto conn = db_create(args->databasefile, db_structure::sc);
-      db_setcovering_entry(*conn, args, convergence, cols, best_cost,
-          instance_filename, duration);
-      break_lines(std::cout);
-      std::cout << "Dados gravados em " << args->databasefile << std::endl;
-    }
-    catch (sqlite::database_exception& e) {
-      std::cerr << "Não pode escrever no arquivo " << args->databasefile << std::endl;
-      return 2;
-    }
+    Database db(args->databasefile);
+    db.set_controller(&table);
+    db.insert_data();
+
+    std::cout << "dados salvos em " << args->databasefile << std::endl;
   }
 
   return 0;
@@ -131,8 +126,7 @@ int exec(CLI *args) {
 /**
  * Função principal:
  * Encapsula a execução do programa todo com um bloco try/catch para
- * lidar com possíveis exceções não tratadas
- */
+ * lidar com possíveis exceções não tratadas */
 int main(int argc, char **argv) {
   try {
     CLI* arguments = parse(argc, argv);

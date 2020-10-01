@@ -45,5 +45,5 @@ COPY --from=build /usr/src/data/mcp /data/mcp
 COPY --from=build /usr/src/data/stp /data/stp
 COPY --from=build /usr/src/data/scp /data/scp
 
-# VOLUME [ "/database" ]
+VOLUME [ "/db" ]
 # OBS: O ponto de montagem no host deve ser especificada ao subir o contêiner

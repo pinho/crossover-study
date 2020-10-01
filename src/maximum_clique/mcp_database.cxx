@@ -1,0 +1,56 @@
+#include "mcp_database.hpp"
+
+MCPTable::MCPTable(CLI *cli)
+: TableController("maxclique_executions"), solution_size(0),
+  solution(std::string())
+{
+  this->population_size = cli->pop_size;
+  this->num_generations = cli->epochs;
+  this->mutation_rate = cli->mutation_rate;
+  this->crossover_rate = cli->crossover_rate;
+  this->crossover_id = cli->crossover_id;
+  this->crossover_name = CrossoverFabric::name(cli->crossover_id);
+  const char *aux = trim_filename(cli->infile);
+  this->instance_file = std::string(aux);
+  this->solution_size = 0;
+  this->solution = std::string();
+}
+
+MCPTable::~MCPTable() = default;
+
+void MCPTable::create(sqlite::connection *con) {
+  std::string query;
+  query = "CREATE TABLE IF NOT EXISTS ";
+  query += this->table_name;
+  query += " (";
+  query += "id INTEGER PRIMARY KEY AUTOINCREMENT, "; 
+  query += "population_size INTEGER, ";
+  query += "num_generations INTEGER, ";
+  query += "mutation_rate REAL, ";
+  query += "crossover_rate REAL, ";
+  query += "crossover INTEGER, ";
+  query += "crossover_name TEXT, ";
+  query += "instance_file TEXT, ";
+  query += "solution_size INTEGER, ";
+  query += "solution TEXT, ";
+  query += "convergence TEXT, ";
+  query += "duration_in_ms REAL";
+  query += ");";
+  sqlite::execute(*con, query, true);
+}
+
+void MCPTable::insert(sqlite::connection *con) {
+  std::string sql;
+  sql = "INSERT INTO " + std::string(this->table_name) + " (";
+  sql += "population_size, num_generations, crossover, crossover_name, ";
+  sql += "crossover_rate, mutation_rate, instance_file, convergence, ";
+  sql += "duration_in_ms, solution_size, solution";
+  sql += ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+  sqlite::execute ins(*con, sql);
+  ins % this->population_size % this->num_generations % this->crossover_id
+      % this->crossover_name  % this->crossover_rate  % this->mutation_rate
+      % this->instance_file   % this->convergence     % this->duration_in_ms 
+      % this->solution_size   % this->solution;
+  ins();
+}

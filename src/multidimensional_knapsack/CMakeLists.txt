@@ -5,12 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 include(GNUInstallDirs)
 string(TOLOWER ${PROJECT_NAME} main_target)
 
-include_directories(../../include)
-add_compile_options("-Wunused")
-
 add_executable(${main_target}
   main.cxx
-  mknap_problem.cxx )
-target_link_libraries(${main_target} core-ga core-utils vsqlitepp)
+  mknap_problem.cxx
+  mknap_table.cxx )
 
 install(TARGETS ${main_target} DESTINATION ${CMAKE_INSTALL_BINARYDIR})

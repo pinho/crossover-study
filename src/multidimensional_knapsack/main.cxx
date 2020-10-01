@@ -7,24 +7,18 @@ using std::chrono::system_clock;
 #include <paradiseo/eo/ga/eoBitOp.h>
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoTimeContinue.h>
-#include <paradiseo/eo/eoRankingSelect.h>
-// #include <paradiseo/eo/eoDetTournamentSelect.h>
+#include <paradiseo/eo/eoSelectOne.h>
+#include <paradiseo/eo/eoDetTournamentSelect.h>
 #include <core/cli/parse.h>
-#include <core/ga/encoding.h>
-#include <core/ga/random.h>
 #include <core/ga/crossover_fabric.h>
 #include <core/ga/genetic_algorithm.h>
-#include <core/utils/split.h>
 #include <core/utils/parse_duration.h>
 #include <core/utils/trim_filename.h>
-#include <core/db/create.hpp>
-#include <core/db/entry.hpp>
+#include <core/db/database.hpp>
 
 #include "mknap_problem.h"
+#include "mknap_table.h"
 
-using Str = std::string;
-#define PRINT(txt) std::cout << txt << std::flush
-#define PRINTLN(txt) std::cout << txt << std::endl
 #define SEPLINE(n) \
   for (int i=0; i < n; i++) { \
     std::cout << '-'; \
@@ -32,16 +26,16 @@ using Str = std::string;
   std::cout << std::endl
 #define UEC(number) "\e[38;5;"+ std::to_string(number) +"m"
 
-void searchCallback (int g, eoPop<Chrom> &p) {
-  std::cout << "G" << g << " -- Melhor fitness: "
-      << p.best_element().fitness() << std::endl;
+void evolutionCallback (int g, eoPop<Chrom> &p) {
+  std::cout << "G" << g << " Melhor custo: ";
+  std::cout << p.best_element().fitness() << std::endl;
 }
 
 
 int exec(int argc, char **argv) {
   auto args = parse(argc, argv);
-  auto filename = trim_filename(args->infile);
-  std::cout << "Problema da Mochila Multi-dimensional: " << filename << std::endl;
+  auto filename = std::string(trim_filename(args->infile));
+  std::cout <<"Problema da Mochila Multi-dimensional: "<<filename <<std::endl;
   SEPLINE(60);
   std::cout << *args;
   SEPLINE(60);
@@ -50,46 +44,32 @@ int exec(int argc, char **argv) {
   mkp.display_info(std::cout);
   SEPLINE(60);
 
-  auto weightsMatrix = mkp.weights();
-  for (int i=0; i < weightsMatrix->size(); i++) {
-    for (int k=0; k < weightsMatrix->at(0).size(); k++) {
-      std::cout << std::setw(4) << weightsMatrix->at(i).at(k);
-    }
-    std::cout << std::endl;
-  }
-
-  PRINT("Inicializando população");
+  std::cout << "Inicializando população...";
   auto pop = mkp.init_pop(args->pop_size);
-  PRINTLN("\rPopulação inicializada!");
+  std::cout << "\rPopulação inicializada!  " << std::endl;
 
-  PRINT("Avaliando população");
+  std::cout << "Avaliando população inicial" << std::endl;
   mkp.eval(pop);
 
   // Definição dos parâmetros do AG
   eoGenContinue<Chrom> term(args->epochs);
   eoBitMutation<Chrom> mutation( args->mutation_rate );
-  eoRankingSelect<Chrom> select;
+  eoDetTournamentSelect<Chrom> select(args->tour_size);
   auto *crossover = CrossoverFabric::create(args->crossover_id);
 
   // define a instância da classe de Algoritmo genético
   GeneticAlgorithm ga(
     mkp, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
   SEPLINE(60);
-  std::cout << UEC(47) << "Iniciando evolução" << UEC(255) << std::endl;
+  std::cout << "Iniciando evolução" << std::endl;
 
-  // Vector de convergências
+  // Vector de convergência da evolução
   std::vector<Chrom> conv;
 
   // Execução da evolução
-  auto start_point = std::chrono::system_clock::now();
-  ga(pop, conv, searchCallback);
-  auto dur_ns = system_clock::now() - start_point; // Duração em nanosegundos
-
-  // Converter duração para segundos
-  std::cout << std::fixed << "Tempo de evolução: " << UEC(47)
-            << parse_duration(dur_ns) << UEC(255) << std::endl;
-
-  SEPLINE(60);
+  auto start_point = system_clock::now();
+  ga(pop, conv, evolutionCallback);
+  nanoseconds duration = system_clock::now() - start_point;
 
   Chrom melhor = pop.best_element();
   std::vector<float> &objectValues = mkp.profits();
@@ -103,32 +83,35 @@ int exec(int argc, char **argv) {
     }
   }
   std::cout << "} \n";
-  std::cout << "Custo total: " << std::setprecision(2) << melhor.fitness()
-            << std::endl;
+  auto cost = melhor.fitness();
+  std::cout << "Custo total: " << cost << std::endl;
 
+  // Mostra informações sobre o resulto final obtido em relação a solução ótima
+  // ou mlehor solução conhecida se ela estiver definida no arquivo de instância
   if (mkp.optimal() > 0.0f) {
     std::cout << (melhor.fitness() / mkp.optimal())*100 << "\% de aproximação.";
-    std::cout << "\nSolução ótima: "<< std::setprecision(2) <<mkp.optimal()
-              << std::endl;
+    std::cout << "\nSolução ótima: "<< mkp.optimal() << std::endl;
   }
 
   SEPLINE(60);
 
+  // Quando a opção --db é usada para definir um arquivo de banco de dados
   if (args->using_db) {
     using namespace std::chrono;
-    auto dur_ms = duration_cast<milliseconds>(dur_ns);
+
+    MKnapTable tb(args);
+    tb.instance_file = filename;
+    tb.duration_in_ms = (double) duration_cast<milliseconds>(duration).count();
+    tb.set_convergence(conv);
+    tb.solution = MKnapTable::sequence_to_string(indices);
+    tb.num_items = (int) indices.size();
+    tb.total_costs = (float) cost;
     
-    try {
-      auto con = db_create(args->databasefile, db_structure::mk);
-      std::cout << "Arquivo \"" << args->databasefile << "\" criado.\n";
-      db_knapsack_entry(*con, args, conv, indices, melhor.fitness(),
-          filename, dur_ms);
-      std::cout << "dados escritos em " << args->databasefile << std::endl;
-    }
-    catch (std::exception &e) {
-      std::cerr << "Erro ao escrever no BD \"" << args->databasefile
-          << "\"; " << e.what() << std::endl;
-    }
+    Database db(args->databasefile);
+    db.set_controller(&tb);
+    db.insert_data();
+
+    std::cout << "Dados salvos em " << args->databasefile << std::endl;
   }
 
   return 0;
@@ -139,7 +122,7 @@ int main(int argc, char **argv) {
   try {
     return exec(argc, argv);
   } catch (std::exception &e) {
-    std::cerr << "exec: " << e.what() << std::endl;
+    std::cerr << "Exception on main: " << e.what() << std::endl;
     return 127;
   }
   return 0;

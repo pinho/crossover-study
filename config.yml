@@ -1,7 +1,8 @@
-crossover: 0
+crossover: [0, 1, 2, 4] 
 xrate: 1.0
-mrate: 0.05
+mrate: 0.005
 popsize: 100
-epochs: 200
+epochs: 500
 ring: 8
-db: /data/out/FirstTestsMaxclique.sqlite
+infile: /data/scp/scp41.txt
+db: "/db/setcovering.sqlite"

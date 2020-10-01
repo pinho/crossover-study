@@ -1,6 +1,6 @@
 #include "parse_duration.h"
 
-std::string parse_duration(std::chrono::nanoseconds& dur) {
+std::string parse_duration(std::chrono::nanoseconds dur) {
   using namespace std::chrono;
   std::stringstream ss;
 
