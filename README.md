@@ -28,15 +28,14 @@ e da [networkrepository.com](https://networkrepository.com)
 * [Executar os binários](#executando)
 * [Imagem Docker](#imagem-docker)
 
-## Instalando dependências
+## Instalando dependências externas
 
 > OBS: O projeto foi desenvolvido e requer um ambiente Linux.
 
 ### Arch Linux
 
 ```sh
-sudo pacman -Sy --ignore cmake wget unzip doxygen boost boost-libs vsqlite++ 
-sudo ./scripts/instd.sh
+sudo pacman -Sy --ignore cmake wget unzip doxygen boost boost-libs vsqlite++
 ```
 
 ### Debian
@@ -44,12 +43,35 @@ sudo ./scripts/instd.sh
 ```sh
 sudo apt-get update
 sudo apt-get install cmake wget unzip doxygen libboost-graph-dev libvsqlitepp-dev
-sudo ./scripts/instd.sh
 ```
 
-O script `instd.sh` baixa e instala outras dependências a partir do código fonte
-usando `wget`, `unzip` e `cmake`, logo é independente de distribuição Linux e
-gerenciador de pacotes.
+<!-- O script `instd.sh` baixa e instala outras dependências a partir do código fonte -->
+<!-- usando `wget`, `unzip` e `cmake`, logo é independente de distribuição Linux e -->
+<!-- gerenciador de pacotes. -->
+
+### ParadisEO
+
+O ParadisEO é usado como submódulo (afinal, quem precisa de monorepo), o
+repositório do ParadisEO é referenciado no caminho `include/paradiseo`.
+O projeto também usa o CMake para confifurar a compilação porém usa algumas
+definições de diretórios raíz do projeto que fazem com a compilação do ParadisEO
+não possa ser incluída diretamente pelo `CMakeLists.txt` do diretório raíz desse
+projeto (_crossover-study_). Portanto, é necessário compilar o ParadisEO
+separadamente:
+
+```sh
+# pwd = **/crossover-study
+
+# Cria um diretório para os arquivos de build
+mkdir -p build/paradiseo
+
+# Configura a compilação
+cmake -B build/paradiseo -DEO_ONLY=ON -DCMAKE_INSTALL_PREFIX=. include/paradiseo-master
+
+# Compila o ParadisEO
+make -C build/paradiseo
+```
+
 
 ## Compilando o projeto
 
@@ -57,41 +79,15 @@ Tenha certeza de ter o `cmake` instalado na versão 3.6+. Use o comando
 `cmake --version` para verificar.
 
 ```sh
-# cria os MakeFiles e inicia a compilação
-mkdir build && cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=../dist
-make -j $(nproc)
+# Compilação do projeto inteiro
+cmake -B build .
+make -C build
 
-# compila e instala os binários e libs
+# Compila e instala os binários e libs
 make install
 ```
 
 Projeto compilado! :)
-
-## Executando
-
-A compilação gera quatro binários executáveis - um para cada problema.
-Todos seguem as mesma regras e opções de argumentos para a execução.
-
-Veja as opções usando a flag `--help`
-
-```console
-% ./maxclique --help
-Problema do Clique Máximo
-Use: ./bin/crossoverstudy-mc -f [input-file] [ARGS] ...
-ARGS:
-  -f, --infile      Arquivo de instância do problema
-  -d, --db          Arquivo .db para salvar os dados. Se não definido não salva
-  -p, --popsize     Tamanho da população [default = 100]
-  -g, --epochs      Número de épocas/gerações [default = 100]
-  -x, --crossover   Operador de crossover utilizado com um ID [default = 0]
-  -c, --xrate       Taxa de cruzamento (%) [default = 0.8]
-  -m, --mrate       Taxa de mutação (%) [default = 0.05]
-  -r, --ring        Tamanho do Ring do operador de seleção por torneio determinístico [default = 8]
-  -h, --help        Mostra essa lista de opções
-```
-
-O único argumento obrigatório é o arquivo de entrada: `-f caminho/para/o/arquivo`
 
 ## Imagem Docker
 
@@ -116,22 +112,6 @@ para a build da imagem. Para construir a imagem padrão, use:
 ```console
 % sudo make image
 % sudo make volume
-```
-
-## Instânciando um contêiner de execução
-
-> Deve ser executado como _root_
-
-> O alvo `image` deve ter sido construído. Veja [Imagem Docker](#Imagem-Docker)
-
-Na pasta `scripts` há um script Python criado para subir um container Docker com
-a imagem da aplicação com um comando de algoritmo que pode ser executado `N`
-vezes em sequência no mesmo contêiner.
-
-Executar com `--help` para ver as opções:
-
-```console
-% sudo ./scripts/execOnContainer.py --help
 ```
 
 ## License

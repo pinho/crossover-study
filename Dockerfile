@@ -13,13 +13,20 @@ WORKDIR /usr/src
 COPY . .
 
 # Executar o script para instalar dependências a partir do github
-RUN bash scripts/instd.sh
+# RUN bash scripts/instd.sh
 
-# Geração dos Makefiles usando cmake
-RUN cmake . 
+# Instalar e contruir dependências externas (ParadisEO)
+RUN mkdir -p build/paradiseo
+RUN cmake -B build/paradiseo \
+    -DEO_ONLY=ON \
+    -DCMAKE_INSTALL_PREFIX=. \
+    include/paradiseo-master
+    
+RUN make -C build/paradiseo install
 
-# Compilando o projeto
-RUN make install
+# Compilação do projeto completo
+RUN cmake -B build .
+RUN make -C build install
 
 
 # Imagem de produção será contruída a parte e copia somente o necessário da

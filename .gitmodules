@@ -1,0 +1,3 @@
+[submodule "include/paradiseo-master"]
+	path = include/paradiseo-master
+	url = https://github.com/nojhan/paradiseo.git

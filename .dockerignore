@@ -15,8 +15,6 @@ bin
 share
 lib
 lib64
-include/paradiseo
-include/scpxx
 
 # Uneeded utils
 diagrams/
