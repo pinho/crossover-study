@@ -15,7 +15,7 @@
 #include <core/utils/parse_duration.h>
 #include <core/db/database.hpp>
 
-#include "maximum_clique_problem.h"
+#include "maximum_weighted_clique_problem.h"
 #include "mcp_database.hpp"
 
 #define sepline(n) \
@@ -33,8 +33,11 @@ using Str = std::string;
  * a aplicação dos operadores genéticos */
 void evolutionCallback (int g, eoPop<Chrom> &p) {
   std::cout << "G" << g << "\t";
-  std::cout << "Tamanho do clique: " << p.best_element().fitness();
-  std::cout << std::endl;
+  auto x = p.it_best_element();
+  std::cout << "Clique de " << std::accumulate(x->begin(), x->end(), 0);
+  std::cout << " vértices\n\tPeso do clique: ";
+  std::cout << x->fitness() << '\n';
+  sepline(30);
 }
 
 
@@ -47,13 +50,16 @@ int exec(int argc, char **argv) {
     split(Str(args->infile), '/').end()-1
   );
 
-  // leitura do arquivo de definição do grafo e instanciação do problema
-  MCProblem mc(args->infile);
+  // Instanciação do objeto do problema do clique máximo com pesos nos vértices.
+  // A instância da classe MWCProblem possui a matriz de adjacências do grafo
+  // e os pesos correspondentes aos vértices, assim como os métodos que lidarão
+  // diretamente com os cromossomos, como o reparo de solução e a função
+  // objetivo.
+  MWCProblem mc(args->infile);
   std::cout << "Matrix inicializada: arquivo " << filename << std::endl;
-
-  sepline(60);
-  std::cout << *args;
-  sepline(60);
+  // sepline(60);
+  // std::cout << *args;
+  // sepline(60);
 
   // Geração da população inicial
   auto pop = mc.init_pop(args->pop_size, 0.25);
@@ -64,6 +70,7 @@ int exec(int argc, char **argv) {
   std::cout << "Avaliando população inicial";
   mc.eval(pop);
   std::cout << "\rPopulação inicial avaliada " << std::endl;
+  std::cout << pop.best_element() << std::endl;
 
   // Definição dos parâmetros do AG
   eoGenContinue<Chrom> term(args->epochs);
@@ -87,16 +94,13 @@ int exec(int argc, char **argv) {
   auto dur_ns = system_clock::now() - start_point; // Duração em nanosegundos
 
   // Solução final
-  sepline(60);
   Chrom melhor = pop.best_element();
-  std::vector<int> solution;
-
-  std::cout << "Melhor solução:\n";
-  std::cout << "Clique de " << (uint) melhor.fitness() << " vértices\n";
-  std::cout << "Vértices:\n";
+  std::cout << "Peso do Clique: " << (uint) melhor.fitness() << std::endl;
 
   // Iterações pelo cromossomo pegando os índices dos genes '1' para definir
   // os vértices que fazem parte da solução final encontrada
+  std::vector<int> solution;
+  std::cout << "Vértices:\n";
   for (size_t i = 0; i < melhor.size(); i++) {
     if (melhor[i]) {
       solution.push_back(i+1);

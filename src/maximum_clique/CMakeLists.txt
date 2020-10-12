@@ -7,7 +7,7 @@ string(TOLOWER ${PROJECT_NAME} main_target)
 
 add_executable(${main_target}
   main.cxx
-  maximum_clique_problem.cxx
+  maximum_weighted_clique_problem.cxx
   mcp_database.cxx)
 
 target_include_directories(${main_target} PRIVATE ../../include)
