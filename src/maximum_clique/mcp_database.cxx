@@ -1,7 +1,7 @@
 #include "mcp_database.hpp"
 
 MCPTable::MCPTable(CLI *cli)
-: TableController("maxclique_executions"), solution_size(0),
+: TableController("maxclique_executions"), solution_size(0), total_cost(0),
   solution(std::string())
 {
   this->population_size = cli->pop_size;
@@ -33,6 +33,7 @@ void MCPTable::create(sqlite::connection *con) {
   query += "instance_file TEXT, ";
   query += "solution_size INTEGER, ";
   query += "solution TEXT, ";
+  query += "total_cost TEXT, ";
   query += "convergence TEXT, ";
   query += "duration_in_ms REAL";
   query += ");";
@@ -44,13 +45,13 @@ void MCPTable::insert(sqlite::connection *con) {
   sql = "INSERT INTO " + std::string(this->table_name) + " (";
   sql += "population_size, num_generations, crossover, crossover_name, ";
   sql += "crossover_rate, mutation_rate, instance_file, convergence, ";
-  sql += "duration_in_ms, solution_size, solution";
-  sql += ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+  sql += "duration_in_ms, solution_size, solution, total_cost";
+  sql += ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
   sqlite::execute ins(*con, sql);
   ins % this->population_size % this->num_generations % this->crossover_id
       % this->crossover_name  % this->crossover_rate  % this->mutation_rate
       % this->instance_file   % this->convergence     % this->duration_in_ms 
-      % this->solution_size   % this->solution;
+      % this->solution_size   % this->solution        % this->total_cost;
   ins();
 }

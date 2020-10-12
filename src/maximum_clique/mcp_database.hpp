@@ -12,10 +12,11 @@
 struct MCPTable : public TableController {
 public:
   int solution_size;
+  int total_cost;
   std::string solution;
 
   explicit MCPTable()
-  : TableController("maxclique_executions"), solution_size(0),
+  : TableController("maxclique_executions"), solution_size(0), total_cost(0),
     solution(std::string()) {}
 
   MCPTable(CLI *cli);

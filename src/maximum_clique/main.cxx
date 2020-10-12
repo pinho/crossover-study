@@ -70,7 +70,7 @@ int exec(int argc, char **argv) {
   std::cout << "Avaliando população inicial";
   mc.eval(pop);
   std::cout << "\rPopulação inicial avaliada " << std::endl;
-  std::cout << pop.best_element() << std::endl;
+  // std::cout << pop.best_element() << std::endl;
 
   // Definição dos parâmetros do AG
   eoGenContinue<Chrom> term(args->epochs);
@@ -95,7 +95,8 @@ int exec(int argc, char **argv) {
 
   // Solução final
   Chrom melhor = pop.best_element();
-  std::cout << "Peso do Clique: " << (uint) melhor.fitness() << std::endl;
+  unsigned int finalcost = (uint) melhor.fitness();
+  std::cout << "Peso do Clique: " << finalcost << std::endl;
 
   // Iterações pelo cromossomo pegando os índices dos genes '1' para definir
   // os vértices que fazem parte da solução final encontrada
@@ -115,8 +116,9 @@ int exec(int argc, char **argv) {
     tb.instance_file = filename;
     tb.duration_in_ms = duration_cast<milliseconds>(dur_ns).count();
     tb.set_convergence(conv);
-    tb.solution_size = (int) melhor.fitness();
+    tb.solution_size = std::accumulate(melhor.begin(), melhor.end(), 0);
     tb.solution = MCPTable::sequence_to_string<int>(solution);
+    tb.total_cost = (int) finalcost;
     // Conecta com o banco
     Database db(args->databasefile);
     db.set_controller(&tb);
