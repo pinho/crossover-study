@@ -47,8 +47,8 @@ COPY --from=build /usr/local/bin/setcovering /usr/bin
 # Coiando arquivos de instância para a imagem em /data/in e definindo o
 # diretório "data" como um volume. Esse diretório deve ser usado para armazenar
 # os arquivos de banco de dados (.sqlite) das execuções
+# COPY --from=build /usr/src/data/mcp /data/mcp
 COPY --from=build /usr/src/data/mkp /data/mkp
-COPY --from=build /usr/src/data/mcp /data/mcp
 COPY --from=build /usr/src/data/mwcp /data/mwcp
 COPY --from=build /usr/src/data/stp /data/stp
 COPY --from=build /usr/src/data/scp /data/scp

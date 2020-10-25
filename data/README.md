@@ -2,10 +2,9 @@
 
 ## Clique máximo
 
-OBS: Todos os arquivos de clique máximo foram - devem ter sido - convertidos para o formato
-de arquivos de grafos do DIMACS.
+<!-- TODO: Atualizar informações de arquivos do clique máximo -->
 
-Arquivo            |   [V]  |   [E]   | CM | Link
+Arquivo            |   [V]  |   [E]   | CM  | Link
 -------------------|--------|---------|-----|---
 `brock400_3`       |    400 |         | ??? | 
 `brock400_4`       |    400 |  59 765 | ??? | 
@@ -18,12 +17,8 @@ Arquivo            |   [V]  |   [E]   | CM | Link
 > [E]   : Número de arestas <br>
 > CM    : limite inferior do tamanho do clique máximo
 
-## Mochila Multidimensional
-
+---
 ## Árvore de Steiner
-
-A fonte de arquivos de intância é a
-[OR-Library](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/).
 
 Todo e qualquer arquivo de definição de um grafo para testes com o poblema da
 árvore de Steiner deve estar na formatação definida pelos arquivos da OR-Library.
@@ -46,4 +41,29 @@ Arquivo         | Vértices (de Steiner)| Arestas | Link
 `steinc4.txt`   | 500  (125)           | 625     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinc4.txt)
 `steinc5.txt`   | 500  (250)           | 625     | [AQUI](http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/steinc5.txt)
 
+---
 ## Cobertura de Conjuntos
+
+Status |  Arquivo    | No. Elementos (linhas) | No. Subconjuntos (colunas)  
+-------|-------------|------------------------|---------------------------
+- [x]  | scp41.txt   | 200 | 1000
+- [x]  | scp42.txt   | 200 | 1000
+- [x]  | scp43.txt   | 200 | 1000
+- [x]  | scp44.txt   | 200 | 1000
+- [x]  | scp51.txt   | 200 | 2000
+- [x]  | scp52.txt   | 200 | 2000
+- [x]  | scp53.txt   | 200 | 2000
+- [x]  | scp53.txt   | 200 | 2000
+
+---
+## Mochila Mutidimensional
+
+Status | Arquivo     | Número de variáveis (itens) | Número de restrições (mochilas)
+-------|-------------|-----------------------------|--------------------------------
+
+---
+## Fontes de arquivos-teste
+
+- **OR-Library**, por Beasley. Disponível em: http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/
+
+- **DIMACS Challenges**. <!-- TODO: Adicionar link para o DIMACS -->
