@@ -13,11 +13,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install Dependencies
+    - name: Installing Dependencies
       run: |
         sudo apt-get install -y
         sudo apt-get install -y cmake wget unzip doxygen
         sudo apt-get install -y libvsqlitepp-dev libboost-graph-dev
-        sudo bash scripts/instd.sh
-    - name: Compile project
-      run: cmake . && make
+    - name: Building ParadisEO
+      run: |
+        mkdir -fp build/paradiseo
+        cmake -B build/paradiseo -DEO_ONLY=ON -DCMAKE_INSTALL_PREFIX=. include/paradiseo-master
+        make -C build/paradiseo
+    - name: Building the project
+      run: |
+        cmake -B build .
+        make -C build
