@@ -20,7 +20,7 @@ jobs:
         sudo apt-get install -y libvsqlitepp-dev libboost-graph-dev
     - name: Building ParadisEO
       run: |
-        mkdir -fp build/paradiseo
+        mkdir -p build/paradiseo
         cmake -B build/paradiseo -DEO_ONLY=ON -DCMAKE_INSTALL_PREFIX=. include/paradiseo-master
         make -C build/paradiseo
     - name: Building the project
