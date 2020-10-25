@@ -21,8 +21,8 @@ lib64
 .idea
 
 # IDEs
-.vscode
-.idea
+.vscode/**
+.idea/**
 
 ## C++ precompiled and executables
 **/*.[o|a]
