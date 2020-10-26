@@ -5,7 +5,7 @@
 FROM ronalddpinho/cpp-build-base AS build
 
 RUN apt-get update -y
-RUN apt-get install -y wget unzip libvsqlitepp-dev libboost-dev
+RUN apt-get install -y libvsqlitepp-dev libboost-dev
 
 WORKDIR /usr/src
 
