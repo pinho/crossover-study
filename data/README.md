@@ -62,6 +62,6 @@ Status | Arquivo     | Número de variáveis (itens) | Número de restrições (
 ---
 ## Fontes de arquivos-teste
 
-- **OR-Library**, por Beasley. Disponível em: http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/
+- **OR-Library**, por Beasley. Disponível em: http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files
 
-- **DIMACS Challenges**. <!-- TODO: Adicionar link para o DIMACS -->
+- **DIMACS Challenges**. Disponível em: http://dimacs.rutgers.edu/programs/challenge
