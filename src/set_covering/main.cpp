@@ -12,8 +12,6 @@ using namespace std::chrono;
 #include <core/cli/parse.h>
 #include <core/ga/genetic_algorithm.h>
 #include <core/ga/crossover_fabric.h>
-// #include <core/db/create.hpp>
-// #include <core/db/entry.hpp>
 #include <core/db/database.hpp>
 #include <core/utils/parse_duration.h>
 #include <core/utils/trim_filename.h>
@@ -21,7 +19,6 @@ using namespace std::chrono;
 
 #include "set_covering_problem.h"
 #include "scp_table.h"
-// #include "genetic_algorithm_scp.h"
 #include "decoder.h"
 
 #define green(msg) "\e[1;32m" + std::string(msg) + "\e[0m"

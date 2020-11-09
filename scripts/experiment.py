@@ -141,26 +141,28 @@ def main(binaryname, count, max_con, wait_time):
   
   # num_created_containers = len(containers)
   client = docker.from_env()
-  nc = len(containers) # Número de containers escalonados
-  nr = 0 # Número de containers rodando
+  num_containers = len(containers) # Número de containers escalonados
+  num_running = 0 # Número de containers rodando
 
   for id in ids:
     cont = client.containers.get(id)
     
     if len(client.containers.list()) < max_con:
-      nr += 1
-      print(f"[{nr} de {nc}] Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"", flush=True)
+      num_running += 1
+      print(f"[{num_running} de {num_containers}] Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"", flush=True)
       cont.start()
     else:
       print("Esperando algum contêiner finalizar", flush=True)
       start_wait = time.time()
+      time_until_now = 0
       while not len(client.containers.list()) < max_con:
         time.sleep(wait_time)
-        print("#", end="", flush=True)
+        time_until_now += wait_time
+        print(f"\r[{round(time_until_now/60,1)} min] Aguardando...", end="", flush=True)
       print()
       print(f"Tempo de espera:", round((time.time()-start_wait)/60, 2), "min")
-      nr += 1
-      print(f"[{nr} de {nc}]Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"", flush=True)
+      num_running += 1
+      print(f"[{num_running} de {num_containers}]Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"", flush=True)
       cont.start()
       pass
   
