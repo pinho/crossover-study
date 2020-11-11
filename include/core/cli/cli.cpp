@@ -46,14 +46,14 @@ void show_help(char **argv) {
 }
 
 CLI *parse(int argc, char **argv) {
-  auto res = new CLI();
+  CLI* res = new CLI();
   int opt;
   while ((opt = getopt_long(argc,argv, short_options,long_options,0)) != -1) {
     switch (opt) {
       case 'd':
         if (optarg) {
-            res->databasefile = optarg;
-            res->using_db = true;
+          res->databasefile = optarg;
+          res->using_db = true;
         }
         break;
       case 'f':

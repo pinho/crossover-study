@@ -82,7 +82,11 @@ MKnapsackProblem::~MKnapsackProblem() = default;
 
 
 eoPop<Chrom> MKnapsackProblem::init_pop(uint length, double bias) {
-  return Random<Chrom>::population(__chromSize, length, bias);
+  eoPop<Chrom> _pop = Random<Chrom>::population(__chromSize, length, bias);
+  for (Chrom& chr : _pop) {
+    this->repair_solution(chr);
+  }
+  return _pop;
 }
 
 
@@ -138,6 +142,48 @@ bool MKnapsackProblem::break_constraint(const Chrom& chromosome_) {
     auto msg = std::string("break_constraint::") + e.what();
     throw std::runtime_error(msg);
   }
+}
+
+inline bool MKnapsackProblem::resources_is_greater(const std::vector<float>* resources)
+{
+  bool result = false;
+  for (size_t i=0; i < resources->size(); i++) {
+    if (resources->at(i) > this->m_capacities[i]) {
+      result = true;
+      break;
+    }
+  }
+  return result;
+}
+
+
+void MKnapsackProblem::repair_solution(Chrom &chromosome) {
+  assert(chromosome.size() == this->m_num_items);
+  std::vector<float> accum_resources;
+
+  for (size_t i=0; i < this->m_num_capacities; i++) {
+    float resources_sum = 0.0f;
+    for (size_t j=0; j < this->m_num_items; j++) {
+      resources_sum += m_weights[i][j] * int(chromosome[j]);
+    }
+    accum_resources.push_back(resources_sum);
+  }
+  assert(accum_resources.size() == this->m_num_capacities);
+
+  // Drop phase
+  int capacity_idx = this->m_num_capacities;
+  for (auto chrom_it = chromosome.rbegin(); chrom_it != chromosome.rend(); ++chrom_it)
+  {
+    if (*chrom_it && this->resources_is_greater(&accum_resources)) {
+      *chrom_it = false;
+      capacity_idx -= 1;
+      for (size_t i=0; i < this->m_num_capacities; i++) {
+        accum_resources[i] -= this->m_weights[i][capacity_idx];
+      }
+    }
+  }
+
+  // TODO: Adicionar a "ADD PHASE" (?)
 }
 
 

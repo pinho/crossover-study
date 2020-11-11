@@ -22,7 +22,14 @@ public:
 
   Fitness objective_function(Chrom &chromosome);
 
+  /**
+   * Verifica se um indivíduo/cromossomo quebra alguma das restrições do
+   * problema. */
   bool break_constraint(const Chrom &chromosome);
+
+  /**
+   * Tornar uma solução inviável em uma solução viável */
+  void repair_solution(Chrom &chromosome);
 
   std::vector<std::vector<float>> *weights();
   float optimal();
@@ -34,6 +41,9 @@ private:
   float m_optimal;
   std::vector<float> m_capacities, m_profits;
   std::vector<std::vector<float>> m_weights;
+
+  // Função para verifica se alguma restrição foi quebrada
+  bool resources_is_greater(const std::vector<float>* resources);
 };
 
 #endif

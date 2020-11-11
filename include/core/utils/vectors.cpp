@@ -5,18 +5,18 @@
  */
 std::vector<float> convert_vec(std::vector<std::string>& source) {
   using Str = std::string;
-  auto *target = new std::vector<float>;
+  std::vector<float> target;
   try {
     for (auto &string_element : source) {
       if (string_element != Str("\n") and string_element != Str(" ")) {
-        target->push_back( std::stof(string_element) );
+        target.push_back( std::stof(string_element) );
       }
     }
   } catch (std::exception &e) {
     std::cerr << "convert_vec: impossível converter string para float\n";
     throw e;
   }
-  return *target;
+  return target;
 }
 
 // template <typename T>

@@ -1,12 +1,12 @@
 #include <iostream>
 #include <iomanip>
-#include <string>
+// #include <string>
+#include <cstdio>
 #include <chrono>
 using std::chrono::system_clock;
 
 #include <paradiseo/eo/ga/eoBitOp.h>
 #include <paradiseo/eo/eoGenContinue.h>
-#include <paradiseo/eo/eoTimeContinue.h>
 #include <paradiseo/eo/eoSelectOne.h>
 #include <paradiseo/eo/eoDetTournamentSelect.h>
 #include <core/cli/parse.h>
@@ -27,15 +27,16 @@ using std::chrono::system_clock;
 #define UEC(number) "\e[38;5;"+ std::to_string(number) +"m"
 
 void evolutionCallback (int g, eoPop<Chrom> &p) {
-  std::cout << "G" << g << " Melhor custo: ";
+  std::cout << "G" << g << " Valor da melhor combinação de items: ";
   std::cout << p.best_element().fitness() << std::endl;
 }
 
 
 int exec(int argc, char **argv) {
-  auto args = parse(argc, argv);
-  auto filename = std::string(trim_filename(args->infile));
-  std::cout <<"Problema da Mochila Multi-dimensional: "<<filename <<std::endl;
+  CLI *args = parse(argc, argv);
+  auto filename = *(split(std::string(args->infile), '/').end()-1);
+
+  std::cout <<"Problema da Mochila Multi-dimensional: "<< filename <<std::endl;
   SEPLINE(60);
   std::cout << *args;
   SEPLINE(60);
@@ -72,17 +73,10 @@ int exec(int argc, char **argv) {
   nanoseconds duration = system_clock::now() - start_point;
 
   Chrom melhor = pop.best_element();
-  std::vector<float> &objectValues = mkp.profits();
+  // std::vector<float> &objectValues = mkp.profits();
   std::vector<uint> indices;
-  std::cout << "Items: { \n";
-  for (uint i = 0; i < melhor.size(); i++) {
-    if (melhor[i]) {
-      indices.push_back(i);
-      std::cout << std::setw(4) << "["<<i<<"] " << std::setprecision(2)
-                << objectValues[i] << "\n";
-    }
-  }
-  std::cout << "} \n";
+
+  SEPLINE(60);
   auto cost = melhor.fitness();
   std::cout << "Custo total: " << cost << std::endl;
 
