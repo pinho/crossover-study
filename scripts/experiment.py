@@ -117,9 +117,11 @@ class Command:
 # Criar contêineres
 def docker_create(fullcommand) -> docker.models.containers.Container:
   client = docker.from_env()
-  # Verifica o número de contêiners em execução
+  num_list_containers = len(client.containers.list(all=True))
+  # Configura e Cria um novo container e retorna-o
   cont = client.containers.create(IMAGE_NAME, fullcommand,
-      detach=True, mounts=[ Mount("/db", VOLUME_NAME) ], cpu_shares=500)
+      name=f'experimentation_{num_list_containers+1}', detach=True,
+      mounts=[ Mount("/db", VOLUME_NAME) ], cpu_shares=500)
   return cont
 
 # Main function 
