@@ -3,11 +3,10 @@ project(MultiKnap)
 set(CMAKE_CXX_STANDARD 17)
 
 include(GNUInstallDirs)
-string(TOLOWER ${PROJECT_NAME} main_target)
 
-add_executable(${main_target}
+add_executable(mkanpsack
   main.cxx
   mknap_problem.cxx
   mknap_table.cxx )
 
-install(TARGETS ${main_target} DESTINATION ${CMAKE_INSTALL_BINARYDIR})
+install(TARGETS mknapsack DESTINATION ${CMAKE_INSTALL_BINARYDIR})

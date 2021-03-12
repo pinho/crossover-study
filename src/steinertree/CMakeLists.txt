@@ -4,10 +4,10 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(GNUInstallDirs)
 
-add_executable(steintree
+add_executable(steinertree
   main.cpp
   steiner_tree.cpp
   steiner_tree_table.cpp
   minimum_spanning_tree.cpp)
 
-install(TARGETS steintree DESTINATION ${CMAKE_INSTALL_BINARYDIR})
+install(TARGETS steinertree DESTINATION ${CMAKE_INSTALL_BINARYDIR})
