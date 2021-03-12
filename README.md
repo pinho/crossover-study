@@ -26,17 +26,12 @@ e do [DIMACS](http://dimacs.rutgers.edu/programs/challenge).
 
 ## Sumário
 
-* [Preparando o ambiente](#Preparando-o-ambiente) (Linux)
-  - [Instalando dependências externas](#Instalação-de-dependências-externas)
-  - [Compilando o ParadisEO](#Compilando-o-ParadisEO)
+* [Instalando dependências externas](#Instalação-de-dependências-externas)
+* [Instalando o ParadisEO](#Instalando-o-ParadisEO)
 * [Compilando o projeto](#Compilando-o-projeto)
 * [Imagem Docker](#imagem-docker)
 
-## Preparando o ambiente
-
-> OBS: O projeto foi desenvolvido e requer um ambiente Linux.
-
-### Instalação de dependências externas
+## Instalação de dependências externas
 
 Arch Linux:
 
@@ -51,29 +46,21 @@ sudo apt-get update
 sudo apt-get install cmake docker doxygen libboost-graph-dev libvsqlitepp-dev
 ```
 
-### Compilando o ParadisEO
+### Instalando o ParadisEO
 
-O ParadisEO é usado como submódulo (afinal, quem precisa de monorepo), o
-repositório do ParadisEO é referenciado no caminho `include/paradiseo`.
-O projeto também usa o CMake para confifurar a compilação porém usa algumas
-definições de diretórios raíz do projeto que fazem com a compilação do ParadisEO
-não possa ser incluída diretamente pelo `CMakeLists.txt` do diretório raíz desse
-projeto (_crossover-study_). Portanto, é necessário compilar o ParadisEO
-separadamente:
+O ParadisEO é umm framework C++ para computação evolutiva, para que o projeto
+seja compilado com sucesso é necessário a instalação do framework e no geral
+ele não está presente de forma padrão nos repositórios de gerenciadores de
+pacotes das distribuições Linux. Portanto é recomendado fazer a instalação a
+partir do código fonte, é só usar os comandos a abaixo:
 
 ```sh
-# pwd = **/crossover-study
-
-# Cria um diretório para os arquivos de build do ParadisEO
-mkdir -p build/paradiseo
-
-# Configura a compilação
-cmake -B build/paradiseo -DEO_ONLY=ON -DCMAKE_INSTALL_PREFIX=. include/paradiseo-master
-
-# Compila o ParadisEO
-make -C build/paradiseo
+wget -c https://github.com/nojhan/paradiseo/archive/master.zip -O paradiseo.zip
+unzip paradiseo.zip && cd paradiseo-master
+mkdir -p build && cd build
+cmake -DEO_ONLY=ON ..
+sudo make install
 ```
-
 
 ## Compilando o projeto
 
