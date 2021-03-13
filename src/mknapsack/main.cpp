@@ -64,12 +64,9 @@ int exec(int argc, char **argv) {
   SEPLINE(60);
   std::cout << "Iniciando evolução" << std::endl;
 
-  // Vector de convergência da evolução
-  std::vector<Chrom> conv;
-
   // Execução da evolução
   auto start_point = system_clock::now();
-  ga(pop, conv, evolutionCallback);
+  ga(pop);
   nanoseconds duration = system_clock::now() - start_point;
 
   Chrom melhor = pop.best_element();
@@ -96,6 +93,7 @@ int exec(int argc, char **argv) {
     MknapModel tb(args);
     tb.instance_file = filename;
     tb.duration_in_ms = (double) duration_cast<milliseconds>(duration).count();
+    auto conv = ga.get_convergence();
     tb.set_convergence(conv);
     tb.solution = MknapModel::sequence_to_string(indices);
     tb.num_items = (int) indices.size();

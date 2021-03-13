@@ -81,11 +81,10 @@ int exec(CLI *args) {
   // Preparando para iniciar a execução
   break_lines(std::cout);
   std::cout << green("Iniciando evolução") << std::endl;
-  std::vector<Chrom> convergence;
 
   // Início da execução do algoritmo
   auto start_point = system_clock::now();
-  ga(pop, convergence, ga_callback);
+  ga(pop);
   nanoseconds duration = system_clock::now() - start_point;
 
   break_lines(std::cout);
@@ -102,6 +101,7 @@ int exec(CLI *args) {
     milliseconds duration = duration_cast<milliseconds>(duration);
     // Organização dos dados da tabela para inserção
     SCPModel table(args);
+    auto convergence = ga.get_convergence();
     table.set_convergence(convergence);
     table.num_columns = qty_columns;
     table.instance_file = instance_filename;

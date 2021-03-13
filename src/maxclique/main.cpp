@@ -19,25 +19,6 @@
 #include "mcp_database.hpp"
 using namespace std::chrono;
 
-#define sepline(n) \
-  for (int i=0; i < n; i++) std::cout << '-'; \
-  std::cout << std::endl
-
-// Unix Escape Color
-#define UNIX_COLOR(number) "\e[38;5;"+ std::to_string(number) +"m"
-
-/**
- * Função executada dentro do algortimo genético a cada geração após os
- * a aplicação dos operadores genéticos */
-void evolutionCallback (int g, eoPop<Chrom> &p) {
-  std::cout << "G" << g << "\t";
-  auto x = p.it_best_element();
-  std::cout << "Clique de " << std::accumulate(x->begin(), x->end(), 0);
-  std::cout << " vértices\n\tPeso do clique: ";
-  std::cout << x->fitness() << '\n';
-  sepline(30);
-}
-
 
 int main(int argc, char **argv)
 {
@@ -77,13 +58,9 @@ int main(int argc, char **argv)
       mc, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
   // sepline(60);
 
-  // std::cout << "Iniciando evolução" << std::endl;
-  // Vector de convergências
-  std::vector<Chrom> conv;
-
   // Execução da evolução
   auto start_point = system_clock::now();
-  ga(pop, conv, evolutionCallback);
+  ga(pop);
   auto dur_ns = system_clock::now() - start_point; // Duração em nanosegundos
 
   // Solução final
@@ -108,6 +85,7 @@ int main(int argc, char **argv)
     MCPModel execution(args);
     execution.instance_file = filename;
     execution.duration_in_ms = duration_cast<milliseconds>(dur_ns).count();
+    const std::vector<Chrom>& conv = ga.get_convergence();
     execution.set_convergence(conv);
     execution.solution_size = std::accumulate(melhor.begin(), melhor.end(), 0);
     execution.solution = MCPModel::sequence_to_string<int>(solution);

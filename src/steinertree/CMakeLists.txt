@@ -7,7 +7,7 @@ include(GNUInstallDirs)
 add_executable(steinertree
   main.cpp
   steiner_tree.cpp
-  steiner_tree_table.cpp
+  steiner_tree_model.cpp
   minimum_spanning_tree.cpp)
 
 target_include_directories(steinertree PRIVATE ../../include)

@@ -7,7 +7,7 @@ include(GNUInstallDirs)
 add_executable(mknapsack
   main.cpp
   mknap_problem.cpp
-  mknap_table.cpp)
+  mknap_model.cpp)
 
 target_include_directories(mknapsack PRIVATE ../../include)
 target_link_libraries(mknapsack PRIVATE GA CLI utils vsqlitepp)

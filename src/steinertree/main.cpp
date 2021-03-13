@@ -66,10 +66,11 @@ int exec(CLI *args) {
 
   std::cout << "Iniciando evolução" << std::endl;
   sep_line(60);
-  std::vector<Chrom> conv;
+
   auto start_point = system_clock::now();
-  ga(population, conv, ga_callback);
+  ga(population);
   auto duration = system_clock::now() - start_point;
+
   sep_line(60);
 
   // Decodificação da solução final e informações associadas
@@ -97,7 +98,7 @@ int exec(CLI *args) {
 
     try {
       SteinerTreeModel execution(args);
-      execution.set_convergence(conv);
+      execution.set_convergence(ga.get_convergence());
       execution.instance_file = filename;
       execution.duration_in_ms = duration_in_ms.count();
       execution.set_solution_data(solution_vec);

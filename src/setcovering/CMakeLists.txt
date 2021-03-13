@@ -8,7 +8,7 @@ string(TOLOWER ${PROJECT_NAME} executable_name)
 add_executable(${executable_name}
   main.cpp
   scp_matrix.cpp
-  scp_table.cpp
+  scp_model.cpp
   set_covering_problem.cpp
   genetic_algorithm_scp.cpp
 )

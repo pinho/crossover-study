@@ -11,7 +11,7 @@
 class GeneticAlgorithm {
 public:
 	typedef typename Chrom::Fitness Fitness;
-	typedef void (*GAInternFunctionCall)(int, eoPop<Chrom>&);
+	//typedef void (*GAInternFunctionCall)(int, eoPop<Chrom>&);
 
 	// Default constructor
 	explicit GeneticAlgorithm(
@@ -34,12 +34,14 @@ public:
 	// Default destructor
 	~GeneticAlgorithm() = default;
 
+  // Getter for the convergence vector
+  std::vector<Chrom> &get_convergence();
+
 	// Main operator of the GA
 	// Gets a reference to a population object and evolve it
 	// Gets also a function to manipulate the population and is called
 	// at end of each generation
-	virtual void operator()(eoPop<Chrom>& population, std::vector<Chrom>& conv,
-			GAInternFunctionCall callback);
+	virtual void operator()(eoPop<Chrom>& population);
 
 protected:
 	Problem& problem;
@@ -49,6 +51,7 @@ protected:
 	eoContinue<Chrom>& stopCriteria;
 	float crossoverRate;
 	float mutationRate;
+  std::vector<Chrom> convergence_;
 };
 
 #endif //CROSSOVERRESEARCH_GENETIC_ALGORITHM_H
