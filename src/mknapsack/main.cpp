@@ -17,7 +17,7 @@ using std::chrono::system_clock;
 #include <core/db/database.hpp>
 
 #include "mknap_problem.h"
-#include "mknap_table.h"
+#include "mknap_model.h"
 
 #define SEPLINE(n) \
   for (int i=0; i < n; i++) { \
@@ -93,17 +93,17 @@ int exec(int argc, char **argv) {
   if (args->using_db) {
     using namespace std::chrono;
 
-    MKnapTable tb(args);
+    MknapModel tb(args);
     tb.instance_file = filename;
     tb.duration_in_ms = (double) duration_cast<milliseconds>(duration).count();
     tb.set_convergence(conv);
-    tb.solution = MKnapTable::sequence_to_string(indices);
+    tb.solution = MknapModel::sequence_to_string(indices);
     tb.num_items = (int) indices.size();
     tb.total_costs = (float) cost;
     
-    Database db(args->databasefile);
-    db.set_controller(&tb);
-    db.insert_data();
+    db::Database db(args->databasefile);
+    db.set_model(&tb);
+    db.exec_insertion();
 
     std::cout << "Dados salvos em " << args->databasefile << std::endl;
   }

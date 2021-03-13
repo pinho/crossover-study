@@ -17,6 +17,7 @@
 
 #include "maximum_weighted_clique_problem.h"
 #include "mcp_database.hpp"
+using namespace std::chrono;
 
 #define sepline(n) \
   for (int i=0; i < n; i++) std::cout << '-'; \
@@ -24,9 +25,6 @@
 
 // Unix Escape Color
 #define UNIX_COLOR(number) "\e[38;5;"+ std::to_string(number) +"m"
-
-using Str = std::string;
-
 
 /**
  * Função executada dentro do algortimo genético a cada geração após os
@@ -41,14 +39,10 @@ void evolutionCallback (int g, eoPop<Chrom> &p) {
 }
 
 
-int exec(int argc, char **argv) {
-  using namespace std::chrono;
-  std::cout << "\e[1;3m\e[38;5;47mProblema do Clique Máximo\e[0m" << std::endl;
-
+int main(int argc, char **argv)
+{
   CLI *args = parse(argc, argv);
-  auto filename = *(
-    split(Str(args->infile), '/').end()-1
-  );
+  auto filename = *(split(std::string(args->infile), '/').end()-1);
 
   // Instanciação do objeto do problema do clique máximo com pesos nos vértices.
   // A instância da classe MWCProblem possui a matriz de adjacências do grafo
@@ -60,16 +54,16 @@ int exec(int argc, char **argv) {
   // sepline(60);
   // std::cout << *args;
   // sepline(60);
-
+ 
   // Geração da população inicial
   auto pop = mc.init_pop(args->pop_size, 0.25);
   std::cout << "População inicializada" << std::endl;
 
   // Avaliando população inicial
-  sepline(60);
-  std::cout << "Avaliando população inicial";
+  // sepline(60);
+  // std::cout << "Avaliando população inicial";
   mc.eval(pop);
-  std::cout << "\rPopulação inicial avaliada " << std::endl;
+  // std::cout << "\rPopulação inicial avaliada " << std::endl;
   // std::cout << pop.best_element() << std::endl;
 
   // Definição dos parâmetros do AG
@@ -78,13 +72,12 @@ int exec(int argc, char **argv) {
   eoDetTournamentSelect<Chrom> select(args->tour_size);
   auto *crossover = CrossoverFabric::create(args->crossover_id);
 
-  // define a instância da classe de Algoritmo genético
+  // Define a instância da classe de Algoritmo genético
   GeneticAlgorithm ga(
-    mc, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
-  sepline(60);
+      mc, select, *crossover, args->crossover_rate, mutation, 1.0f, term);
+  // sepline(60);
 
-  std::cout << "Iniciando evolução" << std::endl;
-
+  // std::cout << "Iniciando evolução" << std::endl;
   // Vector de convergências
   std::vector<Chrom> conv;
 
@@ -112,29 +105,18 @@ int exec(int argc, char **argv) {
 
   if (args->using_db) {
     // Configura a tabela
-    MCPTable tb(args);
-    tb.instance_file = filename;
-    tb.duration_in_ms = duration_cast<milliseconds>(dur_ns).count();
-    tb.set_convergence(conv);
-    tb.solution_size = std::accumulate(melhor.begin(), melhor.end(), 0);
-    tb.solution = MCPTable::sequence_to_string<int>(solution);
-    tb.total_cost = (int) finalcost;
+    MCPModel execution(args);
+    execution.instance_file = filename;
+    execution.duration_in_ms = duration_cast<milliseconds>(dur_ns).count();
+    execution.set_convergence(conv);
+    execution.solution_size = std::accumulate(melhor.begin(), melhor.end(), 0);
+    execution.solution = MCPModel::sequence_to_string<int>(solution);
+    execution.total_cost = (int) finalcost;
     // Conecta com o banco
-    Database db(args->databasefile);
-    db.set_controller(&tb);
-    db.insert_data();
-  }
-
-  return 0;
-}
-
-
-int main(int argc, char **argv) {
-  try {
-    return exec(argc, argv);
-  } catch (std::exception &e) {
-    std::cerr << "Exception catched: " << e.what() << std::endl;
-    return 127;
+    db::Database db(args->databasefile);
+    db.set_model(&execution);
+    db.exec_insertion();
   }
   return 0;
 }
+

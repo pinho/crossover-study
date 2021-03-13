@@ -15,17 +15,17 @@ include_directories(../)
 
 # Biblioteca de interface de linha de comandos
 file(GLOB CLI_SOURCES cli/*.cpp)
-add_library(cliargs ${CLI_SOURCES})
+add_library("CLI" ${CLI_SOURCES})
 
 # Biblioteca para o Algoritmo genético
 file(GLOB GA_SOURCES ga/*.cpp)
-add_library(core-ga ${GA_SOURCES})
-target_link_libraries(core-ga ${PEO} ${PEOUTILS})
+add_library(GA ${GA_SOURCES})
+target_link_libraries(GA ${PEO} ${PEOUTILS})
 
 # Biblioteca de utilitários
 file(GLOB UTILS_SOURCES utils/*.cpp)
-add_library(core-utils ${UTILS_SOURCES})
+add_library(utils ${UTILS_SOURCES})
 
 # Regras de instalação das bibliotecas
-install(TARGETS core-ga core-utils cliargs
+install(TARGETS CLI GA utils
         DESTINATION ${CMAKE_INSTALL_LIBDIR})

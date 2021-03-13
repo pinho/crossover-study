@@ -15,7 +15,7 @@ using namespace std::chrono;
 #include <core/db/database.hpp>
 
 #include "steiner_tree.h"
-#include "steiner_tree_table.h"
+#include "steiner_tree_model.h"
 #include "graph.h"
 
 #define UNIX_COLOR(number) "\e[38;5;"+ std::to_string(number) +"m"
@@ -96,16 +96,16 @@ int exec(CLI *args) {
     auto duration_in_ms = duration_cast<milliseconds>(duration);
 
     try {
-      SteinerTreeTable sttb(args);
-      sttb.set_convergence(conv);
-      sttb.instance_file = filename;
-      sttb.duration_in_ms = duration_in_ms.count();
-      sttb.set_solution_data(solution_vec);
-      sttb.total_costs = best_cost;
+      SteinerTreeModel execution(args);
+      execution.set_convergence(conv);
+      execution.instance_file = filename;
+      execution.duration_in_ms = duration_in_ms.count();
+      execution.set_solution_data(solution_vec);
+      execution.total_costs = best_cost;
 
-      Database db(args->databasefile);
-      db.set_controller(&sttb);
-      db.insert_data();
+      db::Database db(args->databasefile);
+      db.set_model(&execution);
+      db.exec_insertion();
 
       std::cout << "Dados salvos em " << args->databasefile << std::endl;
     }

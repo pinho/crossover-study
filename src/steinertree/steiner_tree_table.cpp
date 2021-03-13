@@ -1,11 +1,11 @@
-#include "steiner_tree_table.h"
+#include "steiner_tree_model.h"
 
-SteinerTreeTable::SteinerTreeTable()
-: TableController("steiner_executions"), num_steiner_nodes(int()),
+SteinerTreeModel::SteinerTreeModel()
+: db::BaseModel("steiner_executions"), num_steiner_nodes(int()),
   steiner_nodes(std::string()), total_costs(float()) {}
 
-SteinerTreeTable::SteinerTreeTable(CLI *cli)
-: TableController("steiner_executions"), num_steiner_nodes(int()),
+SteinerTreeModel::SteinerTreeModel(CLI *cli)
+: db::BaseModel("steiner_executions"), num_steiner_nodes(int()),
   steiner_nodes(std::string()), total_costs(float())
 {
   this->crossover_id = cli->crossover_id;
@@ -16,12 +16,12 @@ SteinerTreeTable::SteinerTreeTable(CLI *cli)
   this->population_size = cli->pop_size;
 }
 
-void SteinerTreeTable::set_solution_data(std::vector<int>& solutionNodes) {
+void SteinerTreeModel::set_solution_data(std::vector<int>& solutionNodes) {
   this->num_steiner_nodes = int(solutionNodes.size());
-  this->steiner_nodes = TableController::sequence_to_string<int>(solutionNodes);
+  this->steiner_nodes = db::BaseModel::sequence_to_string<int>(solutionNodes);
 }
 
-void SteinerTreeTable::create(sqlite::connection *con) {
+void SteinerTreeModel::create(sqlite::connection *con) {
   std::string sql;
   sql = "CREATE TABLE IF NOT EXISTS "+ std::string(this->table_name) + " (";
   sql += "id INTEGER PRIMARY KEY AUTOINCREMENT, "; 
@@ -45,7 +45,7 @@ void SteinerTreeTable::create(sqlite::connection *con) {
   sqlite::execute(*con, sql, true);
 }
 
-void SteinerTreeTable::insert(sqlite::connection *con) {
+void SteinerTreeModel::insert(sqlite::connection *con) {
   std::string sql;
   sql = "INSERT INTO " + std::string(this->table_name) + " (";
   sql += "population_size, num_generations, crossover, crossover_name, ";

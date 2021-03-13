@@ -1,5 +1,5 @@
-#ifndef CORE_DB_TABLE_CONTROLLER_HPP_
-#define CORE_DB_TABLE_CONTROLLER_HPP_
+#ifndef CORE_DB_BASE_MODEL_HPP_
+#define CORE_DB_BASE_MODEL_HPP_
 
 #include <string>
 #include <sstream>
@@ -9,11 +9,13 @@
 #include <sqlite/database_exception.hpp>
 #include "../ga/encoding.h"
 
+namespace db {
+
 /**
  * @struct table_controller organiza os dados que devem ser armazenados em uma
  * tabela para uma execução.
  */
-class TableController {
+class BaseModel {
 public:
   const char *table_name; // Nome da tabela
 
@@ -28,14 +30,14 @@ public:
   std::string convergence;    // Convergência da busca (texto com separador)
   std::string instance_file;  // Nome do arquivo de instancia usado
 
-  TableController(const char *t_tablename)
+  BaseModel(const char *t_tablename)
   : table_name(t_tablename), population_size(0), num_generations(0),
     crossover_id(0), crossover_rate(0.0), mutation_rate(0.0),
     duration_in_ms(0.0), crossover_name(std::string()),
     convergence(std::string()) {}
 
   // Default destructor
-  ~TableController() = default;
+  ~BaseModel() = default;
 
   /**
    * Converte um vector para uma string contendo todos os seus valores
@@ -78,5 +80,6 @@ public:
   virtual void insert(sqlite::connection *con) = 0;
 };
 
+} // endof namespace db
 
 #endif

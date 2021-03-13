@@ -1,7 +1,7 @@
 #include "mcp_database.hpp"
 
-MCPTable::MCPTable(CLI *cli)
-: TableController("maxclique_executions"), solution_size(0), total_cost(0),
+MCPModel::MCPModel(CLI *cli)
+: db::BaseModel("maxclique_executions"), solution_size(0), total_cost(0),
   solution(std::string())
 {
   this->population_size = cli->pop_size;
@@ -16,9 +16,9 @@ MCPTable::MCPTable(CLI *cli)
   this->solution = std::string();
 }
 
-MCPTable::~MCPTable() = default;
+MCPModel::~MCPModel() = default;
 
-void MCPTable::create(sqlite::connection *con) {
+void MCPModel::create(sqlite::connection *con) {
   std::string query;
   query = "CREATE TABLE IF NOT EXISTS ";
   query += this->table_name;
@@ -40,7 +40,7 @@ void MCPTable::create(sqlite::connection *con) {
   sqlite::execute(*con, query, true);
 }
 
-void MCPTable::insert(sqlite::connection *con) {
+void MCPModel::insert(sqlite::connection *con) {
   std::string sql;
   sql = "INSERT INTO " + std::string(this->table_name) + " (";
   sql += "population_size, num_generations, crossover, crossover_name, ";

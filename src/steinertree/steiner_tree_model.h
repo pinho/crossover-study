@@ -1,20 +1,20 @@
-#ifndef STEINER_TREE_TABLE_H_
-#define STEINER_TREE_TABLE_H_
+#ifndef STEINER_TREE_MODEL_H_
+#define STEINER_TREE_MODEL_H_
 
-#include <core/db/table_controller.hpp>
+#include <core/db/base_model.hpp>
 #include <core/ga/crossover_fabric.h>
 #include <core/utils/trim_filename.h>
 #include <core/cli/options.h>
 
-class SteinerTreeTable : public TableController {
+class SteinerTreeModel : public db::BaseModel {
 public:
   int num_steiner_nodes;
   std::string steiner_nodes;
   float total_costs;
 
-  SteinerTreeTable();
-  SteinerTreeTable(CLI*);
-  ~SteinerTreeTable() = default;
+  SteinerTreeModel();
+  SteinerTreeModel(CLI*);
+  ~SteinerTreeModel() = default;
 
   /**
    * @brief define os valores relacionados à solução obtida (numéro de vértices

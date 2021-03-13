@@ -2,7 +2,9 @@
 #define _CORE_DB_DATABASE_HPP
 
 #include <sqlite/connection.hpp>
-#include "table_controller.hpp"
+#include "base_model.hpp"
+
+namespace db {
 
 /**
  * @class Database
@@ -23,28 +25,30 @@ public:
 
   /**
    * @brief Define o ponteiro para a tabela a ser usada pela instância do BD */
-  void set_controller(TableController *table_ptr) {
-    this->tbCtrl = table_ptr;
+  void set_model(BaseModel *table_ptr) {
+    this->tbModel = table_ptr;
   }
 
   /**
    * @brief Criar tabela. Usa a instância de table_controller
    * definida para inserir os dados na tabela */
   void create_table() {
-    this->tbCtrl->create(&this->db_conn);
+    this->tbModel->create(&this->db_conn);
   }
 
   /**
-   * @brief Insere os dados definidos na instância de TableController */
-  void insert_data() {
+   * @brief Insere os dados definidos na instância de BaseModel */
+  void exec_insertion() {
     this->create_table();
-    this->tbCtrl->insert(&this->db_conn);
+    this->tbModel->insert(&this->db_conn);
   }
 
 private:
   const char *db_filename;
   sqlite::connection db_conn;
-  TableController *tbCtrl;
+  BaseModel *tbModel;
 };
+
+} // end of namespace db
 
 #endif

@@ -13,4 +13,7 @@ add_executable(${executable_name}
   genetic_algorithm_scp.cpp
 )
 
+target_include_directories(${executable_name} PRIVATE ../../include)
+target_link_libraries(${executable_name} PRIVATE GA CLI utils vsqlitepp)
+
 install(TARGETS ${executable_name} DESTINATION ${CMAKE_INSTALL_BINARYDIR})

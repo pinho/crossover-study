@@ -8,15 +8,8 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG")
 include(GNUInstallDirs)
 string(TOLOWER ${PROJECT_NAME} project_lower_name)
 
-# Usando o ParadisEO como submódulo e compilando localmente
-# set(EO_ONLY "ON")
-# add_subdirectory(include/paradiseo)
-
 # Bibliotecas construídas localmente
 add_subdirectory(include/core)
-
-add_executable(run src/run.cxx)
-install(TARGETS run DESTINATION ${CMAKE_INSTALL_BINARYDIR})
 
 # O diretório "src" possui subprojetos, um para cada problema de
 # otimização abordado no estudo

@@ -18,7 +18,7 @@ using namespace std::chrono;
 #include <core/utils/logger.h>
 
 #include "set_covering_problem.h"
-#include "scp_table.h"
+#include "scp_model.h"
 #include "decoder.h"
 
 #define green(msg) "\e[1;32m" + std::string(msg) + "\e[0m"
@@ -101,17 +101,17 @@ int exec(CLI *args) {
     std::vector<unsigned int> cols = Decoder::solution(best);
     milliseconds duration = duration_cast<milliseconds>(duration);
     // Organização dos dados da tabela para inserção
-    SCPTable table(args);
+    SCPModel table(args);
     table.set_convergence(convergence);
     table.num_columns = qty_columns;
     table.instance_file = instance_filename;
     table.total_costs = best_cost;
     table.duration_in_ms = duration.count();
-    table.columns = TableController::sequence_to_string(cols);
+    table.columns = SCPModel::sequence_to_string(cols);
 
-    Database db(args->databasefile);
-    db.set_controller(&table);
-    db.insert_data();
+    db::Database db(args->databasefile);
+    db.set_model(&table);
+    db.exec_insertion();
 
     std::cout << "dados salvos em " << args->databasefile << std::endl;
   }

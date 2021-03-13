@@ -10,4 +10,7 @@ add_executable(steinertree
   steiner_tree_table.cpp
   minimum_spanning_tree.cpp)
 
+target_include_directories(steinertree PRIVATE ../../include)
+target_link_libraries(steinertree PRIVATE GA CLI utils vsqlitepp)
+
 install(TARGETS steinertree DESTINATION ${CMAKE_INSTALL_BINARYDIR})

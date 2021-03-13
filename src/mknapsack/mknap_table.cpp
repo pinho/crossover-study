@@ -1,8 +1,8 @@
-#include "mknap_table.h"
+#include "mknap_model.h"
 
-MKnapTable::MKnapTable() : TableController("mknap_executions") {}
+MknapModel::MknapModel() : db::BaseModel("mknap_executions") {}
 
-MKnapTable::MKnapTable(CLI *cli) : TableController("mknap_executions") {
+MknapModel::MknapModel(CLI *cli) : db::BaseModel("mknap_executions") {
   this->crossover_id = cli->crossover_id;
   this->crossover_rate = cli->crossover_rate;
   this->crossover_name = CrossoverFabric::name(this->crossover_id);
@@ -11,7 +11,7 @@ MKnapTable::MKnapTable(CLI *cli) : TableController("mknap_executions") {
   this->population_size = cli->pop_size;
 }
 
-void MKnapTable::create(sqlite::connection *con) {
+void MknapModel::create(sqlite::connection *con) {
   std::string query;
   query = "CREATE TABLE IF NOT EXISTS "+ std::string(this->table_name) + " (";
   query += "id INTEGER PRIMARY KEY AUTOINCREMENT, "; 
@@ -36,7 +36,7 @@ void MKnapTable::create(sqlite::connection *con) {
   sqlite::execute(*con, query, true);
 }
 
-void MKnapTable::insert(sqlite::connection *con) {
+void MknapModel::insert(sqlite::connection *con) {
   std::string sql;
   sql = "INSERT INTO " + std::string(this->table_name) + " (";
   sql += "population_size, num_generations, crossover, crossover_name, ";
