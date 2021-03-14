@@ -5,24 +5,15 @@
 FROM ronalddpinho/cpp-build-base AS build
 
 RUN apt-get update -y
-RUN apt-get install -y libvsqlitepp-dev libboost-dev
+RUN apt-get install -y unzip libvsqlitepp-dev libboost-dev
 
 WORKDIR /usr/src
 
 # Copiar os arquivos do projeto para o contêiner
 COPY . .
 
-# Executar o script para instalar dependências a partir do github
-# RUN bash scripts/instd.sh
-
-# Instalar e contruir dependências externas (ParadisEO)
-RUN mkdir -p build/paradiseo
-RUN cmake -B build/paradiseo \
-    -DEO_ONLY=ON \
-    -DCMAKE_INSTALL_PREFIX=. \
-    include/paradiseo-master
-    
-RUN make -C build/paradiseo install
+# Dependencias externas: Instalar o ParadisEO
+RUN bash install-paradiseo.sh
 
 # Compilação do projeto completo
 RUN cmake -B build .
@@ -40,8 +31,8 @@ RUN apt-get install -y libvsqlitepp-dev
 # Copia somente os executáveis gerados na imagem de build
 COPY --from=build /usr/local/bin/run /usr/bin
 COPY --from=build /usr/local/bin/maxclique /usr/bin
-COPY --from=build /usr/local/bin/multiknap /usr/bin
-COPY --from=build /usr/local/bin/steintree /usr/bin
+COPY --from=build /usr/local/bin/mknapsack /usr/bin
+COPY --from=build /usr/local/bin/steinertree /usr/bin
 COPY --from=build /usr/local/bin/setcovering /usr/bin
 
 # Coiando arquivos de instância para a imagem em /data/in e definindo o

@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 
 # procurando pelas bibliotecas do ParadisEO
-find_library(PEO NAMES eo libeo HINTS ../../lib64)
-find_library(PEOUTILS NAMES eoutils libeoutils HINTS ../../lib64)
+find_library(PEO 
+  NAMES eo libeo 
+  HINTS /usr/local/lib64 /usr/local/lib /usr/lib)
+
+find_library(PEOUTILS 
+  NAMES eoutils libeoutils 
+  HINTS /usr/local/lib64 /usr/local/lib /usr/lib)
 
 if(NOT PEO OR NOT PEOUTILS)
   message(FATAL_ERROR "ParadisEO libraries not found")
