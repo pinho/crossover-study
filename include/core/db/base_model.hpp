@@ -12,7 +12,7 @@
 namespace db {
 
 /**
- * @struct table_controller organiza os dados que devem ser armazenados em uma
+ * @struct BaseModel organiza os dados que devem ser armazenados em uma
  * tabela para uma execução.
  */
 class BaseModel {

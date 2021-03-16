@@ -16,6 +16,7 @@ struct CLI {
     unsigned int tour_size;
     char *databasefile;
     bool using_db;
+    bool verbose;
 
     explicit CLI()
     {
@@ -28,6 +29,7 @@ struct CLI {
         this->tour_size = 8;
         this->databasefile = (char *) "";
         this->using_db = false;
+        this->verbose = false;
     }
 
     explicit CLI(char* f, unsigned int p, unsigned int g, unsigned int c, double cr, double mr)

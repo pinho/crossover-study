@@ -10,13 +10,14 @@ option long_options[] = {
   { "xrate",     required_argument, 0, 'c' },
   { "mrate",     required_argument, 0, 'm' },
   { "ring",      required_argument, 0, 'r' },
+  { "verbose",   no_argument, 0, 'v' },
   { "help",      no_argument, 0, 'h' },
   { 0, 0, 0, 0 }
 };
 
-const char *short_options = "f:d:p:g:x:c:m:r:h";
+const char *short_options = "f:d:p:g:x:c:m:r:vh";
 
-const unsigned int NUM_OPTIONS = 9;
+const unsigned int NUM_OPTIONS = 10;
 
 const char *DESC[NUM_OPTIONS] = {
     "Arquivo de instância do problema",
@@ -27,13 +28,14 @@ const char *DESC[NUM_OPTIONS] = {
     "Taxa de cruzamento (%) [default = 0.8]",
     "Taxa de mutação (%) [default = 0.05]",
     "Tamanho do Ring do operador de seleção por torneio determinístico [default = 8]",
+    "Ativa os log no console",
     "Mostra essa lista de opções"
 };
 
 void show_help(char **argv) {
   printf("Use: %s -f [input-file] [ARGS] ...\n", argv[0]);
   
-  printf("ARGS:\n");
+  printf("\nARGS:\n\n");
   for (unsigned int i = 0; i < NUM_OPTIONS; i++) {
     if (long_options[i].name) {
       if (long_options[i].val) {
@@ -76,6 +78,9 @@ CLI *parse(int argc, char **argv) {
         break;
       case 'r':
         if (optarg) res->tour_size = std::stoi(optarg);
+        break;
+      case 'v':
+        res->verbose = true;
         break;
       case 'h':
         show_help(argv);
