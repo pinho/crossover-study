@@ -2,15 +2,18 @@
 #define CROSSOVERRESEARCH_PROBLEM_H
 
 #include <fstream>
+#include <paradiseo/eo/eoEvalFunc.h>
 #include "encoding.h"
 
 /**
- * Problem class
+ * classe Problem
  * 
- * Defines attributes and characteristics of an optimization problem. Is an
- * virtual/abstract class, is a template class for concrete problems that should
- * inherit from it.
+ * Define atributos a caracteristicas de um problema de otimizacao. E' uma
+ * classe que possui metodos virtuais a serem implementados em classes filhas
+ * (uma classe template para problemas concretos). Herda de eoEvalFunc que
+ * fornece mecanismo de execucao da funcao objetivo atraves do metodo operator()
  */
+//template <typename F> // tipo do valor de fitness
 class Problem {
 public:
 	// Type of the fitness of a chromosome
@@ -20,7 +23,7 @@ public:
 
 	/**
 	 * Getter to private attribute chromSize */
-	uint get_chromsize();
+	size_t get_chromsize();
 
 	/**
 	 * Getter to member name */
@@ -34,7 +37,7 @@ public:
 	 * Check if is a minimization problem */
 	bool is_minimization();
 
-	/**
+  /*
 	 * Evaluator of chromosomes.
 	 * This method apply the objective function with a chromosome computing
 	 * the fitness and set the resultant fitness value to the chromosome. */
@@ -43,6 +46,14 @@ public:
 	/**
 	 * Apply evaluation to each chromosome in a population */
 	void eval(eoPop<Chrom> &pop);
+
+  /**
+   * Returns a reference to EvalFunc object */
+  eoEvalFunc<Chrom>& get_eval_function();
+
+	/**
+   * Definition of the objective function */
+  virtual Fitness operator()(Chrom &chromosome) = 0;
 
 	/**
 	 * Show information of the problem instance in a ostream 
@@ -62,10 +73,11 @@ public:
 	virtual Fitness objective_function(Chrom &chromosome) = 0;
 
 protected:
-	uint __chromSize; // size of the chromosomes in this problem instance
+	size_t __chromSize; // size of the chromosomes in this problem instance
 	char *__infilename; // name of input file of this instance
 	char *__name, *__acronym; // name and sigle of the problem
 	bool __minimize;
+  eoEvalFunc<Chrom> __evalFunction; // Função objetivo
 };
 
 #endif //CROSSOVERRESEARCH_PROBLEM_H

@@ -1,18 +1,18 @@
 #include "problem.h"
 
-uint Problem::get_chromsize() {
+size_t Problem::get_chromsize() {
     return __chromSize;
 }
 
 void Problem::eval(Chrom& chromosome) {
     if (chromosome.invalid())
-        chromosome.fitness( this->objective_function(chromosome) );
+        chromosome.fitness( this->__evalFunction(chromosome) );
 }
 
 void Problem::eval(eoPop<Chrom>& pop) {
     for (uint i=0; i < pop.size(); i++) {
         this->eval(pop[i]);
-#ifndef NDEBUG
+#ifndef DEBUG
     }
 #else
         std::cout << "\r" << i+1 << " de " << pop.size()
@@ -20,6 +20,10 @@ void Problem::eval(eoPop<Chrom>& pop) {
     }
     std::cout << std::endl;
 #endif
+}
+
+eoEvalFunc<Chrom>& Problem::get_eval_function() {
+  return this->__evalFunction;
 }
 
 const char *Problem::name() {

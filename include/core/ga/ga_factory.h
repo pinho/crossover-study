@@ -8,6 +8,7 @@
 #include <paradiseo/eo/eoDetTournamentSelect.h>
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoTimeContinue.h>
+#include <paradiseo/eo/eoEvalContinue.h>
 #include "encoding.h"
 #include "genetic_algorithm.h"
 #include "crossover_fabric.h"
@@ -88,6 +89,31 @@ private:
   eoQuadOp<Chrom> *crossoverPtr;
   eoBitMutation<Chrom> mutationOp;
   eoTimeContinue<Chrom> *stopCriteria;
+};
+
+/**
+ * Cria um Algoritmo Genetico com criterio de parada baseado no numero de
+ * avaliacoes feitas com a funcao objetivo.
+ */
+class EvaluationsGAFactory : public GAFactory {
+public:
+  explicit EvaluationsGAFactory(Problem &problem_) : problem(problem_) {}
+
+  ~EvaluationsGAFactory() = default;
+
+  GeneticAlgorithm make_ga(uint8_t tourRingSize, uint32_t stop,
+      uint8_t crossoverId, float crossRate, float mutRate)
+  {
+    // TODO: Need change implementation of Problem to inherit from eoEvalFunc
+    throw std::logic_error("Non-Implemented Method: EvaluationsGAFactory::make_ga");
+  }
+
+private:
+  Problem &problem;
+  eoDetTournamentSelect<Chrom> select;
+  eoQuadOp<Chrom> *crossoverPtr;
+  eoBitMutation<Chrom> mutationOp;
+  eoEvalContinue<Chrom> *stopCriteria;
 };
 
 #endif
