@@ -19,7 +19,9 @@ public:
 	// Type of the fitness of a chromosome
 	using Fitness = typename Chrom::Fitness;
 
-	~Problem() {}
+	~Problem() {
+    delete __evalFunction;
+  }
 
 	/**
 	 * Getter to private attribute chromSize */
@@ -77,7 +79,7 @@ protected:
 	char *__infilename; // name of input file of this instance
 	char *__name, *__acronym; // name and sigle of the problem
 	bool __minimize;
-  eoEvalFunc<Chrom> __evalFunction; // Função objetivo
+  eoEvalFunc<Chrom> *__evalFunction; // Ponteiro para um objeto de função obj.
 };
 
 #endif //CROSSOVERRESEARCH_PROBLEM_H
