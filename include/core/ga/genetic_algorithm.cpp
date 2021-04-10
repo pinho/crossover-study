@@ -3,19 +3,22 @@
 //
 
 #include "genetic_algorithm.h"
+//#include <iostream>
 
 std::vector<Chrom> &GeneticAlgorithm::get_convergence() {
-  return this->convergence_;
+  return this->convergence;
 }
+
 
 void GeneticAlgorithm::operator()(eoPop<Chrom>& population)
 {
 	eoPop<Chrom> nextGen;
 	Chrom _elite;
+  std::cout << "Stopper: " << this->stopCriteria.className() << std::endl;
 
 	// Clear convergence array
-  if (!this->convergence_.empty()) {
-    this->convergence_.clear();
+  if (!this->convergence.empty()) {
+    this->convergence.clear();
   }
 
 	// Main loop
@@ -24,6 +27,7 @@ void GeneticAlgorithm::operator()(eoPop<Chrom>& population)
 		_elite = population.best_element();
 		// Select for next population
 		select(population, nextGen);
+
 		// Recombination step (crossover)
 		for (size_t i=0; i < (population.size()/2); i++) {
 			if (rng.flip(crossoverRate)) {
@@ -32,6 +36,7 @@ void GeneticAlgorithm::operator()(eoPop<Chrom>& population)
 				}
 			}
 		}
+
 		// Mutation process step
 		for (size_t i=0; i < nextGen.size(); i++) {
 			if (rng.flip(mutationRate)) {
@@ -39,16 +44,21 @@ void GeneticAlgorithm::operator()(eoPop<Chrom>& population)
 					nextGen[i].invalidate();
 			}
 		}
+
 		// Evaluate the new generation
 		population.swap(nextGen);
-		problem.eval(population);
+    for (Chrom &individual : population) {
+      problem(individual);
+    }
 
 		// Recovers the elite
 		auto _worseIt = population.it_worse_element();
 		*_worseIt = _elite;
+    // std::cout << population.best_element().fitness() << std::endl;
 
 		// Save to convergence
-		this->convergence_.push_back( population.best_element() );
-	} while (stopCriteria(population));
+		this->convergence.push_back( population.best_element() );
+	}
+  while (stopCriteria(population));
 	nextGen.clear();
 }

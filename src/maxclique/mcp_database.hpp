@@ -23,9 +23,9 @@ public:
 
   ~MCPModel();
 
-  void create(sqlite::connection *con);
+  void create(sqlite::connection *con) override;
 
-  void insert(sqlite::connection *con);
+  void insert(sqlite::connection *con) override;
 };
 
 #endif

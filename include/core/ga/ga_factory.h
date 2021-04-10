@@ -34,7 +34,7 @@ public:
 };
 
 /**
- * Cria um Algoritmo Genetico com o numero de geracoes como criterio de parada */
+ * Cria um Algoritmo Genetico com o numero de geracoes como criterio de parada*/
 class GenerationsGAFactory : public GAFactory {
 public:
   explicit GenerationsGAFactory(Problem &problem_) : problem(problem_) {}
@@ -61,6 +61,8 @@ private:
   eoBitMutation<Chrom> mutationOp;
   eoGenContinue<Chrom> *stopCriteria;
 };
+
+
 
 /**
  * Cria um Algoritmo Genetico com um tempo como criterio de parada */
@@ -93,9 +95,11 @@ private:
   eoTimeContinue<Chrom> *stopCriteria;
 };
 
+
+
 /**
- * Cria um Algoritmo Genetico com criterio de parada baseado no numero de
- * avaliacoes feitas com a funcao objetivo.
+ * Cria um Algoritmo Genético com critério de parada baseado no número de
+ * avaliações feitas com a função objetivo.
  */
 class EvaluationsGAFactory : public GAFactory {
 public:
@@ -108,7 +112,6 @@ public:
       uint8_t crossoverId, float crossRate, float mutRate)
   {
     // TODO: Need change implementation of Problem to inherit from eoEvalFunc
-    
     // eoEvalFunc<Chrom> *problemEvalFunc = (eoEvalFunc<Chrom> *)&this->problem;
     // this->evalFuncCounter = eoEvalFuncCounter(*problemEvalFunc);
     this->stopCriteria = new eoEvalContinue<Chrom>(this->evalFuncCounter, stop);
@@ -117,9 +120,13 @@ public:
     mutationOp = eoBitMutation<Chrom>(mutRate);
     crossoverPtr = CrossoverFabric::create(crossoverId);
 
-    GeneticAlgorithm ga(problem,
+    GeneticAlgorithm ga(evalFuncCounter,
         select, *crossoverPtr, crossRate, mutationOp, 1.0F, *stopCriteria);
     return ga;
+  }
+
+  eoEvalFuncCounter<Chrom>& get_evalfunccounter() {
+    return this->evalFuncCounter;
   }
 
 private:

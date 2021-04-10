@@ -15,7 +15,7 @@ public:
 
 	// Default constructor
 	explicit GeneticAlgorithm(
-			Problem &problem_,
+			eoEvalFunc<Chrom>& problem_,
 			eoSelectOne<Chrom> &selectOp_,
 			eoQuadOp<Chrom> &crossoverOp_,
 			const float crossoverRate_,
@@ -44,14 +44,14 @@ public:
 	virtual void operator()(eoPop<Chrom>& population);
 
 protected:
-	Problem& problem;
+	eoEvalFunc<Chrom>& problem;
 	eoSelectPerc<Chrom> select;
 	eoInvalidateQuadOp<Chrom> cross;
 	eoInvalidateMonOp<Chrom> mutate;
 	eoContinue<Chrom>& stopCriteria;
 	float crossoverRate;
 	float mutationRate;
-  std::vector<Chrom> convergence_;
+  std::vector<Chrom> convergence;
 };
 
 #endif //CROSSOVERRESEARCH_GENETIC_ALGORITHM_H

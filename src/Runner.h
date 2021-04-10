@@ -1,6 +1,8 @@
 #ifndef RUNNER_H_
 #define RUNNER_H_
 
+#define DEBUG 1
+
 #include <string>
 #include <sstream>
 #include <exception>
@@ -78,7 +80,7 @@ public:
     auto population = this->problemInstance->init_pop(cliArguments->pop_size, 0.25);
     this->problemInstance->eval(population);
 
-    this->gaFactory = new TimeGAFactory(*this->problemInstance);
+    this->gaFactory = new EvaluationsGAFactory(*this->problemInstance);
 
     GeneticAlgorithm ga = this->gaFactory->make_ga(cliArguments->tour_size,
         cliArguments->stop_criteria, cliArguments->crossover_id,
