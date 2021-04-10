@@ -5,7 +5,7 @@ option long_options[] = {
   { "infile",    required_argument, 0, 'f' },
   { "db",        required_argument, 0, 'd' },
   { "popsize",   required_argument, 0, 'p' },
-  { "epochs",    required_argument, 0, 'g' },
+  { "stop",      required_argument, 0, 's' },
   { "crossover", required_argument, 0, 'x' },
   { "xrate",     required_argument, 0, 'c' },
   { "mrate",     required_argument, 0, 'm' },
@@ -15,7 +15,7 @@ option long_options[] = {
   { 0, 0, 0, 0 }
 };
 
-const char *short_options = "f:d:p:g:x:c:m:r:vh";
+const char *short_options = "f:d:p:s:x:c:m:r:vh";
 
 const unsigned int NUM_OPTIONS = 10;
 
@@ -23,7 +23,7 @@ const char *DESC[NUM_OPTIONS] = {
     "Arquivo de instância do problema",
     "Arquivo .db para salvar os dados. Se não definido não salva",
     "Tamanho da população [default = 100]",
-    "Número de épocas/gerações [default = 100]",
+    "Critério de parada [default = 100]",
     "Operador de crossover utilizado com um ID [default = 0]",
     "Taxa de cruzamento (%) [default = 0.8]",
     "Taxa de mutação (%) [default = 0.05]",
@@ -64,8 +64,8 @@ CLI *parse(int argc, char **argv) {
       case 'p':
         if (optarg) res->pop_size = std::stoi(optarg);
         break;
-      case 'g':
-        if (optarg) res->epochs = std::stoi(optarg);
+      case 's':
+        if (optarg) res->stop_criteria = std::stoi(optarg);
         break;
       case 'c':
         if (optarg) res->crossover_rate = std::stod(optarg);
@@ -94,35 +94,3 @@ CLI *parse(int argc, char **argv) {
   return res;
 }
 
-
-std::string identify(CLI& cli) {
-  std::string ID;
-
-  if (cli.crossover_rate > 1 || cli.crossover_rate < 0) {
-    cli.crossover_rate = 1;
-  }
-
-  if (cli.mutation_rate > 1 || cli.mutation_rate < 0) {
-    cli.mutation_rate = 0.05;
-  }
-
-  ID = cli.crossover_id == 0? "UNIFORM" : std::to_string(cli.crossover_id).append("POINTS");
-  // P(popsize)
-  ID.append("P").append(std::to_string(cli.pop_size));
-  // G(epochs)
-  ID.append("G").append(std::to_string(cli.epochs));
-  // CR(crossover_rate)
-  ID.append("CR");
-  auto cr = std::to_string(cli.crossover_rate);
-  cr.erase(cr.begin()+1);
-  cr.erase(cr.begin()+3, cr.end());
-  ID.append(cr);
-  // MR(mutation_rate)
-  ID.append("MR");
-  auto mr = std::to_string(cli.mutation_rate);
-  mr.erase(mr.begin()+1);
-  mr.erase(mr.begin()+3, mr.end());
-  ID.append(mr);
-  
-  return ID;
-}

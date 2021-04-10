@@ -9,7 +9,7 @@
 struct CLI {
     char *infile;
     unsigned int pop_size;
-    unsigned int epochs;
+    unsigned int stop_criteria;
     unsigned int crossover_id;
     double crossover_rate;
     double mutation_rate;
@@ -22,7 +22,7 @@ struct CLI {
     {
         this->infile = (char *) "";
         this->pop_size = 100;
-        this->epochs = 50;
+        this->stop_criteria = 50;
         this->crossover_id = 0;
         this->crossover_rate = 0.8;
         this->mutation_rate = 0.05;
@@ -36,7 +36,7 @@ struct CLI {
     {
         this->infile = f;
         this->pop_size = p;
-        this->epochs = g;
+        this->stop_criteria = g;
         this->crossover_id = c;
         this->crossover_rate = cr;
         this->mutation_rate = mr;
@@ -45,7 +45,7 @@ struct CLI {
     friend std::ostream& operator << (std::ostream& os, CLI& cli) {
         std::string cross_name = cli.crossover_id == 0? "Uniforme" : std::to_string(cli.crossover_id).append("-Pontos");
         os << "População  : " << cli.pop_size << "\n";
-        os << "N. Gerações: " << cli.epochs << "\n";
+        os << "N. Gerações: " << cli.stop_criteria << "\n";
         os << "Crossover  : " << cross_name << "\n";
         os << "Tx de cruz.: " << cli.crossover_rate*100 << "%\n";
         os << "Tx de muta.: " << cli.mutation_rate*100 << "%\n";

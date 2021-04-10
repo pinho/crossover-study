@@ -12,7 +12,7 @@ SteinerTreeModel::SteinerTreeModel(CLI *cli)
   this->crossover_rate = cli->crossover_rate;
   this->crossover_name = CrossoverFabric::name(this->crossover_id);
   this->mutation_rate = cli->mutation_rate;
-  this->num_generations = cli->epochs;
+  this->stop_criteria = cli->stop_criteria;
   this->population_size = cli->pop_size;
 }
 
@@ -26,7 +26,7 @@ void SteinerTreeModel::create(sqlite::connection *con) {
   sql = "CREATE TABLE IF NOT EXISTS "+ std::string(this->table_name) + " (";
   sql += "id INTEGER PRIMARY KEY AUTOINCREMENT, "; 
   sql += "population_size INTEGER, ";
-  sql += "num_generations INTEGER, ";
+  sql += "stop_criteria INTEGER, ";
   sql += "crossover INTEGER, ";
   sql += "crossover_name TEXT, ";
   sql += "crossover_rate REAL, ";
@@ -48,7 +48,7 @@ void SteinerTreeModel::create(sqlite::connection *con) {
 void SteinerTreeModel::insert(sqlite::connection *con) {
   std::string sql;
   sql = "INSERT INTO " + std::string(this->table_name) + " (";
-  sql += "population_size, num_generations, crossover, crossover_name, ";
+  sql += "population_size, stop_criteria, crossover, crossover_name, ";
   sql += "crossover_rate, mutation_rate, instance_file, convergence, ";
   sql += "duration_in_ms, num_steiner_nodes, steiner_nodes, total_costs";
   sql += ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -59,7 +59,7 @@ void SteinerTreeModel::insert(sqlite::connection *con) {
 # endif
 
   sqlite::execute ins(*con, sql);
-  ins % this->population_size   % this->num_generations % this->crossover_id
+  ins % this->population_size   % this->stop_criteria   % this->crossover_id
       % this->crossover_name    % this->crossover_rate  % this->mutation_rate
       % this->instance_file     % this->convergence     % this->duration_in_ms
       % this->num_steiner_nodes % this->steiner_nodes   % this->total_costs;

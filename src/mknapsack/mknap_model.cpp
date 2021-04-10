@@ -7,7 +7,7 @@ MknapModel::MknapModel(CLI *cli) : db::BaseModel("mknap_executions") {
   this->crossover_rate = cli->crossover_rate;
   this->crossover_name = CrossoverFabric::name(this->crossover_id);
   this->mutation_rate = cli->mutation_rate;
-  this->num_generations = cli->epochs;
+  this->stop_criteria = cli->stop_criteria;
   this->population_size = cli->pop_size;
 }
 
@@ -16,7 +16,7 @@ void MknapModel::create(sqlite::connection *con) {
   query = "CREATE TABLE IF NOT EXISTS "+ std::string(this->table_name) + " (";
   query += "id INTEGER PRIMARY KEY AUTOINCREMENT, "; 
   query += "population_size INTEGER, ";
-  query += "num_generations INTEGER, ";
+  query += "stop_criteria INTEGER, ";
   query += "crossover INTEGER, ";
   query += "crossover_name TEXT, ";
   query += "crossover_rate REAL, ";
@@ -39,7 +39,7 @@ void MknapModel::create(sqlite::connection *con) {
 void MknapModel::insert(sqlite::connection *con) {
   std::string sql;
   sql = "INSERT INTO " + std::string(this->table_name) + " (";
-  sql += "population_size, num_generations, crossover, crossover_name, ";
+  sql += "population_size, stop_criteria, crossover, crossover_name, ";
   sql += "crossover_rate, mutation_rate, instance_file, convergence, ";
   sql += "duration_in_ms, num_items, solution, total_costs";
   sql += ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -50,7 +50,7 @@ void MknapModel::insert(sqlite::connection *con) {
 # endif
 
   sqlite::execute ins(*con, sql);
-  ins % this->population_size % this->num_generations % this->crossover_id
+  ins % this->population_size % this->stop_criteria   % this->crossover_id
       % this->crossover_name  % this->crossover_rate  % this->mutation_rate
       % this->instance_file   % this->convergence     % this->duration_in_ms
       % this->num_items       % this->solution        % this->total_costs;

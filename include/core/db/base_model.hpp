@@ -21,7 +21,7 @@ public:
 
   // OBS: unsigned int não funciona diretamente com o operator% de sqlite::execute
   int population_size;        // Tamanho da população de indivíduos
-  int num_generations;        // Número de gerações
+  int stop_criteria;          // Número de gerações
   int crossover_id;           // ID do operador de crossover
   double crossover_rate;      // Taxa de cruzamento
   double mutation_rate;       // Taxa de mutação
@@ -31,7 +31,7 @@ public:
   std::string instance_file;  // Nome do arquivo de instancia usado
 
   BaseModel(const char *t_tablename)
-  : table_name(t_tablename), population_size(0), num_generations(0),
+  : table_name(t_tablename), population_size(0), stop_criteria(0),
     crossover_id(0), crossover_rate(0.0), mutation_rate(0.0),
     duration_in_ms(0.0), crossover_name(std::string()),
     convergence(std::string()) {}

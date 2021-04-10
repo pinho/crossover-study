@@ -5,7 +5,7 @@ MCPModel::MCPModel(CLI *cli)
   solution(std::string())
 {
   this->population_size = cli->pop_size;
-  this->num_generations = cli->epochs;
+  this->stop_criteria = cli->stop_criteria;
   this->mutation_rate = cli->mutation_rate;
   this->crossover_rate = cli->crossover_rate;
   this->crossover_id = cli->crossover_id;
@@ -49,7 +49,7 @@ void MCPModel::insert(sqlite::connection *con) {
   sql += ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
   sqlite::execute ins(*con, sql);
-  ins % this->population_size % this->num_generations % this->crossover_id
+  ins % this->population_size % this->stop_criteria   % this->crossover_id
       % this->crossover_name  % this->crossover_rate  % this->mutation_rate
       % this->instance_file   % this->convergence     % this->duration_in_ms 
       % this->solution_size   % this->solution        % this->total_cost;

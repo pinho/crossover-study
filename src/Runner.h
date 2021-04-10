@@ -81,7 +81,7 @@ public:
     this->gaFactory = new TimeGAFactory(*this->problemInstance);
 
     GeneticAlgorithm ga = this->gaFactory->make_ga(cliArguments->tour_size,
-        cliArguments->epochs, cliArguments->crossover_id,
+        cliArguments->stop_criteria, cliArguments->crossover_id,
         cliArguments->crossover_rate, cliArguments->mutation_rate);
 
     // Executar o AG
