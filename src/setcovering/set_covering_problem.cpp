@@ -1,15 +1,13 @@
 #include "set_covering_problem.h"
 
 SetCoveringProblem::SetCoveringProblem(const char *filename) {
-  this->__acronym = (char *) "SCP";
-  this->__name    = (char *) "Set Covering Problem";
-  this->__infilename = (char *) filename;
-  this->__minimize = true;
+  this->instanceFilename = std::string(filename);
+  this->minimization = true;
 
   std::ifstream file(filename);
   if (file.is_open()) {
     this->coverage_matrix = new matrix(file);
-    this->__chromSize = this->coverage_matrix->num_columns;
+    this->chromSize = this->coverage_matrix->num_columns;
     this->num_subsets = this->coverage_matrix->num_columns;
     this->num_elements = this->coverage_matrix->num_rows;
     this->weights = this->coverage_matrix->get_weights_pointer();
@@ -35,7 +33,7 @@ SetCoveringProblem::SetCoveringProblem(const char *filename) {
   } else {
     std::cerr << "Use a opção -f" << std::endl;
     throw std::runtime_error(
-      "Não foi possível abrir o arquivo no caminho: "+ std::string(filename)
+      "Não foi possível abrir o arquivo no caminho: " + this->instanceFilename
     );
   }
 }
@@ -56,22 +54,6 @@ float* SetCoveringProblem::get_weights() {
   return this->coverage_matrix->get_weights_pointer();
 }
 
-void SetCoveringProblem::display_info(std::ostream& os) {
-  os << this->__name << " (" << this->__acronym << ")\n";
-  os << "Número de elementos no conjunto universo: " << this->num_elements << "\n";
-  os << "Número de subconjuntos: " << this->num_subsets;
-  os << std::endl;
-}
-
-/**
- * Versão 1 do método de inicialização de população:
- * Todos os cromossomos da população são inicializados com a mesma taxa de
- * alelos "1", definida pelo param "bias" */
-// eoPop<Chrom>
-// SetCoveringProblem::init_pop(unsigned int length, double bias) {
-//   return Random<Chrom>::population(__chromSize, length, bias);
-// }
-
 /**
  * Versão 2 do método de inicialização de população:
  * A população é inicializada com diferentes probabilidades de geração de
@@ -86,14 +68,16 @@ SetCoveringProblem::init_pop(unsigned int length, double bias) {
   }
 
   eoPop<Chrom> aux_pop;
+  Chrom generated;
+  eoBooleanGenerator bitRng(Random<Chrom>::uniform(bias, 0.500001));
+  eoInitFixedLength<Chrom> init(this->chromSize, bitRng);
   unsigned int i = 1;
+
   do {
-    Chrom generated;
-    eoBooleanGenerator bitRng(Random<Chrom>::uniform(bias, 0.500001));
-    eoInitFixedLength<Chrom> init(this->__chromSize, bitRng);
     init(generated);
     aux_pop.push_back(generated);
-  } while (i++ < length);
+  }
+  while (i++ < length);
 
   return aux_pop;
 }
@@ -102,7 +86,7 @@ SetCoveringProblem::init_pop(unsigned int length, double bias) {
 std::set<uint> SetCoveringProblem::coverage_set(const Chrom& chrom) {
   // Constrói um set com todas as linhas cobertas pela definição do cromossomo
   std::set<uint> l_rows_covered;
-  for (size_t k=0; k < this->__chromSize; k++) {
+  for (size_t k=0; k < this->chromSize; k++) {
     if (chrom[k]) {
       l_rows_covered.insert(
         this->rows_covered_by[k].begin(),
@@ -147,20 +131,16 @@ void SetCoveringProblem::make_feasible(Chrom& chrom) {
 
 
 // Função objetivo da cobertura de conjuntos
-SetCoveringProblem::Fitness SetCoveringProblem::objective_function(Chrom& chrom)
-{
-  // Verifica se o indiivíduo é viável
+void SetCoveringProblem::operator()(Chrom& chrom) {
   if (!this->atend_constraint(chrom)) {
-    return Fitness(0);
+    chrom.fitness(0);
   }
 
-  // Somar os custos das colunas selecionadas
   float accum = 0;
-  for (size_t i = 0; i < __chromSize; i++) {
+  for (size_t i = 0; i < this->chromSize; i++) {
     if (chrom[i]) {
       accum += this->weights[i];
     }
   }
-
-  return (Fitness) (1/accum);
+  chrom.fitness(1/accum);
 }

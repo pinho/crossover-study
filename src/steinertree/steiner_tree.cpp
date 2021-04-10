@@ -1,10 +1,8 @@
 #include "steiner_tree.h"
 
 SteinerTreeProblem::SteinerTreeProblem(const char* filename) {
-  this->__infilename = (char*) filename;
-  this->__name = (char*) "Steiner Tree Problem";
-  this->__acronym = (char*) "STP";
-  this->__minimize = true;
+  this->instanceFilename = (char*) filename;
+  this->minimization = true;
 
   // Ler o arquivo de texto
   std::ifstream file(filename);
@@ -41,7 +39,7 @@ SteinerTreeProblem::SteinerTreeProblem(const char* filename) {
     this->num_steiner_nodes = file_content_numbers[index];
     std::cout << "num_steiner_nodes = " << this->num_steiner_nodes << "\n";
     this->steiner_nodes_vec_ptr = new std::vector<int>(num_steiner_nodes);
-    this->__chromSize = this->num_steiner_nodes;
+    this->chromSize = this->num_steiner_nodes;
     index += 1;
 
     for (size_t i=0; i < this->steiner_nodes_vec_ptr->size(); i++) {
@@ -58,24 +56,16 @@ SteinerTreeProblem::~SteinerTreeProblem() {
   free(this->edges_vec_ptr);
 }
 
-void SteinerTreeProblem::display_info(std::ostream& os) {
-  os << this->__acronym << " - " << this->__name << std::endl;
-  os << "Vértices terminais : " << this->num_nodes << std::endl;
-  os << "Vértices de Steiner: " << this->num_steiner_nodes << std::endl;
-  os << "Arestas: " << this->num_edges << std::endl;
-}
-
 eoPop<Chrom> SteinerTreeProblem::init_pop(uint len, double bias) {
-  return Random<Chrom>::population(this->__chromSize, len, bias);
+  return Random<Chrom>::population(this->chromSize, len, bias);
 }
 
-SteinerTreeProblem::Fitness
-SteinerTreeProblem::objective_function(Chrom& chromosome) {
+void SteinerTreeProblem::operator()(Chrom& chromosome) {
   std::vector<edge_t> edges(*this->edges_vec_ptr);
   std::vector<float> weights(*this->weights_vec_ptr);
   int num_removed_nodes = 0;
 
-  for (uint i=0; i < __chromSize; i++) {
+  for (uint i=0; i < this->chromSize; i++) {
     if (!chromosome[i]) {
       remove_node(edges, weights, this->steiner_nodes_vec_ptr->at(i));
       num_removed_nodes++;
@@ -84,7 +74,7 @@ SteinerTreeProblem::objective_function(Chrom& chromosome) {
   int V = this->num_nodes - num_removed_nodes;
   auto&& [mst_edges, mst_cost] = KruskalMST(V, num_edges, &edges[0], &weights[0]);
 
-  return Fitness(1 / mst_cost);
+  chromosome.fitness(1 / mst_cost);
 }
 
 void

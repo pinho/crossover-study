@@ -2,6 +2,8 @@
 #include <core/cli/parse.h>
 #include <core/db/database.hpp>
 
+#define DEBUG 1
+
 #include "set_covering_problem.h"
 #include "scp_model.h"
 #include  "../Runner.h"

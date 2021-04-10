@@ -10,6 +10,9 @@ int main(int argc, char **argv) {
   CLI *args = parse(argc, argv);
 
   Runner<MWCProblem, MCPModel> r(args->infile);
+
+  // Executa todo o processo de preparação, evolução,
+  // e organização dos dados de saída
   r(args);
 
   if (args->using_db) {

@@ -1,58 +1,24 @@
 #include "maximum_weighted_clique_problem.h"
 
 MWCProblem::MWCProblem(const char *filepath) {
-  // this->M = matrix::read_from_file(filepath);
   std::ifstream file(filepath);
   this->mat = weighted_matrix::read_file(file);
-  this->__chromSize = mat.get_num_nodes();
-  this->__name = (char *) "Problema do Clique Máximo";
-  this->__acronym = (char *) "MCP";
-  this->__minimize = false;
-  this->__infilename = (char *)filepath;
+  this->chromSize = mat.get_num_nodes();
+  this->minimization = false;
+  this->instanceFilename = (char *)filepath;
 
   // Criar um vector para mapear os graus de cada nó
-  degrees = std::vector<int>(__chromSize);
-  for (size_t i = 0; i < (size_t)__chromSize; i++) {
+  degrees = std::vector<int>(this->chromSize);
+  for (size_t i = 0; i < (size_t)this->chromSize; i++) {
     degrees[i] = std::accumulate( mat[i].begin(), mat[i].end(), 0 );
   }
 }
 
 MWCProblem::~MWCProblem() = default;
 
-void MWCProblem::display_info(std::ostream &os) {
-  os << __name << " (Maximização) " << std::endl;
-  os << this->mat.get_num_nodes() << " vértices" << std::endl;
-  os << this->mat.get_num_edges() << " arestas" << std::endl;
-}
-
 eoPop<Chrom> MWCProblem::init_pop(uint length, double bias) {
-  return Random<Chrom>::population(__chromSize, length, bias);
+  return Random<Chrom>::population(this->chromSize, length, bias);
 }
-
-// void MCProblem::repair_clique(Chrom& chromosome) {
-//   assert(chromosome.size() == this->__chromSize);
-
-//   // cria um novo vector com os vértices que estão na solução
-//   std::vector<std::pair<int, int>> nodes_included;
-//   for (uint i=0; i < __chromSize; i++)
-//     if (chromosome[i]) nodes_included.emplace_back(i, 0);
-
-//   count_adjacency(nodes_included, __graph);
-//   // bool cont = !check_counting(nodes_included);
-
-//   while ( !check_counting(nodes_included) ) {
-//     // Ordenando os elementos [nó; grau]
-//     std::sort(nodes_included.begin(), nodes_included.end(),
-//         [](const auto &a, const auto &b) { return a.second < b.second; }
-//     );
-
-//     // eliminar o menor
-//     chromosome[nodes_included.begin()->first] = 0;
-//     nodes_included.erase( nodes_included.begin() );
-//     // re-contagem
-//     count_adjacency(nodes_included, __graph);
-//   }
-// }
 
 /**
  * Repair Clique procura o vértice incluso na solução que tem o menor grau,
@@ -62,7 +28,7 @@ void MWCProblem::repair_clique(Chrom& chrom) {
     int index;
     int minor = std::numeric_limits<int>::max();
     
-    for (size_t i = 0; i < __chromSize; i++) {
+    for (size_t i = 0; i < this->chromSize; i++) {
       if (chrom[i] and degrees[i] < minor) {
         minor = degrees[i]; index=i;
       }
@@ -105,9 +71,9 @@ void MWCProblem::expand_clique(Chrom& chrom, uint gene_index) {
 }
 
 
-double MWCProblem::objective_function(Chrom &chrom) {
+void MWCProblem::operator()(Chrom &chrom) {
   repair_clique(chrom);
-  random_generator<int> rg(__chromSize);
+  random_generator<int> rg(this->chromSize);
   int r = rg();
   expand_clique(chrom, r);
 
@@ -116,8 +82,8 @@ double MWCProblem::objective_function(Chrom &chrom) {
     for (size_t i=0; i < chrom.size(); i++) {
       sum += chrom[i] * mat.get_weight(i);
     }
-    return sum;
+    chrom.fitness(sum);
   } else {
-    return 0;
+    chrom.fitness(0);
   }
 }

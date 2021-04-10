@@ -13,27 +13,17 @@
  * (uma classe template para problemas concretos). Herda de eoEvalFunc que
  * fornece mecanismo de execucao da funcao objetivo atraves do metodo operator()
  */
-//template <typename F> // tipo do valor de fitness
-class Problem {
+class Problem : public eoEvalFunc<Chrom> {
 public:
 	// Type of the fitness of a chromosome
 	using Fitness = typename Chrom::Fitness;
 
 	~Problem() {
-    delete __evalFunction;
   }
 
 	/**
 	 * Getter to private attribute chromSize */
 	size_t get_chromsize();
-
-	/**
-	 * Getter to member name */
-	const char *name();
-
-	/**
-	 * Getter to member acronym */
-	const char *acronym();
 
 	/**
 	 * Check if is a minimization problem */
@@ -50,17 +40,8 @@ public:
 	void eval(eoPop<Chrom> &pop);
 
   /**
-   * Returns a reference to EvalFunc object */
-  eoEvalFunc<Chrom>& get_eval_function();
-
-	/**
    * Definition of the objective function */
-  virtual Fitness operator()(Chrom &chromosome) = 0;
-
-	/**
-	 * Show information of the problem instance in a ostream 
-	 * std::cout is the default ostream instance */
-	virtual void display_info(std::ostream &os) = 0;
+  void operator()(Chrom& chromosome) = 0;
 
 	/**
 	 * Population initializer
@@ -68,18 +49,11 @@ public:
 	 * problem instance. */
 	virtual eoPop<Chrom> init_pop(uint length, double bias) = 0;
 
-	/**
-	 * Objective Function
-	 * The function that defines the fitness of a chromosome, is the main 
-	 * formulation of an optimization problem */
-	virtual Fitness objective_function(Chrom &chromosome) = 0;
-
 protected:
-	size_t __chromSize; // size of the chromosomes in this problem instance
-	char *__infilename; // name of input file of this instance
-	char *__name, *__acronym; // name and sigle of the problem
-	bool __minimize;
-  eoEvalFunc<Chrom> *__evalFunction; // Ponteiro para um objeto de função obj.
+	size_t chromSize; // size of the chromosomes in this problem instance
+  std::string instanceFilename; // name of input file of this instance
+	bool minimization;
+  // eoEvalFunc<Chrom> *evalFunction; // Ponteiro para um objeto de função obj.
 };
 
 #endif //CROSSOVERRESEARCH_PROBLEM_H

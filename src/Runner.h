@@ -15,26 +15,27 @@
 // Essa classe implementa a lógica de preparação e execução do AG de forma
 // genérica, ou seja, cada problema pode ser executado usando ela desde que
 // sejam definidas todas as classes requisitadas
-template <class ProblemType, class DbModel>
+template <class ConcreteProblem, class DbModel>
 class Runner {
 public:
   explicit Runner(const char *instanceFilename)
-    : problemInstance(instanceFilename) {}
+    : problemInstance( new ConcreteProblem(instanceFilename) ) {}
   
   explicit Runner(std::string instanceFilename)
-    : problemInstance(instanceFilename.c_str()) {}
+    : problemInstance(new ConcreteProblem(instanceFilename.c_str()) ) {}
 
-  explicit Runner(ProblemType &instance) : problemInstance(instance) {}
+  explicit Runner(ConcreteProblem *instance_ptr)
+    : problemInstance(instance_ptr) {}
 
   ~Runner() = default;
 
   void set_problem_instance(Problem &prob) {
-    this->problemInstance = prob;
+    this->problemInstance = &prob;
   }
 
   void set_problem_instance(std::string filename) {
     try {
-      this->problemInstance = ProblemType(filename);
+      this->problemInstance = ConcreteProblem(filename);
     } catch (std::exception &e) {
       std::cerr << "Problem Instance Error: " << e.what() << std::endl;
       throw e;
@@ -74,10 +75,10 @@ public:
     auto filename = *(split(std::string(cliArguments->infile), '/').end()-1);
     this->dbModel = DbModel(cliArguments);
 
-    auto population = this->problemInstance.init_pop(cliArguments->pop_size, 0.25);
-    this->problemInstance.eval(population);
+    auto population = this->problemInstance->init_pop(cliArguments->pop_size, 0.25);
+    this->problemInstance->eval(population);
 
-    this->gaFactory = new TimeGAFactory(this->problemInstance);
+    this->gaFactory = new TimeGAFactory(*this->problemInstance);
 
     GeneticAlgorithm ga = this->gaFactory->make_ga(cliArguments->tour_size,
         cliArguments->epochs, cliArguments->crossover_id,
@@ -90,7 +91,7 @@ public:
     auto durationMS = duration_cast<milliseconds>(end_tpoint - start_tpoint);
 
     Chrom best = population.best_element();
-    double finalcost = this->problemInstance.is_minimization() ?
+    double finalcost = this->problemInstance->is_minimization() ?
         double(1/best.fitness()) : best.fitness();
 
     std::vector<int> solution;
@@ -98,7 +99,6 @@ public:
     for (size_t i = 0; i < best.size(); i++) {
       if (best[i]) solution.push_back(i+1);
     }
-    
 
     // Definicao da saida para o BD
     this->solutionTotalCost = finalcost;
@@ -113,7 +113,7 @@ public:
   }
 
 private:
-  ProblemType problemInstance;
+  ConcreteProblem *problemInstance;
   GAFactory *gaFactory;
   DbModel dbModel;
   size_t solutionSize;

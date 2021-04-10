@@ -16,11 +16,9 @@ public:
   MKnapsackProblem(const char *);
   ~MKnapsackProblem();
 
-  void display_info(std::ostream &os);
-
   eoPop<Chrom> init_pop(uint length, double bias = 0.5);
 
-  Fitness objective_function(Chrom &chromosome);
+  void operator()(Chrom &chromosome);
 
   /**
    * Verifica se um indivíduo/cromossomo quebra alguma das restrições do

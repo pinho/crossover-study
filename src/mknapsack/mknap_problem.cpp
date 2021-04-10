@@ -33,13 +33,9 @@ float sum_by_genes(std::vector<float>::iterator _vecFirst,
  */
 MKnapsackProblem::MKnapsackProblem (const char *filename) {
   using std::vector;
-
-  this->__acronym = (char *) "MKP";
-  this->__name = (char *) "Problema da Mochila Muldimensional";
-  this->__infilename = (char *) filename;
-  this->__minimize = false;
+  this->instanceFilename = (char *) filename;
+  this->minimization = false;
   
-  // scpxx::InstanceFile<float> f(filename);
   std::ifstream f(filename);
   
   if (f.is_open()) {
@@ -55,7 +51,7 @@ MKnapsackProblem::MKnapsackProblem (const char *filename) {
     this->m_num_capacities = (uint) _values[1];
     this->m_optimal = _values[2];
 
-    this->__chromSize = m_num_items;
+    this->chromSize = m_num_items;
 
     // Lendo os itens e seus valores
     m_profits = vector<float>(m_num_items);
@@ -82,7 +78,7 @@ MKnapsackProblem::~MKnapsackProblem() = default;
 
 
 eoPop<Chrom> MKnapsackProblem::init_pop(uint length, double bias) {
-  eoPop<Chrom> _pop = Random<Chrom>::population(__chromSize, length, bias);
+  eoPop<Chrom> _pop = Random<Chrom>::population(this->chromSize, length, bias);
   for (Chrom& chr : _pop) {
     this->repair_solution(chr);
   }
@@ -90,32 +86,16 @@ eoPop<Chrom> MKnapsackProblem::init_pop(uint length, double bias) {
 }
 
 
-void MKnapsackProblem::display_info(std::ostream &os) {
-  os << this->__name << " - " << (__minimize?"Minimização":"Maximização") <<std::endl;
-  os << this->m_num_items << " items\n";
-  os << "Profits: ";
-  print_vec<float>(m_profits, os);
-  os << this->m_num_capacities << " restrições\n";
-  os << "Capacidades: ";
-  print_vec<float>(m_capacities, os);
-}
-
-
-MKnapsackProblem::Fitness MKnapsackProblem::objective_function(Chrom& chromosome_) {
+void MKnapsackProblem::operator()(Chrom& chromosome_) {
   assert(chromosome_.size() == m_num_items);
-  // Check constraint
+  
   if (break_constraint(chromosome_)) {
-    return Fitness(0);
+    chromosome_.fitness(0);
+  } else {
+    auto f = sum_by_genes(m_profits.begin(), m_profits.end(),
+        chromosome_.cbegin(), chromosome_.cend());
+    chromosome_.fitness(f);
   }
-  // Sum r_ij * x_j
-  // Fitness _sum = Fitness(0);
-  // for (uint i=0; i < m_num_items; i++) {
-  //   if (chromosome_[i])
-  //     _sum += m_profits[i];
-  // }
-
-  return sum_by_genes(m_profits.begin(), m_profits.end(),
-      chromosome_.cbegin(), chromosome_.cend());
 }
 
 
