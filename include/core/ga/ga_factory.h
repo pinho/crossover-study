@@ -9,6 +9,8 @@
 #include <paradiseo/eo/eoGenContinue.h>
 #include <paradiseo/eo/eoTimeContinue.h>
 #include <paradiseo/eo/eoEvalContinue.h>
+#include <paradiseo/eo/eoEvalFunc.h>
+#include <paradiseo/eo/eoEvalFuncCounter.h>
 #include "encoding.h"
 #include "genetic_algorithm.h"
 #include "crossover_fabric.h"
@@ -71,8 +73,8 @@ public:
   GeneticAlgorithm make_ga(uint8_t tourRingSize, uint32_t stop,
       uint8_t crossoverId, float crossRate, float mutRate)
   {
-    std::chrono::duration<uint32_t, std::ratio<1>> _time(stop);
-    stopCriteria = new eoTimeContinue<Chrom>(_time.count());
+    // std::chrono::duration<uint32_t, std::ratio<1>> _time(stop);
+    stopCriteria = new eoTimeContinue<Chrom>(stop);
 
     select = eoDetTournamentSelect<Chrom>(tourRingSize);
     mutationOp = eoBitMutation<Chrom>(mutRate);
@@ -97,7 +99,8 @@ private:
  */
 class EvaluationsGAFactory : public GAFactory {
 public:
-  explicit EvaluationsGAFactory(Problem &problem_) : problem(problem_) {}
+  explicit EvaluationsGAFactory(Problem &problem_)
+    : problem(problem_), evalFuncCounter((eoEvalFunc<Chrom>&)problem_) {}
 
   ~EvaluationsGAFactory() = default;
 
@@ -105,7 +108,18 @@ public:
       uint8_t crossoverId, float crossRate, float mutRate)
   {
     // TODO: Need change implementation of Problem to inherit from eoEvalFunc
-    throw std::logic_error("Non-Implemented Method: EvaluationsGAFactory::make_ga");
+    
+    // eoEvalFunc<Chrom> *problemEvalFunc = (eoEvalFunc<Chrom> *)&this->problem;
+    // this->evalFuncCounter = eoEvalFuncCounter(*problemEvalFunc);
+    this->stopCriteria = new eoEvalContinue<Chrom>(this->evalFuncCounter, stop);
+
+    select = eoDetTournamentSelect<Chrom>(tourRingSize);
+    mutationOp = eoBitMutation<Chrom>(mutRate);
+    crossoverPtr = CrossoverFabric::create(crossoverId);
+
+    GeneticAlgorithm ga(problem,
+        select, *crossoverPtr, crossRate, mutationOp, 1.0F, *stopCriteria);
+    return ga;
   }
 
 private:
@@ -113,6 +127,7 @@ private:
   eoDetTournamentSelect<Chrom> select;
   eoQuadOp<Chrom> *crossoverPtr;
   eoBitMutation<Chrom> mutationOp;
+  eoEvalFuncCounter<Chrom> evalFuncCounter;
   eoEvalContinue<Chrom> *stopCriteria;
 };
 
