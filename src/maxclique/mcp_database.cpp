@@ -25,7 +25,7 @@ void MCPModel::create(sqlite::connection *con) {
   query += " (";
   query += "id INTEGER PRIMARY KEY AUTOINCREMENT, "; 
   query += "population_size INTEGER, ";
-  query += "num_generations INTEGER, ";
+  query += "stop_criteria INTEGER, ";
   query += "mutation_rate REAL, ";
   query += "crossover_rate REAL, ";
   query += "crossover INTEGER, ";
