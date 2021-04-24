@@ -1,10 +1,20 @@
 from yaml import load, CLoader
 from collections.abc import Iterable
 from os import system
+from datetime import datetime
 from docker.types import Mount
 import docker
 import time
 import click
+
+
+# ---------------------------------------------------------------------------- #
+# Funcao para imprimir LOG com timestamp
+# ---------------------------------------------------------------------------- #
+def debug_log(message):
+    now = datetime.now()
+    print(now.strftime('[%d/%m/%y - %H:%M:%S %p] -- '), end='', flush=True)
+    print(f'{message}', flush=True)
 
 # ---------------------------------------------------------------------------- #
 # Executar experimentos.
@@ -17,11 +27,11 @@ import click
 # tada em um contêiner "-n" vezes
 # ---------------------------------------------------------------------------- #
 # Definições padrão
-CONFIG_FILE = "config.yml" 
+# CONFIG_FILE = "config.yml" 
 IMAGE_NAME  = "crossoverstudy"
 VOLUME_NAME = "studyvol"
 VALID_CLI_OPTIONS = [
-  "infile", "db", "popsize", "epochs", "crossover", "xrate", "mrate", "ring"]
+  "infile", "db", "popsize", "stop", "crossover", "xrate", "mrate", "ring"]
 
 # ---------------------------------------------------------------------------- #
 # Classe ParamCombination: Combinação de parâmetros
@@ -80,7 +90,7 @@ class ConfigFile:
       for xrate in iter_params["xrate"]:
         for mrate in iter_params["mrate"]:
           for popsize in iter_params["popsize"]:
-            for numgen in iter_params["epochs"]:
+            for numgen in iter_params["stop"]:
               for infile in iter_params["infile"]:
                 # Cria obj de combinação
                 pc = ParamCombination({
@@ -88,7 +98,7 @@ class ConfigFile:
                   "xrate": xrate,
                   "mrate": mrate,
                   "popsize": popsize,
-                  "epochs": numgen,
+                  "stop": numgen,
                   "infile": infile,
                   "db": dbfile
                 })
@@ -120,7 +130,7 @@ def docker_create(fullcommand) -> docker.models.containers.Container:
   num_list_containers = len(client.containers.list(all=True))
   # Configura e Cria um novo container e retorna-o
   cont = client.containers.create(IMAGE_NAME, fullcommand,
-      name=f'experimentation_{num_list_containers+1}', detach=True,
+      name=f'experimentation_{num_list_containers+1}', detach=True, 
       mounts=[ Mount("/db", VOLUME_NAME) ], cpu_shares=500)
   return cont
 
@@ -130,8 +140,9 @@ def docker_create(fullcommand) -> docker.models.containers.Container:
 @click.option('-n','--count',help="Repetir execuções N vezes", default=1, show_default=True)
 @click.option('--max-con',help="Número máximo de contêiners ativos", default=2, show_default=True)
 @click.option('-t', '--wait-time', help="Tempo entre as verficações de contêineres (segundos)", default=30, show_default=True)
-def main(binaryname, count, max_con, wait_time):
-  c = ConfigFile(CONFIG_FILE)
+@click.option('-c', '--config', help="Caminho para o arquivo de configuração YAML", default='config.yml', show_default=True)
+def main(binaryname, count, max_con, wait_time, config_file):
+  c = ConfigFile(config_file)
   combinations = c.parse_combinations()
   containers = []
 
@@ -151,25 +162,25 @@ def main(binaryname, count, max_con, wait_time):
     
     if len(client.containers.list()) < max_con:
       num_running += 1
-      print(f"[{num_running} de {num_containers}] Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"", flush=True)
+      debug_log(f"[{num_running} de {num_containers}] Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"")
       cont.start()
     else:
-      print("Esperando algum contêiner finalizar", flush=True)
+      debug_log("Esperando algum contêiner finalizar")
       start_wait = time.time()
       time_until_now = 0
       while not len(client.containers.list()) < max_con:
         time.sleep(wait_time)
         time_until_now += wait_time
-        print(f"\r[{round(time_until_now/60,1)} min] Aguardando...", end="", flush=True)
+        debug_log(f"\r({round(time_until_now/60,1)} min) Aguardando...", end="")
       print()
-      print(f"Tempo de espera:", round((time.time()-start_wait)/60, 2), "min")
+      debug_log(f"Tempo de espera:", round((time.time()-start_wait)/60, 2), "min")
       num_running += 1
-      print(f"[{num_running} de {num_containers}]Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"", flush=True)
+      debug_log(f"[{num_running} de {num_containers}]Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"")
       cont.start()
       pass
   
   print("----------------------------------------")
-  print("Todos os contêineres foram disparados.\nValeu falou ;)")
+  debug_log("Todos os contêineres foram disparados.\nValeu falou ;)")
   return
 
 # ---------------------------------------------------------------------------- #
