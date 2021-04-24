@@ -43,7 +43,7 @@ public:
    * Converte um vector para uma string contendo todos os seus valores
    * separados por vírgula */
   template <typename T>
-  static std::string sequence_to_string(std::vector<T>& seq) {
+  static std::string sequence_to_string(const std::vector<T>& seq) {
     std::stringstream ss;
     auto it = seq.cbegin();
     for (; it != seq.cend(); ++it) {
@@ -54,18 +54,18 @@ public:
   }
 
   // Define o atributo convergência a partir de uma sequência de cromossomos
-  void set_convergence(const std::vector<Chrom>& convVec) {
+  void set_convergence(const std::vector<double>& convVec) {
     if (!this->convergence.empty()) {
       this->convergence.clear();
     }
-    std::stringstream ss;
-    for (auto it = convVec.cbegin(); it != convVec.cend(); ++it) {
-      ss << it->fitness();
-      if ( it != convVec.cend()-1 ) {
-        ss << ',';
-      }
-    }
-    this->convergence = ss.str();
+    // std::stringstream ss;
+    // for (auto it = convVec.cbegin(); it != convVec.cend(); ++it) {
+    //   ss << it->fitness();
+    //   if ( it != convVec.cend()-1 ) {
+    //     ss << ',';
+    //   }
+    // }
+    this->convergence = BaseModel::sequence_to_string<double>(convVec);
   }
 
   // TODO: adicionar metodo de setar a duração

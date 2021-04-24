@@ -43,7 +43,7 @@ void MCPModel::create(sqlite::connection *con) {
 void MCPModel::insert(sqlite::connection *con) {
   std::string sql;
   sql = "INSERT INTO " + std::string(this->table_name) + " (";
-  sql += "population_size, num_generations, crossover, crossover_name, ";
+  sql += "population_size, stop_criteria, crossover, crossover_name, ";
   sql += "crossover_rate, mutation_rate, instance_file, convergence, ";
   sql += "duration_in_ms, solution_size, solution, total_cost";
   sql += ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";

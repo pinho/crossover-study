@@ -109,7 +109,21 @@ public:
 
     this->dbModel.instance_file = filename;
     this->dbModel.duration_in_ms = durationMS.count();
-    this->dbModel.set_convergence(ga.get_convergence());
+
+    // Customizando vetor de convergencia de acordo com o tipo de otimizacao
+    std::vector<Chrom> convergence = ga.get_convergence();
+    std::vector<double> convergenceFitness;
+    if (this->problemInstance->is_minimization()) {
+      for (Chrom &chrom : convergence) {
+        convergenceFitness.push_back(1/chrom.fitness());
+      }
+    } else {
+      for (Chrom &chrom : convergence) {
+        convergenceFitness.push_back(chrom.fitness());
+      }
+    }
+
+    this->dbModel.set_convergence(convergenceFitness);
 
     this->wasExecuted = true;
   }
