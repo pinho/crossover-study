@@ -7,14 +7,11 @@ before_script:
   # Install dependencies packages
   - apt-get update -y
   - apt-get install -y doxygen libboost-dev libvsqlitepp-dev
-  # Building ParadisEO libs
-  - mkdir -p build/paradiseo
-  - cmake -B build/paradiseo -DEO_ONLY=ON -DCMAKE_INSTALL_PREFIX=. include/paradiseo-master
-  - make -C build/paradiseo
+  - bash install-paradiseo.sh
 
 build:
   stage: build
   script:
-    - cmake -B build .
-    - cmake --build build --config Release
+    - cmake .
+    - make
     
