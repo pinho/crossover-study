@@ -5,10 +5,10 @@
 crossover: [ 0, 1, 2, 4, 8 ]
 
 # Taxas de Cruzamento (de 0.0 a 1.0)
-xrate: [ 1.0, 0.5 ]
+xrate: 1.0
 
 # Taxa de mutação (de 0.0 a 1.0)
-mrate: 0.002
+mrate: 0.005
 
 # Tamanho da população (no. inteiro)
 popsize: 50
@@ -21,10 +21,9 @@ ring: 4
 
 # arquivos de instâncias teste (string - caminho para arquivo)
 infile:
-  - /data/scp/scp41.txt
-  - /data/scp/scp42.txt
-  - /data/scp/scp43.txt
-  - /data/scp/scp44.txt
+  - /data/mkp/mknapcb31.txt
+  - /data/mkp/mknapcb61.txt
+  - /data/mkp/mknapcb91.txt
 
 # Nome do arquivo de banco de dados para salvar os resultados colhidos
 # (string - caminho para um arquivo)

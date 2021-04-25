@@ -141,10 +141,12 @@ def docker_create(fullcommand) -> docker.models.containers.Container:
 @click.option('--max-con',help="Número máximo de contêiners ativos", default=2, show_default=True)
 @click.option('-t', '--wait-time', help="Tempo entre as verficações de contêineres (segundos)", default=30, show_default=True)
 @click.option('-c', '--config', help="Caminho para o arquivo de configuração YAML", default='config.yml', show_default=True)
-def main(binaryname, count, max_con, wait_time, config_file):
-  c = ConfigFile(config_file)
+def main(binaryname, count, max_con, wait_time, config):
+  c = ConfigFile(config)
   combinations = c.parse_combinations()
   containers = []
+
+  debug_log("Analisando as combinações de parâmetros")
 
   for parCombination in combinations:
     command = Command(binaryname, params=parCombination)
@@ -157,12 +159,14 @@ def main(binaryname, count, max_con, wait_time, config_file):
   num_containers = len(containers) # Número de containers escalonados
   num_running = 0 # Número de containers rodando
 
+  debug_log(f"{num_containers} contêineres escalonados")
+
   for id in ids:
     cont = client.containers.get(id)
     
     if len(client.containers.list()) < max_con:
       num_running += 1
-      debug_log(f"[{num_running} de {num_containers}] Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"")
+      debug_log(f"[{num_running}º de {num_containers}] Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"")
       cont.start()
     else:
       debug_log("Esperando algum contêiner finalizar")
@@ -171,16 +175,15 @@ def main(binaryname, count, max_con, wait_time, config_file):
       while not len(client.containers.list()) < max_con:
         time.sleep(wait_time)
         time_until_now += wait_time
-        debug_log(f"\r({round(time_until_now/60,1)} min) Aguardando...", end="")
-      print()
-      debug_log(f"Tempo de espera:", round((time.time()-start_wait)/60, 2), "min")
+        # debug_log(f"({round(time_until_now/60,1)} minutos) Aguardando...")
+      debug_log(f"Vaga para um novo contêiner: tempo de espera = {round((time.time()-start_wait)/60, 2)} minutos")
       num_running += 1
-      debug_log(f"[{num_running} de {num_containers}]Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"")
+      debug_log(f"Iniciando o contêiner \"{cont.attrs['Name'][1:]}\"")
       cont.start()
       pass
   
   print("----------------------------------------")
-  debug_log("Todos os contêineres foram disparados.\nValeu falou ;)")
+  debug_log("Todos os contêineres já foram iniciados.\nTchaau :D")
   return
 
 # ---------------------------------------------------------------------------- #
