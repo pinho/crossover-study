@@ -37,7 +37,7 @@ SteinerTreeProblem::SteinerTreeProblem(const char* filename) {
     // Atribuindo os valores do array de vértices de Steiner
     // index += 1; // pula o número de vértices de Steiner (já foi lido)
     this->num_steiner_nodes = file_content_numbers[index];
-    std::cout << "num_steiner_nodes = " << this->num_steiner_nodes << "\n";
+    //std::cout << "num_steiner_nodes = " << this->num_steiner_nodes << "\n";
     this->steiner_nodes_vec_ptr = new std::vector<int>(num_steiner_nodes);
     this->chromSize = this->num_steiner_nodes;
     index += 1;
