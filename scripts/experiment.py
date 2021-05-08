@@ -138,10 +138,10 @@ def docker_create(fullcommand) -> docker.models.containers.Container:
 @click.command()
 @click.argument('binaryname')
 @click.option('-n','--count',help="Repetir execuções N vezes", default=1, show_default=True)
-@click.option('--max-con',help="Número máximo de contêiners ativos", default=2, show_default=True)
 @click.option('-t', '--wait-time', help="Tempo entre as verficações de contêineres (segundos)", default=30, show_default=True)
-@click.option('-c', '--config', help="Caminho para o arquivo de configuração YAML", default='config.yml', show_default=True)
-def main(binaryname, count, max_con, wait_time, config):
+@click.option('-c', '--config', help="Caminho para o arquivo de configuração YAML", default='experiment.config.yml', show_default=True)
+@click.option('-j', '--max-con',help="Número máximo de contêiners ativos rodando em paralelo", default=1, show_default=True)
+def main(binaryname, count, wait_time, config, max_con):
   c = ConfigFile(config)
   combinations = c.parse_combinations()
   containers = []
