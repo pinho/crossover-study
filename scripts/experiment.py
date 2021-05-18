@@ -7,7 +7,6 @@ import docker
 import time
 import click
 
-
 # ---------------------------------------------------------------------------- #
 # Funcao para imprimir LOG com timestamp
 # ---------------------------------------------------------------------------- #
@@ -53,7 +52,9 @@ class ParamCombination:
 # Faz o carregamento do arquivbo de configuração em um dicionário e exporta
 # definindo as flags e opções aceitas nos binários de execução do algoritmo.
 class ConfigFile:
+
   params: dict
+
   def __init__(self, filename: str):
     with open(filename, "r") as f:
       buff = f.read()
