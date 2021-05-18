@@ -33,7 +33,7 @@ void MCPModel::create(sqlite::connection *con) {
   query += "instance_file TEXT, ";
   query += "solution_size INTEGER, ";
   query += "solution TEXT, ";
-  query += "total_cost TEXT, ";
+  query += "total_costs TEXT, ";
   query += "convergence TEXT, ";
   query += "duration_in_ms REAL";
   query += ");";
