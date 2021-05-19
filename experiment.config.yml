@@ -2,7 +2,7 @@
 # 0 - Crossover Uniforme
 # 1 - Um-Ponto de Corte
 # N - N-Pontos de Corte (com N >= 2)
-crossover: [ 4, 8 ]
+crossover: [ 0, 1, 2, 4, 8 ]
 
 # Taxas de Cruzamento (de 0.0 a 1.0)
 xrate: 1.0
@@ -21,8 +21,8 @@ ring: 4
 
 # arquivos de instâncias teste (string - caminho para arquivo)
 infile:
-  - /data/stp/steine4.txt
+  - /data/stp/steind5.txt
 
 # Nome do arquivo de banco de dados para salvar os resultados colhidos
 # (string - caminho para um arquivo)
-db: "/db/Resultados.db3"
+db: "/db/resultados-oficial.db3"
