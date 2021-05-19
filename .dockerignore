@@ -1,11 +1,13 @@
 # Files and directories ignored by Dockerfile
-.github/
 .vscode/
 .idea/
-.gitlab-ci.{yml,yaml}
+.git/
+.github/
 .gitignore
+.gitlab-ci.{yml,yaml}
 **/*.md
 LICENSE
+README.md
 
 # Directories for local build
 cmake-build-debug/
@@ -21,3 +23,9 @@ diagrams/
 analysis/
 pyutils/
 results/
+doc/
+results/
+data/backups/
+
+# Ignored extensions
+*.{db,db3,sqlite,sqlite3,log,yml,yaml}
