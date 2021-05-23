@@ -29,6 +29,7 @@ def table_exists(con: lite.Connection, tablename: str) -> bool:
     try:
         cursor = con.cursor()
         cursor.execute(f'SELECT id FROM {tablename};')
+        cursor.close()
         return True
     except:
         return False
@@ -50,7 +51,7 @@ def display_from(con: lite.Connection, tablename: str, title: str):
         for instance, crossover, crossover_rate, count, mean in cursor.execute(query):
             crossover_fmt = f'{crossover} ({int(crossover_rate*100)}%)'
             print(f'{crossover_fmt:<16}\t{instance}\t{count}\t{mean}')
-    print('\n')
+    print()
     return
 
 
