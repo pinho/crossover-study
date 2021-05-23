@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from argparse import ArgumentParser
 from sqlite3 import Connection
 from functions import plot_crossover_boxplots
@@ -6,10 +7,12 @@ from functions import plot_crossover_boxplots
 FORMAT = '[%(asctime)-15s] %(message)s'
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger(__name__)
-logger.info('Configuring queries on database')
+logger.warning('Configuring queries on database')
 
 parser = ArgumentParser(description='Plot and generate graphs in image files')
 parser.add_argument('dbfilename', action='store', help='Database file to use')
+parser.add_argument('-d', '--saveon', help='Defines the directory to save files')
+parser.add_argument('-e', '--ext', default='svg', help='Set image extension to save (png, svg,...)')
 parser.add_argument('--mcp', action='store_true', default=False, help='Plot for maximum clique problem')
 parser.add_argument('--mkp', action='store_true', default=False, help='Plot for multidimensional knapsack')
 parser.add_argument('--scp', action='store_true', default=False, help='Plot for set covering problem')
@@ -30,12 +33,19 @@ if __name__ == '__main__':
   con = Connection(args.dbfilename)
 
   num_figures_generated = 0
-  figures = {} # key = name for file; value = Figure object
   query_config = {} # key = tablename; value = list of instances
   if args.mcp: query_config[MCP_TABLENAME] = MCP_INSTANCE_FILES
   if args.mkp: query_config[MKP_TABLENAME] = MKP_INSTANCE_FILES
   if args.scp: query_config[SCP_TABLENAME] = SCP_INSTANCE_FILES
   if args.stp: query_config[STP_TABLENAME] = STP_INSTANCE_FILES
+
+  if args.saveon:
+    dir = Path(args.saveon)
+    if dir.exists() and not dir.is_dir():
+      raise IOError(f'Path "{dir}" is not a directory')
+    elif not dir.exists():
+      dir.mkdir(exist_ok=True)
+      logger.warning(f'Directory {str(dir.resolve())} was created')
 
   # print(query_config)
   for table in query_config:
@@ -43,12 +53,16 @@ if __name__ == '__main__':
       try:
         fig, _ = plot_crossover_boxplots(con, table, instance=instance)
         instance_no_ext = instance.split('.')[0]
-        figname = f'{table}__{instance_no_ext}.svg'
-        logger.debug('Try generate {figname}')
+        figname = f'{table}__{instance_no_ext}.{args.ext}'
+        if dir:
+          figpath = dir / Path(figname)
+          figname = str(figpath)
+        logger.warning(f'Saving {figname}')
         fig.savefig(figname, transparent=True)
+        num_figures_generated += 1
       except:
         logger.warning(f"Didn't generate figure for table='{table}' and instance_file='{instance}'. [SKIP]")
         pass
       pass
   con.close()
-  logger.info(f'Finished. Number of figures is {len(figures)}')
+  logger.warning(f'Finished. Number of figures is {num_figures_generated}')
