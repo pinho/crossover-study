@@ -27,7 +27,7 @@ e do [DIMACS](http://dimacs.rutgers.edu/programs/challenge).
 ## Sumário
 
 * [Instalando dependências externas](#Instalação-de-dependências-externas)
-* [Instalando o ParadisEO](#Instalando-o-ParadisEO)
+  - [Instalando o ParadisEO](#Instalando-o-ParadisEO)
 * [Compilando o projeto](#Compilando-o-projeto)
 * [Imagem Docker](#imagem-docker)
 
@@ -52,14 +52,13 @@ O ParadisEO é umm framework C++ para computação evolutiva, para que o projeto
 seja compilado com sucesso é necessário a instalação do framework e no geral
 ele não está presente de forma padrão nos repositórios de gerenciadores de
 pacotes das distribuições Linux. Portanto é recomendado fazer a instalação a
-partir do código fonte, é só usar os comandos a abaixo:
+partir do código fonte.
+
+Um script é fornecido para automatizar o download e instalação da biblioteca no
+sistema no Linux:
 
 ```sh
-wget -c https://github.com/nojhan/paradiseo/archive/master.zip -O paradiseo.zip
-unzip paradiseo.zip && cd paradiseo-master
-mkdir -p build && cd build
-cmake -DEO_ONLY=ON ..
-sudo make install
+bash install-paradiseo.sh
 ```
 
 ## Compilando o projeto
@@ -67,12 +66,15 @@ sudo make install
 Tenha certeza de ter o `cmake` instalado na versão 3.6+. Use o comando
 `cmake --version` para verificar.
 
-```sh
-# Compilação do projeto inteiro
-cmake -B build .
-make -C build
+Compilação do projeto inteiro
 
-# Compila e instala os binários e libs
+```sh
+cmake -B build . && make -C build
+```
+
+Compila e instala os binários executáveis e das bibliotecas
+
+```sh
 make install
 ```
 
