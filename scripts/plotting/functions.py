@@ -40,7 +40,11 @@ def plot_crossover_boxplots(con: sql.Connection, tablename, instance=None, figsi
     # Extrai as series de custos como listas, de cada operador
     all_result_lists = list()
     for _id in dataframes:
-        all_result_lists.append(list(dataframes[_id]['total_costs']))
+        # FIXME: GAMBIARRA, no caso do maxclique, a coluna total_costs esta como TEXT
+        # entao nao esta sendo possivel fazer calculos os valores de custos.
+        lista = list(dataframes[_id]['total_costs'])
+        all_result_lists.append([ float(v) for v in lista ])
+
         
     # Plota as os boxplots
     fig, ax = subplots(1, 1, figsize=figsize)

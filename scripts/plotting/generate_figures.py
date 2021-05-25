@@ -23,8 +23,8 @@ MKP_TABLENAME = 'mknap_executions'
 SCP_TABLENAME = 'setcovering_executions'
 STP_TABLENAME = 'steiner_executions'
 
-MCP_INSTANCE_FILES = ['C1000.9.clq']
-MKP_INSTANCE_FILES = ['mknapcb31.txt']
+MCP_INSTANCE_FILES = ['C1000.9.clq', 'p_hat1000-1.clq', 'p_hat1000-2.clq', 'san1000.clq']
+MKP_INSTANCE_FILES = ['mknapcb31.txt', 'mknapcb61.txt', 'mknapcb91.txt']
 SCP_INSTANCE_FILES = ['scp41.txt', 'scp42.txt', 'scp43.txt', 'scp44.txt']
 STP_INSTANCE_FILES = ['steind5.txt', 'steind10.txt', 'steind15.txt']
 
@@ -60,8 +60,9 @@ if __name__ == '__main__':
         logger.warning(f'Saving {figname}')
         fig.savefig(figname, transparent=True)
         num_figures_generated += 1
-      except:
+      except Exception as e:
         logger.warning(f"Didn't generate figure for table='{table}' and instance_file='{instance}'. [SKIP]")
+        print(e)
         pass
       pass
   con.close()
