@@ -40,8 +40,10 @@ lib64
 **/*~
 **/*.bkp
 
-
 ## Python e Notebooks
 **/__pycache__/
 **/*.ipynb_checkpoints
 **.ipynb
+
+## Arquivos de bancos de dados locais
+*.{db,db3,sqlite}
