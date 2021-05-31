@@ -3,8 +3,8 @@ from string import Template
 from pandas import read_sql_query
 from matplotlib.pyplot import subplots
 # relative imports
-from data import DataSolver
-from boxplot_styles import black_boxes
+from .data import DataSolver
+from .boxplot_styles import black_boxes
 
 # Contrói um Query SQL padrão baseada na tabela e no operador de crossover.
 # A query consulta o arquivo de instância, o crossover, a taxa de cruzamento, os

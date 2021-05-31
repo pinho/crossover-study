@@ -51,3 +51,8 @@ class SteinerTreeData:
 
         cur.close()
         return data
+
+
+def resolve_convergence(convergence: str) -> list[int]:
+    return DataSolver.resolve_integers_list(convergence)
+

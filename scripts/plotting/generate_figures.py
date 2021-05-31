@@ -3,6 +3,12 @@ from pathlib import Path
 from argparse import ArgumentParser
 from sqlite3 import Connection
 from functions import plot_crossover_boxplots
+from instances import (
+  MCP_INSTANCE_FILES,
+  MKP_INSTANCE_FILES,
+  SCP_INSTANCE_FILES,
+  STP_INSTANCE_FILES
+)
 
 FORMAT = '[%(asctime)-15s] %(message)s'
 logging.basicConfig(format=FORMAT)
@@ -11,7 +17,7 @@ logger.warning('Configuring queries on database')
 
 parser = ArgumentParser(description='Plot and generate graphs in image files')
 parser.add_argument('dbfilename', action='store', help='Database file to use')
-parser.add_argument('-d', '--saveon', help='Defines the directory to save files')
+parser.add_argument('-d', '--saveon', default='.', help='Defines the directory to save files')
 parser.add_argument('-e', '--ext', default='svg', help='Set image extension to save (png, svg,...)')
 parser.add_argument('--mcp', action='store_true', default=False, help='Plot for maximum clique problem')
 parser.add_argument('--mkp', action='store_true', default=False, help='Plot for multidimensional knapsack')
@@ -22,11 +28,6 @@ MCP_TABLENAME = 'maxclique_executions'
 MKP_TABLENAME = 'mknap_executions'
 SCP_TABLENAME = 'setcovering_executions'
 STP_TABLENAME = 'steiner_executions'
-
-MCP_INSTANCE_FILES = ['C1000.9.clq', 'p_hat1000-1.clq', 'p_hat1000-2.clq', 'san1000.clq']
-MKP_INSTANCE_FILES = ['mknapcb31.txt', 'mknapcb61.txt', 'mknapcb91.txt']
-SCP_INSTANCE_FILES = ['scp41.txt', 'scp42.txt', 'scp43.txt', 'scp44.txt']
-STP_INSTANCE_FILES = ['steind5.txt', 'steind10.txt', 'steind15.txt']
 
 if __name__ == '__main__':
   args = parser.parse_args()

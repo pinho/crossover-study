@@ -1,15 +1,17 @@
 # Arquivos de instâncias
 
-As instâncias usadas para os estudos estão localizadas no diretório `instances` e organizadas
-em subpastas nomeadas com as siglas dos problemas escolhidos para a aplicação dos estudos.
-Foi definido que seriam usadas 4 instâncias para cada problema de otimização e que essas
-instâncias buscariam incluir problemas de mais de um dimensão para não restringir demais os
-estudos a um tamanho de instância.
+As instâncias usadas para os estudos estão localizadas no diretório `instances`
+e organizadas em subpastas nomeadas com as siglas dos problemas escolhidos para
+a aplicação dos estudos. Foi definido que seriam usadas 4 instâncias para cada
+problema de otimização e que essas instâncias buscariam incluir problemas de
+mais de um dimensão para não restringir demais os estudos a um tamanho de
+instância.
 
-Com isso, foram escolhidos 4 instâncias que foram obtidas de bases de dados conhecidas como a
-_OR-Library_ e os problemas de clique máximo do _DIMACS_. As tabelas abaixo mostram as
-informações sobre as instâncias escolhidas para cada problema de otimização. A árvore de
-diretórios de arquivos de problemas ficou definida como a seguinte:
+Com isso, foram escolhidos 4 instâncias que foram obtidas de bases de dados
+conhecidas como a _OR-Library_ [1] e os problemas de clique máximo do _DIMACS_
+[2]. As tabelas abaixo mostram as informações sobre as instâncias escolhidas
+para cada problema de otimização. A árvore de diretórios de arquivos de
+problemas ficou definida como a seguinte:
 
 ```text
 data/instances
@@ -46,26 +48,19 @@ Arquivo      | No. Elementos (linhas) | No. Subconjuntos (colunas)
 ---
 ## Clique Máximo
 
-Dado um grafo `G = (V, E)`, um clique `C = (Vc, Ec)` de `G` é subgrafo completo de `G`,
-ou seja, um subgrafo onde todos os vértices de `Vc` estão conectados entre si. O Problema
-do Clique Máximo com Pesos define 0.073valores para cada vértices, e o objetivo é encontrar um
-clique cuja soma dos pesos de seus vértices seja a maior possível.
+Dado um grafo `G = (V, E)`, um clique `C = (Vc, Ec)` de `G` é subgrafo completo
+de `G`, ou seja, um subgrafo onde todos os vértices de `Vc` estão conectados
+entre si. O Problema do Clique Máximo com Pesos define 0.073valores para cada
+vértices, e o objetivo é encontrar um clique cuja soma dos pesos de seus
+vértices seja a maior possível.
 
 Arquivo            | Vértices |  Arestas  | Densidade do grafo
 -------------------|----------|-----------|--------------------
-`C250.9.clq`       |      250 |    27 984 | 90%
 `C500.9.clq`       |      500 |   112 332 | 90%
-`c-fat500-1.clq`   |      500 |     4 459 | 3,5%
-`c-fat500-2.clq`   |      500 |     9 139 | 7,3%
 `C1000.9.clq`      |     1000 |   450 079 | 90,1%
 `san1000.clq`      |     1000 |   250 500 | 50,1%
 `C2000.5.clq`      |     2000 |   999 836 | 50%
 `C2000.9.clq`      |     2000 | 1 799 532 | 90%
-`MANN_a81`         |     3321 | 5 506 380 | 0.9988
-`MANN_a45`         |     1035 |   533 115 | 0.9962
-`hamming6-2`       |     1024 |   518 656 | 0.9902
-`hamming6-4`       |     1024 |   434 176 | 0.8289
-`p-hat1000-3`      |     1000 |   371 746 | 0.7442
 
 
 ---
@@ -91,6 +86,6 @@ Arquivo      | Número de itens (variáveis) | Número de mochilas (restrições
 ---
 ## Fontes de arquivos-teste
 
-- **OR-Library**, por Beasley. Disponível em: http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files
+- [1] **OR-Library**, por Beasley. Disponível em: http://people.brunel.ac.uk/~mastjjb/jeb/orlib/files
 
-- **DIMACS Challenges**. Disponível em: http://dimacs.rutgers.edu/programs/challenge
+- [2] **DIMACS Challenges**. Disponível em: http://dimacs.rutgers.edu/programs/challenge
